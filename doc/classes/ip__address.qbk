@@ -1,0 +1,293 @@
+[section:ip__address Class [^ip::address]]
+
+  namespace std {
+    namespace tr2 {
+      namespace sys {
+        namespace ip {
+
+          class address
+          {
+          public:
+            // constructors:
+            address();
+            address(const address_v4& addr);
+            address(const address_v6& addr);
+
+            // assignment:
+            address& operator=(const address_v4& addr);
+            address& operator=(const address_v6& addr);
+
+            // members:
+            bool is_multicast() const;
+            bool is_v4() const;
+            bool is_v6() const;
+            address_v4 to_v4() const;
+            address_v6 to_v6() const;
+            string to_string() const;
+            string to_string(error_code& ec) const;
+
+            // static members:
+            static address from_string(const string& str);
+            static address from_string(const string& str, error_code& ec);
+          };
+
+          // address comparisons:
+          bool operator==(const address& a, const address& b);
+          bool operator!=(const address& a, const address& b);
+          bool operator< (const address& a, const address& b);
+          bool operator> (const address& a, const address& b);
+          bool operator<=(const address& a, const address& b);
+          bool operator>=(const address& a, const address& b);
+
+          // address I/O:
+          template<class CharT, class Traits>
+            basic_ostream<CharT, Traits>& operator<<(
+              basic_ostream<CharT, Traits>& os, const address& addr);
+
+        } // namespace ip
+      } // namespace sys
+    } // namespace tr2
+  } // namespace std
+
+[section [^ip::address] constructors]
+
+  address();
+
+[function_effects Constructs an object of class `address`.]
+
+[function_postconditions The postconditions of this function are indicated in
+the table below.]
+
+[table address::address() effects
+  [[expression][value]]
+  [
+    [`is_v4()`]
+    [`true`]
+  ]
+  [
+    [`is_v6()`]
+    [`false`]
+  ]
+  [
+    [`to_v4()`]
+    [`address_v4()`]
+  ]
+]
+
+  address(const address_v4& addr);
+
+[function_effects Constructs an object of class `address`, initialising it with
+the specified IP version 4 address.]
+
+[function_postconditions The postconditions of this function are indicated in
+the table below.]
+
+[table address::address(const address_v4&) effects
+  [[expression][value]]
+  [
+    [`is_v4()`]
+    [`true`]
+  ]
+  [
+    [`is_v6()`]
+    [`false`]
+  ]
+  [
+    [`to_v4()`]
+    [`addr`]
+  ]
+]
+
+  address(const address_v6& addr);
+
+[function_effects Constructs an object of class `address`, initialising it with
+the specified IP version 6 address.]
+
+[function_postconditions The postconditions of this function are indicated in
+the table below.]
+
+[table address::address(const address_v6&) effects
+  [[expression][value]]
+  [
+    [`is_v4()`]
+    [`false`]
+  ]
+  [
+    [`is_v6()`]
+    [`true`]
+  ]
+  [
+    [`to_v6()`]
+    [`addr`]
+  ]
+]
+
+[endsect]
+
+[section [^ip::address] assignment]
+
+  address& operator=(const address_v4& addr);
+
+[function_effects Assigns the specified IP version 4 address into an object of
+class `address`.]
+
+[function_returns `*this`.]
+
+[function_postconditions The postconditions of this function are indicated in
+the table below.]
+
+[table address& address::operator=(const address_v4&) effects
+  [[expression][value]]
+  [
+    [`is_v4()`]
+    [`true`]
+  ]
+  [
+    [`is_v6()`]
+    [`false`]
+  ]
+  [
+    [`to_v4()`]
+    [`addr`]
+  ]
+]
+
+  address& operator=(const address_v6& addr);
+
+[function_effects Assigns the specified IP version 6 address into an object of
+class `address`.]
+
+[function_returns `*this`.]
+
+[function_postconditions The postconditions of this function are indicated in
+the table below.]
+
+[table address& address::operator=(const address_v6&) effects
+  [[expression][value]]
+  [
+    [`is_v4()`]
+    [`true`]
+  ]
+  [
+    [`is_v6()`]
+    [`false`]
+  ]
+  [
+    [`to_v6()`]
+    [`addr`]
+  ]
+]
+
+[endsect]
+
+[section [^ip::address] members]
+
+  bool is_multicast() const;
+
+[function_returns `is_v4() ? to_v4().is_multicast() : to_v6().is_multicast()`.]
+
+  bool is_v4() const;
+
+[function_returns `true` if the object contains an IP version 4 address.]
+
+  bool is_v6() const;
+
+[function_returns `true` if the object contains an IP version 6 address.]
+
+  address_v4 to_v4() const;
+
+[function_returns The IP version 4 address contained by the object.]
+
+[function_throws `bad_cast` if `is_v4()` is false.]
+
+  address_v6 to_v6() const;
+
+[function_returns The IP version 6 address contained by the object.]
+
+[function_throws `bad_cast` if `is_v6()` is false.]
+
+  string to_string() const;
+  string to_string(error_code& ec) const;
+
+[function_returns `is_v4() ? to_v4().to_string(ec) : to_v6().to_string(ec)`.]
+
+[endsect]
+
+[section [^ip::address] static members]
+
+  static address from_string(const string& str);
+  static address from_string(const string& str, error_code& ec);
+
+[function_effects Converts a string representation of an address into an object
+of class `address`, as if by calling:
+``
+  address a;
+  address_v6 v6a = address_v6::from_string(str, ec);
+  if (!ec)
+    a = v6a;
+  else
+  {
+    address_v4 v4a = address_v4::from_string(str, ec);
+    if (!ec)
+      a = v4a;
+  }
+``]
+
+[function_returns `a`.]
+
+[endsect]
+
+[section [^ip::address] comparisons]
+
+  bool operator==(const address& a, const address& b);
+
+[function_returns `(a.is_v4() && b.is_v4() && a.to_v4() == b.to_v4()) ||
+(a.is_v6() && b.is_v6() && a.to_v6() == b.to_v6())`.]
+
+  bool operator!=(const address& a, const address& b);
+
+[function_returns `!(a == b)`.]
+
+  bool operator< (const address& a, const address& b);
+
+[function_returns `(a.is_v4() && b.is_v4() && a.to_v4() < b.to_v4()) ||
+(a.is_v6() && b.is_v6() && a.to_v6() < b.to_v6()) ||
+(a.is_v4() && b.is_v6())`.]
+
+  bool operator> (const address& a, const address& b);
+
+[function_returns `b < a`.]
+
+  bool operator<=(const address& a, const address& b);
+  
+[function_returns `!(b < a)`.]
+
+  bool operator>=(const address& a, const address& b);
+
+[function_returns `!(a < b)`.]
+
+[endsect]
+
+[section [^ip::address] I/O]
+
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>& os, const address& addr);
+
+[function_effects Outputs the string representation of the address to the
+stream, as if it were implemented as follows:
+``
+  error_code ec;
+  string s = addr.to_string(ec);
+  if (ec)
+    os.setstate(ios_base::failbit); // may throw ios::failure
+  else
+    for (string::iterator i = s.begin(); i != s.end(); ++i)
+      os << os.widen(*i);
+``]
+
+[function_returns `os`.]
+
+[endsect]
+
+[endsect]

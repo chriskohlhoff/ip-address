@@ -1,0 +1,261 @@
+[section:ip__address_v4 Class [^ip::address_v4]]
+
+  namespace std {
+    namespace tr2 {
+      namespace sys {
+        namespace ip {
+
+          class address_v4
+          {
+          public:
+            // types:
+            typedef array<unsigned char, 4> bytes_type;
+
+            // constructors:
+            address_v4();
+            explicit address_v4(const bytes_type& bytes);
+            explicit address_v4(unsigned long val);
+
+            // members:
+            bool is_class_a() const;
+            bool is_class_b() const;
+            bool is_class_c() const;
+            bool is_multicast() const;
+            bytes_type to_bytes() const;
+            unsigned long to_ulong() const;
+            string to_string() const;
+            string to_string(error_code& ec) const;
+
+            // static members:
+            static address_v4 from_string(const string& str);
+            static address_v4 from_string(const string& str, error_code& ec);
+            static address_v4 any();
+            static address_v4 loopback();
+            static address_v4 broadcast();
+            static address_v4 broadcast(const address_v4& addr,
+              const address_v4& mask);
+            static address_v4 netmask(const address_v4& addr);
+          };
+
+          // address_v4 comparisons:
+          bool operator==(const address_v4& a, const address_v4& b);
+          bool operator!=(const address_v4& a, const address_v4& b);
+          bool operator< (const address_v4& a, const address_v4& b);
+          bool operator> (const address_v4& a, const address_v4& b);
+          bool operator<=(const address_v4& a, const address_v4& b);
+          bool operator>=(const address_v4& a, const address_v4& b);
+
+          // address_v4 I/O:
+          template<class CharT, class Traits>
+            basic_ostream<CharT, Traits>& operator<<(
+              basic_ostream<CharT, Traits>& os, const address_v4& addr);
+
+        } // namespace ip
+      } // namespace sys
+    } // namespace tr2
+  } // namespace std
+
+[section [^ip::address_v4] constructors]
+
+  address_v4();
+
+[function_effects Constructs an object of class `address_v4`.]
+
+[function_postconditions The postconditions of this function are indicated in
+the table below.]
+
+[table address_v4::address_v4() effects
+  [[expression][value]]
+  [[`to_bytes()`][`{0, 0, 0, 0}`]]
+  [[`to_ulong()`][`0`]]
+]
+
+  address_v4(const bytes_type& bytes);
+
+[function_effects Constructs an object of class `address_v4`.]
+
+[function_requires Each element of the array `bytes` is in the range
+`[0, 0xFF]`.]
+
+[function_throws `out_of_range` if any element of the array `bytes` is not in
+the range `[0, 0xFF]`. [inline_note For implementations where `UCHAR_MAX ==
+0xFF`, no out-of-range detection is needed.]]
+
+[function_postconditions The postconditions of this function are indicated in
+the table below.]
+
+[table address_v4::address_v4(const bytes_type&) effects
+  [[expression][value]]
+  [
+    [`to_bytes()`]
+    [``
+       { bytes[0], bytes[1],
+         bytes[2], bytes[3] }
+     ``]
+  ]
+  [
+    [`to_ulong()`]
+    [``
+       (bytes[0] << 24) | (bytes[1] << 16)
+         | (bytes[2] << 8) | bytes[3]
+     ``]
+  ]
+]
+
+  address_v4(unsigned long val);
+
+[function_effects Constructs an object of class `address_v4`.]
+
+[function_requires `val` is in the range `[0, 0xFFFFFFFF]`.]
+
+[function_throws `out_of_range` if `val` is not in the range `[0, 0xFFFFFFFF]`.
+[inline_note For implementations where `ULONG_MAX == 0xFFFFFFFF`, no
+out-of-range detection is needed.]]
+
+[function_postconditions The postconditions of this function are indicated in
+the table below.]
+
+[table address_v4::address_v4(unsigned long) effects
+  [[expression][value]]
+  [
+    [`to_bytes()`]
+    [``
+       { (val >> 24) & 0xFF, (val >> 16) & 0xFF,
+         (val >> 8)  & 0xFF, val & 0xFF }
+     ``]
+  ]
+  [
+    [`to_ulong()`]
+    [`val`]
+  ]
+]
+
+[endsect]
+
+[section [^ip::address_v4] members]
+
+  bool is_class_a() const;
+
+[function_returns `(to_ulong() & 0x80000000) == 0`.]
+
+  bool is_class_b() const;
+
+[function_returns `(to_ulong() & 0xC0000000) == 0x80000000`.]
+
+  bool is_class_c() const;
+
+[function_returns `(to_ulong() & 0xE0000000) == 0xC0000000`.]
+
+  bool is_multicast() const;
+
+[function_returns `(to_ulong() & 0xF0000000) == 0xE0000000`.]
+
+  bytes_type to_bytes() const;
+
+[function_returns A representation of the address in [link
+definitions.network_byte_order network byte order].]
+
+  unsigned long to_ulong() const;
+
+[function_returns A representation of the address in [link
+definitions.host_byte_order host byte order].]
+
+  string to_string() const;
+  string to_string(error_code& ec) const;
+
+[function_effects Converts an address into a string representation, as if by
+__POSIX__ __inet_ntop__ when invoked with address family `AF_INET`.]
+
+[function_returns If successful, the string representation of the address.
+Otherwise `string()`.]
+
+[endsect]
+
+[section [^ip::address_v4] static members]
+
+  static address_v4 from_string(const string& str);
+  static address_v4 from_string(const string& str, error_code& ec);
+
+[function_effects Converts a string representation of an address into a
+corresponding `address_v4` value, as if by __POSIX__ __inet_pton__ when invoked
+with address family `AF_INET`.]
+
+[function_returns If successful, an `address_v4` value corresponding to the
+string `str`. Otherwise `address_v4()`.]
+
+  static address_v4 any();
+
+[function_returns `address_v4()`.]
+
+  static address_v4 loopback();
+
+[function_returns `address_v4(0x7F000001)`.]
+
+  static address_v4 broadcast();
+
+[function_returns `address_v4(0xFFFFFFFF)`.]
+
+  static address_v4 broadcast(const address_v4& addr, const address_v4& mask);
+
+[function_returns `address_v4(addr.to_ulong() | ~mask.to_ulong())`.]
+
+  static address_v4 netmask(const address_v4& addr);
+
+[function_block If `addr.is_class_a()` is true, returns
+`address_v4(0xFF000000)`. If `addr.is_class_b()` is true, returns
+`address_v4(0xFFFF0000)`. If `addr.is_class_c()` is true, returns
+`address_v4(0xFFFFFF00)`. Otherwise returns `address_v4(0xFFFFFFFF)`.]
+
+[endsect]
+
+[section [^ip::address_v4] comparisons]
+
+  bool operator==(const address_v4& a, const address_v4& b);
+
+[function_returns `a.to_ulong() == b.to_ulong()`.]
+
+  bool operator!=(const address_v4& a, const address_v4& b);
+
+[function_returns `a.to_ulong() != b.to_ulong()`.]
+
+  bool operator< (const address_v4& a, const address_v4& b);
+
+[function_returns `a.to_ulong() < b.to_ulong()`.]
+
+  bool operator> (const address_v4& a, const address_v4& b);
+
+[function_returns `a.to_ulong() > b.to_ulong()`.]
+
+  bool operator<=(const address_v4& a, const address_v4& b);
+
+[function_returns `a.to_ulong() <= b.to_ulong()`.]
+
+  bool operator>=(const address_v4& a, const address_v4& b);
+
+[function_returns `a.to_ulong() >= b.to_ulong()`.]
+
+[endsect]
+
+[section [^ip::address_v4] I/O]
+
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>& os, const address_v4& addr);
+
+[function_effects Outputs the string representation of the address to the
+stream, as if it were implemented as follows:
+``
+  error_code ec;
+  string s = addr.to_string(ec);
+  if (ec)
+    os.setstate(ios_base::failbit); // may throw ios::failure
+  else
+    for (string::iterator i = s.begin(); i != s.end(); ++i)
+      os << os.widen(*i);
+``]
+
+[function_returns `os`.]
+
+[endsect]
+
+[endsect]

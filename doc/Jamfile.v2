@@ -1,0 +1,17 @@
+project asio-tr2-doc
+  : build-dir ../bin
+  ;
+
+using quickbook ;
+
+boostbook proposal
+  :
+    proposal.qbk
+  :
+    <xsl:param>toc.section.depth=6
+    <xsl:param>section.autolabel=1
+    <xsl:param>toc.max.depth=6
+    <format>onehtml
+  ;
+
+# install html : design/membar.png ;

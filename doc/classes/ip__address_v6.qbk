@@ -1,0 +1,381 @@
+[section:ip__address_v6 Class [^ip::address_v6]]
+
+  namespace std {
+    namespace tr2 {
+      namespace sys {
+        namespace ip {
+
+          class address_v6
+          {
+          public:
+            // types:
+            typedef array<unsigned char, 16> bytes_type;
+
+            // constructors:
+            address_v6();
+            explicit address_v6(const bytes_type& bytes,
+                                unsigned long scope_id = 0);
+
+            // members:
+            void scope_id(unsigned long id);
+            unsigned long scope_id() const;
+            bool is_unspecified() const;
+            bool is_loopback() const;
+            bool is_multicast() const;
+            bool is_link_local() const;
+            bool is_site_local() const;
+            bool is_v4_mapped() const;
+            bool is_v4_compatible() const;
+            bool is_multicast_node_local() const;
+            bool is_multicast_link_local() const;
+            bool is_multicast_site_local() const;
+            bool is_multicast_org_local() const;
+            bool is_multicast_global() const;
+            bytes_type to_bytes() const;
+            string to_string() const;
+            string to_string(error_code& ec) const;
+            address_v4 to_v4() const;
+
+            // static members:
+            static address_v6 from_string(const string& str);
+            static address_v6 from_string(const string& str, error_code& ec);
+            static address_v6 any();
+            static address_v6 loopback();
+            static address_v6 v4_mapped(const address_v4& addr);
+            static address_v6 v4_compatible(const address_v4& addr);
+          };
+
+          // address_v6 comparisons:
+          bool operator==(const address_v6& a, const address_v6& b);
+          bool operator!=(const address_v6& a, const address_v6& b);
+          bool operator< (const address_v6& a, const address_v6& b);
+          bool operator> (const address_v6& a, const address_v6& b);
+          bool operator<=(const address_v6& a, const address_v6& b);
+          bool operator>=(const address_v6& a, const address_v6& b);
+
+          // address_v6 I/O:
+          template<class CharT, class Traits>
+            basic_ostream<CharT, Traits>& operator<<(
+              basic_ostream<CharT, Traits>& os, const address_v6& addr);
+
+        } // namespace ip
+      } // namespace sys
+    } // namespace tr2
+  } // namespace std
+
+[std_note The implementations of the functions `is_unspecified`, `is_loopback`,
+`is_multicast`, `is_link_local`, `is_site_local`, `is_v4_mapped`,
+`is_v4_compatible`, `is_multicast_node_local`, `is_multicast_link_local`,
+`is_multicast_site_local`, `is_multicast_org_local` and `is_multicast_global`
+are determined by [RFC4291].]
+
+[section [^ip::address_v6] constructors]
+
+  address_v6();
+
+[function_effects Constructs an object of class `address_v6`.]
+
+[function_postconditions The postconditions of this function are indicated in
+the table below.]
+
+[table address_v6::address_v6() effects
+  [[expression][value]]
+  [[`is_unspecified()`][`true`]]
+  [[`scope_id()`][`0`]]
+]
+
+  explicit address_v6(const bytes_type& bytes,
+                      unsigned long scope_id = 0);
+
+[function_effects Constructs an object of class `address_v6`.]
+
+[function_postconditions The postconditions of this function are indicated in
+the table below.]
+
+[table address_v6::address_v6() effects
+  [[expression][value]]
+  [[`to_bytes()`][`bytes`]]
+  [[`scope_id()`][`scope_id`]]
+]
+
+[endsect]
+
+[section [^ip::address_v6] members]
+
+  void scope_id(unsigned long id);
+
+[function_postconditions `scope_id() == id`.]
+
+  unsigned long scope_id() const;
+
+[function_returns The scope identifier associated with the address.]
+
+  bool is_unspecified() const;
+
+[function_returns A boolean indicating whether the `address_v6` object
+represents an unspecified address, as if computed by the following method:
+``
+  bytes_type b = to_bytes();
+  return b[ 0] == 0 && b[ 1] == 0 && b[ 2] == 0 && b[ 3] == 0
+      && b[ 4] == 0 && b[ 5] == 0 && b[ 6] == 0 && b[ 7] == 0
+      && b[ 8] == 0 && b[ 9] == 0 && b[10] == 0 && b[11] == 0
+      && b[12] == 0 && b[13] == 0 && b[14] == 0 && b[15] == 0;
+``]
+
+  bool is_loopback() const;
+
+[function_returns A boolean indicating whether the `address_v6` object
+represents a loopback address, as if computed by the following method:
+``
+  bytes_type b = to_bytes();
+  return b[ 0] == 0 && b[ 1] == 0 && b[ 2] == 0 && b[ 3] == 0
+      && b[ 4] == 0 && b[ 5] == 0 && b[ 6] == 0 && b[ 7] == 0
+      && b[ 8] == 0 && b[ 9] == 0 && b[10] == 0 && b[11] == 0
+      && b[12] == 0 && b[13] == 0 && b[14] == 0 && b[15] == 1;
+``]
+
+  bool is_multicast() const;
+
+[function_returns A boolean indicating whether the `address_v6` object
+represents a multicast address, as if computed by the following method:
+``
+  bytes_type b = to_bytes();
+  return b[0] == 0xFF;
+``]
+
+  bool is_link_local() const;
+
+[function_returns A boolean indicating whether the `address_v6` object
+represents a unicast link-local address, as if computed by the following
+method:
+``
+  bytes_type b = to_bytes();
+  return b[0] == 0xFE && (b[1] & 0xC0) == 0x80;
+``]
+
+  bool is_site_local() const;
+
+[function_returns A boolean indicating whether the `address_v6` object
+represents a unicast site-local address, as if computed by the following
+method:
+``
+  bytes_type b = to_bytes();
+  return b[0] == 0xFE && (b[1] & 0xC0) == 0xC0;
+``]
+
+  bool is_v4_mapped() const;
+
+[function_returns A boolean indicating whether the `address_v6` object
+represents an IPv4-mapped IPv6 address, as if computed by the following method:
+``
+  bytes_type b = to_bytes();
+  return b[ 0] == 0 && b[ 1] == 0 && b[ 2] == 0 && b[ 3] == 0
+      && b[ 4] == 0 && b[ 5] == 0 && b[ 6] == 0 && b[ 7] == 0
+      && b[ 8] == 0 && b[ 9] == 0 && b[10] == 0xFF && b[11] == 0xFF;
+``]
+
+  bool is_v4_compatible() const;
+
+[function_returns A boolean indicating whether the `address_v6` object
+represents an IPv4-compatible IPv6 address, as if computed by the following
+method:
+``
+  bytes_type b = to_bytes();
+  return b[ 0] == 0 && b[ 1] == 0 && b[ 2] == 0 && b[ 3] == 0
+      && b[ 4] == 0 && b[ 5] == 0 && b[ 6] == 0 && b[ 7] == 0
+      && b[ 8] == 0 && b[ 9] == 0 && b[10] == 0 && b[11] == 0
+      && !is_unspecified() && !is_loopback();
+``]
+
+  bool is_multicast_node_local() const;
+
+[function_returns A boolean indicating whether the `address_v6` object
+represents a multicast node-local address, as if computed by the following
+method:
+``
+  bytes_type b = to_bytes();
+  return b[0] == 0xFF && (b[1] & 0x0F) == 0x01;
+``]
+
+  bool is_multicast_link_local() const;
+
+[function_returns A boolean indicating whether the `address_v6` object
+represents a multicast link-local address, as if computed by the following
+method:
+``
+  bytes_type b = to_bytes();
+  return b[0] == 0xFF && (b[1] & 0x0F) == 0x02;
+``]
+
+  bool is_multicast_site_local() const;
+
+[function_returns A boolean indicating whether the `address_v6` object
+represents a multicast site-local address, as if computed by the following
+method:
+``
+  bytes_type b = to_bytes();
+  return b[0] == 0xFF && (b[1] & 0x0F) == 0x05;
+``]
+
+  bool is_multicast_org_local() const;
+
+[function_returns A boolean indicating whether the `address_v6` object
+represents a multicast organisation-local address, as if computed by the
+following method:
+``
+  bytes_type b = to_bytes();
+  return b[0] == 0xFF && (b[1] & 0x0F) == 0x08;
+``]
+
+  bool is_multicast_global() const;
+
+[function_returns A boolean indicating whether the `address_v6` object
+represents a multicast organisation-local address, as if computed by the
+following method:
+``
+  bytes_type b = to_bytes();
+  return b[0] == 0xFF && (b[1] & 0x0F) == 0x0E;
+``]
+
+  bytes_type to_bytes() const;
+
+[function_returns A representation of the address in [link
+definitions.network_byte_order network byte order].]
+
+  string to_string() const;
+  string to_string(error_code& ec) const;
+
+[function_effects Converts an address into a string representation. If
+`scope_id() == 0`, converts as if by __POSIX__ __inet_ntop__ when invoked with
+address family `AF_INET6`. If `scope_id() != 0`, the format is
+['`address`]`%`['`scope-id`], where ['`address`] is the string representation
+of the equivalent address having `scope_id() == 0`, and ['`scope-id`] is an
+implementation-defined string representation of the scope identifier.]
+
+[function_returns If successful, the string representation of the address.
+Otherwise `string()`.]
+
+  address_v4 to_v4() const;
+
+[function_requires `is_v4_mapped() || is_v4_compatible()`.]
+
+[function_returns An `address_v4` object corresponding to the IPv4-mapped or
+IPv4 compatible IPv6 address, as if computed by the following method:
+``
+  bytes_type v6b = to_bytes();
+  address_v4::bytes_type v4b = { v6b[12], v6b[13], v6b[14], v6b[15] };
+  return address_v4(v4b);
+``]
+
+[function_throws `bad_cast` if `is_v4_mapped()` is `false` and
+`is_v4_compatible()` is `false`.]
+
+[endsect]
+
+[section [^ip::address_v6] static members]
+
+  static address_v6 from_string(const string& str);
+  static address_v6 from_string(const string& str, error_code& ec);
+
+[function_effects Converts a string representation of an address into a
+corresponding `address_v6` value. The format is either ['`address`] or
+['`address`]`%`['`scope-id`], where ['`address`] is in the format specified by
+__POSIX__ __inet_pton__ when invoked with address family `AF_INET6`, and
+['`scope-id`] is an optional string specifying the scope identifier. All
+implementations shall accept as ['`scope-id`] a string representation of an
+unsigned decimal integer. It is implementation-defined whether alternative
+scope identifier representations are permitted. If ['`scope-id`] is not
+supplied, an `address_v6` object shall be returned such that `scope_id() ==
+0`.]
+
+[function_returns If successful, an `address_v6` value corresponding to the
+string `str`. Otherwise returns `address_v6()`.]
+
+  static address_v6 any();
+
+[function_returns `address_v6()`.]
+
+  static address_v6 loopback();
+
+[function_returns An address `a` such that the condition `a.is_loopback()`
+holds.]
+
+  static address_v6 v4_mapped(const address_v4& addr);
+
+[function_returns An `address_v6` object containing the IPv4-mapped IPv6
+address corresponding to the specified IPv4 address, as if computed by the
+following method:
+``
+  address_v4::bytes_type v4b = addr.to_bytes();
+  bytes_type v6b = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                     0xFF, 0xFF, v4b[0], v4b[1], v4b[2], v4b[3] };
+  return address_v6(v6b);
+``]
+
+  static address_v6 v4_compatible(const address_v4& addr);
+
+[function_returns An `address_v6` object containing the IPv4-compatible IPv6
+address corresponding to the specified IPv4 address, as if computed by the
+following method:
+``
+  address_v4::bytes_type v4b = addr.to_bytes();
+  bytes_type v6b = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                     v4b[0], v4b[1], v4b[2], v4b[3] };
+  return address_v6(v6b);
+``]
+
+[endsect]
+
+[section [^ip::address_v6] comparisons]
+
+  bool operator==(const address_v6& a, const address_v6& b);
+
+[function_returns `a.to_bytes() == b.to_bytes() && a.scope_id() ==
+b.scope_id()`.]
+
+  bool operator!=(const address_v6& a, const address_v6& b);
+
+[function_returns `!(a == b)`.]
+
+  bool operator< (const address_v6& a, const address_v6& b);
+
+[function_returns `a.to_bytes() < b.to_bytes() || (!(b.to_bytes() <
+a.to_bytes()) && a.scope_id() < b.scope_id())`.]
+
+  bool operator> (const address_v6& a, const address_v6& b);
+
+[function_returns `b < a`.]
+
+  bool operator<=(const address_v6& a, const address_v6& b);
+
+[function_returns `!(b < a)`.]
+
+  bool operator>=(const address_v6& a, const address_v6& b);
+
+[function_returns `!(a < b)`.]
+
+[endsect]
+
+[section [^ip::address_v6] I/O]
+
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>& os, const address_v6& addr);
+
+[function_effects Outputs the string representation of the address to the
+stream, as if it were implemented as follows:
+``
+  error_code ec;
+  string s = addr.to_string(ec);
+  if (ec)
+    os.setstate(ios_base::failbit); // may throw ios::failure
+  else
+    for (string::iterator i = s.begin(); i != s.end(); ++i)
+      os << os.widen(*i);
+``]
+
+[function_returns `os`.]
+
+[endsect]
+
+[endsect]

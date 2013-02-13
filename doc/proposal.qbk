@@ -1,0 +1,164 @@
+[library IP Address Proposal
+    [quickbook 1.1]
+    [id ipaddress]
+    [last-revision YYYY-MM-DD]
+]
+
+[/-----------------------------------------------------------------------------]
+
+[template std_note[text]
+\[['Note:] [text] '''&mdash;'''['end note]\]
+]
+
+[template inline_note[text] \[['Note:] [text] '''&mdash;'''['end note]\] ]
+
+[template std_example[text code]
+\[['Example:] [text]
+[code]
+'''&mdash;'''['end example]\]
+]
+
+[template function_block[text]
+[:[text]]
+]
+
+[template function_requires[text]
+[:['Requires:] [text]]
+]
+
+[template function_effects[text]
+[:['Effects:] [text]]
+]
+
+[template function_returns[text]
+[:['Returns:] [text]]
+]
+
+[template function_throws[text]
+[:['Throws:] [text]]
+]
+
+[template function_postconditions[text]
+[:['Postconditions:] [text]]
+]
+
+[template function_complexity[text]
+[:['Complexity:] [text]]
+]
+
+[template function_notes[text]
+[:['Notes:] [text]]
+]
+
+[template function_note[text]
+[:\[['Note:] [text] '''&mdash;'''['end note]\]]
+]
+
+[template function_example[text]
+[:\[['Example:] [text]
+'''&mdash;'''['end example]\]]
+]
+
+[template commentary[text]
+[blurb [text]]
+]
+
+[template mdash[] '''&mdash; ''']
+
+[/-----------------------------------------------------------------------------]
+
+[def __POSIX__ /POSIX/]
+[def __inet_ntop__ [@http://www.opengroup.org/onlinepubs/000095399/functions/inet_ntop.html `inet_ntop()`]]
+[def __inet_pton__ [@http://www.opengroup.org/onlinepubs/000095399/functions/inet_pton.html `inet_pton()`]]
+[def __dotdotdot__ ...]
+
+[/-----------------------------------------------------------------------------]
+
+[template RFC4291[] \[[link ref-RFC4291 RFC4291]\]]
+
+[/-----------------------------------------------------------------------------]
+
+[section Overview]
+
+[endsect]
+
+[/-----------------------------------------------------------------------------]
+
+[section Motivation and Scope]
+
+[section Scope]
+
+[endsect]
+
+[section Target Audience]
+
+[endsect]
+
+[section Reference Implementation]
+
+[endsect]
+
+[section Related Work]
+
+[endsect]
+
+[endsect]
+
+[/-----------------------------------------------------------------------------]
+
+[section Impact On the Standard]
+
+This is a pure library proposal. It does not add any new language features, nor
+does it alter any existing standard library headers.
+
+This library can be implemented using compilers that conform to the C++11
+standard. An implementation of this library requires operating system-specific
+functions that lie outside the C++11 standard.
+
+[endsect]
+
+[/-----------------------------------------------------------------------------]
+
+[section Design Decisions]
+
+[endsect]
+
+[/-----------------------------------------------------------------------------]
+
+[section Proposed Text]
+
+[commentary Grey-shaded italic text is commentary on the proposal. It is not to
+be added to the TS.]
+
+[include:definitions definitions.qbk]
+
+[section:internet_protocol Internet protocol addresses]
+
+This clause describes components that C++ programs may use to manipulate IP
+addresses.
+
+[include:headers headers/network.qbk]
+
+[include:classes classes/ip__address.qbk]
+[include:classes classes/ip__address_v4.qbk]
+[include:classes classes/ip__address_v6.qbk]
+
+[endsect]
+
+[endsect]
+
+[/-----------------------------------------------------------------------------]
+
+[section Acknowledgements]
+
+[endsect]
+
+[/-----------------------------------------------------------------------------]
+
+[section References]
+
+[#ref-RFC4291] \[RFC4291\] Hinden, R. and Deering, S.,
+['RFC 4291: Internet Protocol Version 6 (IPv6) Addressing Architecture], 2006,
+[@http://www.ietf.org/rfc/rfc4291.txt].
+
+[endsect]

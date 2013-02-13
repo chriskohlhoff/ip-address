@@ -1,0 +1,15 @@
+[section Definitions]
+
+[section:host_byte_order host byte order]
+See
+[@http://www.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap04.html#tag_04_08
+Host and Network Byte Orders].
+[endsect]
+
+[section:network_byte_order network byte order]
+See
+[@http://www.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap04.html#tag_04_08
+Host and Network Byte Orders].
+[endsect]
+
+[endsect]

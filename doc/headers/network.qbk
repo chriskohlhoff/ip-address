@@ -1,0 +1,61 @@
+[section Header [^<network>] synopsis]
+
+  namespace std {
+    namespace tr2 {
+      namespace sys {
+
+        // Internet protocol addresses:
+
+        namespace ip {
+
+          class ``[link classes.ip__address address]``;
+
+          // address comparisons:
+          bool operator==(const address&, const address&);
+          bool operator!=(const address&, const address&);
+          bool operator< (const address&, const address&);
+          bool operator> (const address&, const address&);
+          bool operator<=(const address&, const address&);
+          bool operator>=(const address&, const address&);
+
+          // address I/O:
+          template<class CharT, class Traits>
+            basic_ostream<CharT, Traits>& operator<<(
+              basic_ostream<CharT, Traits>&, const address&);
+
+          class ``[link classes.ip__address_v4 address_v4]``;
+
+          // address_v4 comparisons:
+          bool operator==(const address_v4&, const address_v4&);
+          bool operator!=(const address_v4&, const address_v4&);
+          bool operator< (const address_v4&, const address_v4&);
+          bool operator> (const address_v4&, const address_v4&);
+          bool operator<=(const address_v4&, const address_v4&);
+          bool operator>=(const address_v4&, const address_v4&);
+
+          // address_v4 I/O:
+          template<class CharT, class Traits>
+            basic_ostream<CharT, Traits>& operator<<(
+              basic_ostream<CharT, Traits>&, const address_v4&);
+
+          class ``[link classes.ip__address_v6 address_v6]``;
+
+          // address_v6 comparisons:
+          bool operator==(const address_v6&, const address_v6&);
+          bool operator!=(const address_v6&, const address_v6&);
+          bool operator< (const address_v6&, const address_v6&);
+          bool operator> (const address_v6&, const address_v6&);
+          bool operator<=(const address_v6&, const address_v6&);
+          bool operator>=(const address_v6&, const address_v6&);
+
+          // address_v6 I/O:
+          template<class CharT, class Traits>
+            basic_ostream<CharT, Traits>& operator<<(
+              basic_ostream<CharT, Traits>&, const address_v6&);
+
+        } // namespace ip
+      } // namespace sys
+    } // namespace tr2
+  } // namespace std
+
+[endsect]
