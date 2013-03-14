@@ -1,66 +1,64 @@
 [section:ip__address_v6 Class [^ip::address_v6]]
 
   namespace std {
-    namespace tr2 {
-      namespace sys {
-        namespace ip {
+    namespace net {
+      namespace ip {
 
-          class address_v6
-          {
-          public:
-            // types:
-            typedef array<unsigned char, 16> bytes_type;
+        class address_v6
+        {
+        public:
+          // types:
+          typedef array<unsigned char, 16> bytes_type;
 
-            // constructors:
-            address_v6();
-            explicit address_v6(const bytes_type& bytes,
-                                unsigned long scope_id = 0);
+          // constructors:
+          address_v6();
+          explicit address_v6(const bytes_type& bytes,
+                              unsigned long scope_id = 0);
 
-            // members:
-            void scope_id(unsigned long id);
-            unsigned long scope_id() const;
-            bool is_unspecified() const;
-            bool is_loopback() const;
-            bool is_multicast() const;
-            bool is_link_local() const;
-            bool is_site_local() const;
-            bool is_v4_mapped() const;
-            bool is_v4_compatible() const;
-            bool is_multicast_node_local() const;
-            bool is_multicast_link_local() const;
-            bool is_multicast_site_local() const;
-            bool is_multicast_org_local() const;
-            bool is_multicast_global() const;
-            bytes_type to_bytes() const;
-            string to_string() const;
-            string to_string(error_code& ec) const;
-            address_v4 to_v4() const;
+          // members:
+          void scope_id(unsigned long id);
+          unsigned long scope_id() const;
+          bool is_unspecified() const;
+          bool is_loopback() const;
+          bool is_multicast() const;
+          bool is_link_local() const;
+          bool is_site_local() const;
+          bool is_v4_mapped() const;
+          bool is_v4_compatible() const;
+          bool is_multicast_node_local() const;
+          bool is_multicast_link_local() const;
+          bool is_multicast_site_local() const;
+          bool is_multicast_org_local() const;
+          bool is_multicast_global() const;
+          bytes_type to_bytes() const;
+          string to_string() const;
+          string to_string(error_code& ec) const;
+          address_v4 to_v4() const;
 
-            // static members:
-            static address_v6 from_string(const string& str);
-            static address_v6 from_string(const string& str, error_code& ec);
-            static address_v6 any();
-            static address_v6 loopback();
-            static address_v6 v4_mapped(const address_v4& addr);
-            static address_v6 v4_compatible(const address_v4& addr);
-          };
+          // static members:
+          static address_v6 from_string(const string& str);
+          static address_v6 from_string(const string& str, error_code& ec);
+          static address_v6 any();
+          static address_v6 loopback();
+          static address_v6 v4_mapped(const address_v4& addr);
+          static address_v6 v4_compatible(const address_v4& addr);
+        };
 
-          // address_v6 comparisons:
-          bool operator==(const address_v6& a, const address_v6& b);
-          bool operator!=(const address_v6& a, const address_v6& b);
-          bool operator< (const address_v6& a, const address_v6& b);
-          bool operator> (const address_v6& a, const address_v6& b);
-          bool operator<=(const address_v6& a, const address_v6& b);
-          bool operator>=(const address_v6& a, const address_v6& b);
+        // address_v6 comparisons:
+        bool operator==(const address_v6& a, const address_v6& b);
+        bool operator!=(const address_v6& a, const address_v6& b);
+        bool operator< (const address_v6& a, const address_v6& b);
+        bool operator> (const address_v6& a, const address_v6& b);
+        bool operator<=(const address_v6& a, const address_v6& b);
+        bool operator>=(const address_v6& a, const address_v6& b);
 
-          // address_v6 I/O:
-          template<class CharT, class Traits>
-            basic_ostream<CharT, Traits>& operator<<(
-              basic_ostream<CharT, Traits>& os, const address_v6& addr);
+        // address_v6 I/O:
+        template<class CharT, class Traits>
+          basic_ostream<CharT, Traits>& operator<<(
+            basic_ostream<CharT, Traits>& os, const address_v6& addr);
 
-        } // namespace ip
-      } // namespace sys
-    } // namespace tr2
+      } // namespace ip
+    } // namespace net
   } // namespace std
 
 [std_note The implementations of the functions `is_unspecified`, `is_loopback`,

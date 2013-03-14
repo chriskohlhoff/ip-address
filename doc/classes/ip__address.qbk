@@ -1,52 +1,50 @@
 [section:ip__address Class [^ip::address]]
 
   namespace std {
-    namespace tr2 {
-      namespace sys {
-        namespace ip {
+    namespace net {
+      namespace ip {
 
-          class address
-          {
-          public:
-            // constructors:
-            address();
-            address(const address_v4& addr);
-            address(const address_v6& addr);
+        class address
+        {
+        public:
+          // constructors:
+          address();
+          address(const address_v4& addr);
+          address(const address_v6& addr);
 
-            // assignment:
-            address& operator=(const address_v4& addr);
-            address& operator=(const address_v6& addr);
+          // assignment:
+          address& operator=(const address_v4& addr);
+          address& operator=(const address_v6& addr);
 
-            // members:
-            bool is_multicast() const;
-            bool is_v4() const;
-            bool is_v6() const;
-            address_v4 to_v4() const;
-            address_v6 to_v6() const;
-            string to_string() const;
-            string to_string(error_code& ec) const;
+          // members:
+          bool is_multicast() const;
+          bool is_v4() const;
+          bool is_v6() const;
+          address_v4 to_v4() const;
+          address_v6 to_v6() const;
+          string to_string() const;
+          string to_string(error_code& ec) const;
 
-            // static members:
-            static address from_string(const string& str);
-            static address from_string(const string& str, error_code& ec);
-          };
+          // static members:
+          static address from_string(const string& str);
+          static address from_string(const string& str, error_code& ec);
+        };
 
-          // address comparisons:
-          bool operator==(const address& a, const address& b);
-          bool operator!=(const address& a, const address& b);
-          bool operator< (const address& a, const address& b);
-          bool operator> (const address& a, const address& b);
-          bool operator<=(const address& a, const address& b);
-          bool operator>=(const address& a, const address& b);
+        // address comparisons:
+        bool operator==(const address& a, const address& b);
+        bool operator!=(const address& a, const address& b);
+        bool operator< (const address& a, const address& b);
+        bool operator> (const address& a, const address& b);
+        bool operator<=(const address& a, const address& b);
+        bool operator>=(const address& a, const address& b);
 
-          // address I/O:
-          template<class CharT, class Traits>
-            basic_ostream<CharT, Traits>& operator<<(
-              basic_ostream<CharT, Traits>& os, const address& addr);
+        // address I/O:
+        template<class CharT, class Traits>
+          basic_ostream<CharT, Traits>& operator<<(
+            basic_ostream<CharT, Traits>& os, const address& addr);
 
-        } // namespace ip
-      } // namespace sys
-    } // namespace tr2
+      } // namespace ip
+    } // namespace net
   } // namespace std
 
 [section [^ip::address] constructors]
