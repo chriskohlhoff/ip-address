@@ -17,6 +17,8 @@
           address& operator=(const address_v6& addr);
 
           // members:
+          bool is_unspecified() const;
+          bool is_loopback() const;
           bool is_multicast() const;
           bool is_v4() const;
           bool is_v6() const;
@@ -179,6 +181,14 @@ the table below.]
 [endsect]
 
 [section [^ip::address] members]
+
+  bool is_unspecified() const;
+
+[function_returns `is_v4() ? to_v4().is_unspecified() : to_v6().is_unspecified()`.]
+
+  bool is_loopback() const;
+
+[function_returns `is_v4() ? to_v4().is_loopback() : to_v6().is_loopback()`.]
 
   bool is_multicast() const;
 

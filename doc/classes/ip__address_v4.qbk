@@ -16,6 +16,8 @@
           explicit address_v4(unsigned long val);
 
           // members:
+          bool is_unspecified() const;
+          bool is_loopback() const;
           bool is_class_a() const;
           bool is_class_b() const;
           bool is_class_c() const;
@@ -131,6 +133,14 @@ the table below.]
 [endsect]
 
 [section [^ip::address_v4] members]
+
+  bool is_unspecified() const;
+
+[function_returns `to_ulong() == 0`.]
+
+  bool is_loopback() const;
+
+[function_returns `(to_ulong() & 0xFF000000) == 0x7F`.]
 
   bool is_class_a() const;
 
