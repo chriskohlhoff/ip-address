@@ -288,7 +288,12 @@ stream, as if it were implemented as follows:
   error_code ec;
   string s = addr.to_string(ec);
   if (ec)
-    os.setstate(ios_base::failbit); // may throw ios::failure
+  {
+    if (os.exceptions() & ios_base::failbit)
+      throw system_error(ec);
+    else
+      os.setstate(ios_base::failbit);
+  }
   else
     for (string::iterator i = s.begin(); i != s.end(); ++i)
       os << os.widen(*i);
