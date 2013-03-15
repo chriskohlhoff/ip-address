@@ -1,7 +1,6 @@
-[library IP Address Proposal
+[library A Three-Class IP Address Proposal
     [quickbook 1.1]
     [id ipaddress]
-    [last-revision YYYY-MM-DD]
 ]
 
 [/-----------------------------------------------------------------------------]
@@ -59,10 +58,6 @@
 '''&mdash;'''['end example]\]]
 ]
 
-[template commentary[text]
-[blurb [text]]
-]
-
 [template mdash[] '''&mdash; ''']
 
 [/-----------------------------------------------------------------------------]
@@ -70,6 +65,8 @@
 [def __POSIX__ /POSIX/]
 [def __inet_ntop__ [@http://www.opengroup.org/onlinepubs/000095399/functions/inet_ntop.html `inet_ntop()`]]
 [def __inet_pton__ [@http://www.opengroup.org/onlinepubs/000095399/functions/inet_pton.html `inet_pton()`]]
+[def __Asio__ [@http://www.boost.org/libs/asio Boost.Asio]]
+[def __N2175__ [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2175.pdf N2175] "Networking Library Proposal for TR2 (Revision 1)"]
 [def __dotdotdot__ ...]
 
 [/-----------------------------------------------------------------------------]
@@ -80,40 +77,24 @@
 
 [section Overview]
 
+This proposal describes a three-class design for IP address classes:
+
+* A vocabulary type, `ip::address`, for use in IP version independent code.
+
+* An IPv4-specific type `ip::address_v4`.
+
+* An IPv6-specific type `ip::address_v6`.
+
 [endsect]
 
 [/-----------------------------------------------------------------------------]
-
-[section Motivation and Scope]
-
-[section Scope]
-
-[endsect]
-
-[section Target Audience]
-
-[endsect]
 
 [section Reference Implementation]
 
-[endsect]
-
-[section Related Work]
-
-[endsect]
-
-[endsect]
-
-[/-----------------------------------------------------------------------------]
-
-[section Impact On the Standard]
-
-This is a pure library proposal. It does not add any new language features, nor
-does it alter any existing standard library headers.
-
-This library can be implemented using compilers that conform to the C++11
-standard. An implementation of this library requires operating system-specific
-functions that lie outside the C++11 standard.
+This proposal is based on the IP address classes in the __Asio__ library. The
+proposed text is from __N2175__ with small modifications to reflect
+enhancements made to __Asio__ since 2007. At present, the proposed text does
+not differ in any significant way from the corresponding classes in __Asio__.
 
 [endsect]
 
@@ -121,14 +102,145 @@ functions that lie outside the C++11 standard.
 
 [section Design Decisions]
 
+[section A Version-Independent Vocabulary Type]
+
+Ideally, most network applications should be written so that they are
+independent of the IP version in use. For this reason, this proposal provides
+the `ip::address` class as a vocabulary type.
+
+The characteristics of the `ip::address` class are as follows:
+
+* Uses type erasure. It may hold either an IPv4 or IPv6 address, but it
+preserves original type.
+
+* May be used with `AF_INET` or `AF_INET6` sockets.
+
+* May be converted to or from either an IPv4 address string or an IPv6 address
+string. Automatically determines the correct underlying type.
+
+* May be converted to or from an IPv4 or IPv6 address object of the
+corresponding version-specific class. ("To" assuming the version-independent
+source holds the correct underlying type.)
+
+* Provides various operations, for testing and manipulating addresses, that
+apply to both IPv4 and IPv6.
+
+[section Why Type Erasure?]
+
+The question of whether to use a type-erased vocabulary type was discussed
+during the 2005 Boost review of __Asio__. What was originally proposed was to
+distinguish IPv4 and IPv6 using separate types and to use template-based
+genericity to be version independent. This approach was rejected by the
+participants in the review.
+
+The point is that most applications do indeed need to be version independent at
+runtime. For example:
+
+[teletype]
+
+  Usage: my_tcp_server <bind_to_address>
+
+  ./my_tcp_server 0.0.0.0    # Binds to IPv4 wildcard address
+  ./my_tcp_server 127.0.0.1  # Binds to specific IPv6 address
+  ./my_tcp_server ::0        # Binds to IPv6 wildcard address
+  ./my_tcp_server ::1        # Binds to specific IPv6 address
+
+[c++]
+
+The implementation of [^my_tcp_server] only deals in one type of address class.
+No templates are required.
+
+Forcing all applications to create their own runtime switching was deemed
+infeasible. Dual-stack support is not universal and cannot be relied on for
+portable applications. Hence the current form in __Asio__ exists as a tradeoff
+between supporting the easy development of version-independent applications and
+the low level access to those who need it.
+
+[endsect]
+
+[endsect]
+
+[section Version-Specific Types]
+
+The version-specific address classes, `ip::address_v4` and `ip::address_v6`,
+are provided for use cases where finer grained control is required, such as:
+
+* Reduced memory consumption. An application may need to store many addresses.
+* Speed. A complex algorithm may deal only a single type of address, and the
+cost of repeatedly extracting the underlying value from a type-erased type is
+prohibitive.
+* Compile-time type safety. A programmer may wish to provide an interface that
+deals in only one particular IP version. Another may wish to provide different
+overloads of a function that are distinguished by IP version.
+
+The characteristics of the `ip::address_v4` class are as follows:
+
+* Specifically an IPv4 address.
+
+* For use with `AF_INET` sockets.
+
+* May be converted to or from an IPv4-form address string (`a.b.c.d`). Rejects
+other string forms.
+
+* May be converted to or from a 32 bit integer in host byte order. (Some
+applications use this for low level bit manipulation.)
+
+* May be converted to or from a 32 bit integer / 4 byte array in network byte
+order. (E.g. if used for transmission when embedded within a network protocol.)
+
+* Provides static member functions for creating well-known IPv4 addresses.
+
+* Provides various other operations for testing and manipulating IPv4 addresses.
+
+The characteristics of the `ip::address_v6` class are as follows:
+
+* Specifically an IPv6 address.
+
+* For use with `AF_INET6` sockets.
+
+* May be converted to or from an IPv6-form address string (`abcd:efgh:...`,
+etc). Rejects other string forms.
+
+* May be converted to or from a 128 bit integer / 16 byte array in network byte
+order. (E.g. again, if used for transmission.)
+
+* May be explicitly created from an `ip::address_v4`, with the creation function
+determining which conversion is used (to v4-mapped or v4-compatible).
+
+* May be explicitly converted to an `ip::address_v4`, if the address is one of
+the above v4 forms.
+
+* Provides static member functions for creating well-known IPv6 addresses.
+
+* Provides various other operations for testing and manipulating IPv6
+addresses.
+
+[endsect]
+
+[section Namespace]
+
+This proposal follows __Asio__ in the use of the namespace `ip::`, rather than
+the prefix `ip_`, for the address classes. This namespace is part of a wider
+taxonomy and encompasses other IP-related facilities, including:
+
+* Protocol classes (`tcp`, `udp` and `icmp`).
+* Socket option classes related to unicast and multicast.
+* Classes and functions related to IP name resolution.
+
+The author notes that the abbreviation [@http://en.wikipedia.org/wiki/IP IP] is
+an overloaded term, even within computing. If backward compatibility was not a
+concern, he would instead prefer the namespace `inet::`. This is consistent with
+__POSIX__ naming, as in `AF_INET`, `inet_ntop()`, etc. It is also unambiguously
+network related and so might be placed directly under the `std` namespace, i.e.
+`std::inet`.
+
+[endsect]
+
 [endsect]
 
 [/-----------------------------------------------------------------------------]
 
 [section Proposed Text]
-
-[commentary Grey-shaded italic text is commentary on the proposal. It is not to
-be added to the TS.]
 
 [include:definitions definitions.qbk]
 
