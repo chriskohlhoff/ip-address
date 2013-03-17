@@ -94,7 +94,7 @@ This proposal describes a three-class design for IP address classes:
 This proposal is based on the IP address classes in the __Asio__ library. The
 proposed text is from __N2175__ with small modifications to reflect
 enhancements made to __Asio__ since 2007. At present, the proposed text does
-not differ in any significant way from the corresponding classes in __Asio__.
+not differ significantly from the corresponding classes in __Asio__.
 
 [endsect]
 
@@ -254,6 +254,7 @@ addresses.
 [include:classes classes/ip__address.qbk]
 [include:classes classes/ip__address_v4.qbk]
 [include:classes classes/ip__address_v6.qbk]
+[include:classes classes/hash.qbk]
 
 [endsect]
 
