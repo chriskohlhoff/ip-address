@@ -308,9 +308,9 @@ A pure IPv4 address is subtly different from one mapped into an IPv6 address.
 This ties into the question of the larger networking ecosystem, in particular
 how one might use the address classes in conjunction with sockets. For example:
 
-* `"1.2.3.4"` -> `AF_INET` socket
-* `"::ffff:1.2.3.4"` -> `AF_INET6` with dual stack socket
-* `"fe80::...:12:34"` -> `AF_INET6` with or without dual stack
+* `"1.2.3.4" ->` `AF_INET` socket
+* `"::ffff:1.2.3.4" ->` `AF_INET6` with dual stack socket
+* `"fe80::...:12:34" ->` `AF_INET6` with or without dual stack
 
 Things like dual stack support are far from universal and some IPv6
 transition/portability guides recommend explicitly disabling dual stack
