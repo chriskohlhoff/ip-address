@@ -141,7 +141,7 @@ runtime. For example:
   Usage: my_tcp_server <bind_to_address>
 
   ./my_tcp_server 0.0.0.0    # Binds to IPv4 wildcard address
-  ./my_tcp_server 127.0.0.1  # Binds to specific IPv6 address
+  ./my_tcp_server 127.0.0.1  # Binds to specific IPv4 address
   ./my_tcp_server ::0        # Binds to IPv6 wildcard address
   ./my_tcp_server ::1        # Binds to specific IPv6 address
 
