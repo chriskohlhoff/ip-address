@@ -89,12 +89,45 @@ This proposal describes a three-class design for IP address classes:
 
 [/-----------------------------------------------------------------------------]
 
+[section Motivation and Scope]
+
+[section Scope]
+
+This proposal describes only types necessary to support the manipulation of IP
+(Internet Protocol) addresses. Other networking facilities, such as sockets and
+name resolution, are outside the scope of this proposal.
+
+[endsect]
+
+[section Target Audience]
+
+The proposed interface is primarily intended for use by developers writing
+programs with a networking component, and in particular programs that utilise
+internet protocols such as TCP and UDP.
+
+[endsect]
+
 [section Reference Implementation]
 
 This proposal is based on the IP address classes in the __Asio__ library. The
 proposed text is from __N2175__ with small modifications to reflect
 enhancements made to __Asio__ since 2007. At present, the proposed text does
 not differ significantly from the corresponding classes in __Asio__.
+
+[endsect]
+
+[endsect]
+
+[/-----------------------------------------------------------------------------]
+
+[section Impact On the Standard]
+
+This is a pure library proposal. It does not add any new language features, nor
+does it alter any existing standard library headers.
+
+This library can be implemented using compilers that conform to the C++11
+standard. An implementation of this library requires operating system-specific
+functions that lie outside the C++11 standard.
 
 [endsect]
 
@@ -154,7 +187,7 @@ Forcing all applications to create their own runtime switching was deemed
 infeasible. Dual-stack support is not universal and cannot be relied on for
 portable applications. Hence the current form in __Asio__ exists as a tradeoff
 between supporting the easy development of version-independent applications and
-the low level access to those who need it.
+the low level access for those who need it.
 
 [endsect]
 
@@ -166,9 +199,9 @@ The version-specific address classes, `ip::address_v4` and `ip::address_v6`,
 are provided for use cases where finer grained control is required, such as:
 
 * Reduced memory consumption. An application may need to store many addresses.
-* Speed. A complex algorithm may deal only a single type of address, and the
-cost of repeatedly extracting the underlying value from a type-erased type is
-prohibitive.
+* Speed. A complex algorithm may deal with only a single type of address, and
+the cost of repeatedly extracting the underlying value from a type-erased type
+is prohibitive.
 * Compile-time type safety. A programmer may wish to provide an interface that
 deals in only one particular IP version. Another may wish to provide different
 overloads of a function that are distinguished by IP version.
@@ -214,6 +247,84 @@ the above v4 forms.
 
 * Provides various other operations for testing and manipulating IPv6
 addresses.
+
+[endsect]
+
+[section Two Classes is Too Few]
+
+An alternative IP address design has been proposed that revolves around two
+classes. Using the naming conventions of this proposal, these classes would be:
+
+* A vocabulary type, `ip::address`, for use in IP version independent code.
+Unlike the three-class design, this class is also intended to represent IPv6
+addresses.
+
+* A version-specific type, `ip::address_v4`.
+
+This design appears to be driven by a desire to push people toward the
+version-independent type, but to still meet the space constraints of
+applications that must deal with large numbers of IPv4 addresses. The design is
+based on the notion that IPv4 addresses are a subset of IPv6 addresses, and
+that IPv4 addresses can be mapped, and stored, into IPv6.
+
+The author rejects this design for a number of reasons.
+
+* It lacks symmetry and is potentially surprising to users.
+
+Superficially, the two-class design gives a special place to IPv4 addresses ("I
+can see the IPv4 class... but where's IPv6?").
+
+What is more important, however, is that the design prevents a programmer from
+utilising the C++ type system to create efficient function overloads based on
+the IP version. A programmer can provide a function overload specifically for
+IPv4 addresses:
+
+  some_function(const ip::address_v4& a)
+  {
+    ...
+  }
+
+but when it comes to supporting IPv6 addresses the programmer has no choice but
+to resort to runtime dispatching:
+
+  some_function(const ip::address& a)
+  {
+    if (a.is_v6())
+    {
+      ...
+    }
+    else
+    {
+      ...
+    }
+  }
+
+There is no way for an programmer to express an interface that wants to deal
+only in IPv6 addresses.
+
+* It unnecessarily discards information.
+
+A pure IPv4 address is subtly different from one mapped into an IPv6 address.
+This ties into the question of the larger networking ecosystem, in particular
+how one might use the address classes in conjunction with sockets. For example:
+
+* `"1.2.3.4"` -> `AF_INET` socket
+* `"::ffff:1.2.3.4"` -> `AF_INET6` with dual stack socket
+* `"fe80::...:12:34"` -> `AF_INET6` with or without dual stack
+
+Things like dual stack support are far from universal and some IPv6
+transition/portability guides recommend explicitly disabling dual stack
+support. The author does not think that standardized address classes should
+push people in one or other direction with respect to dual stack usage. Thus,
+it is important to preserve the original type of the IP address.
+
+* It treats IPv6 operations as a superset of IPv4 operations.
+
+As there is no separate type for IPv6, the vocabulary type `ip::address` must
+support all IPv6-related operations. Some of these operations may lack a
+meaningful implementation for IPv4 addresses, and so behave in quite different
+ways (e.g. fail). Note that some of these operations are outside the scope of
+standardization, i.e. they may be part of an application.
 
 [endsect]
 

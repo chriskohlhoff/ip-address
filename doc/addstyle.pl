@@ -19,8 +19,8 @@ my $style =
 
 my $docno =
 "<pre>" .
-"Doc. no:  N????=??-????\n" .
-"Date:     2013-03-15\n" .
+"Doc. no:  N3603\n" .
+"Date:     2013-03-17\n" .
 "Author:   Christopher Kohlhoff &lt;chris\@kohlhoff.com&gt;\n" .
 "</pre>\n";
 
