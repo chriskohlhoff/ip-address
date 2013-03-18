@@ -286,7 +286,7 @@ utilising the C++ type system to create efficient function overloads based on
 the IP version. A programmer can provide a function overload specifically for
 IPv4 addresses:
 
-  some_function(const ip::address_v4& a)
+  void some_function(const ip::address_v4& a)
   {
     ...
   }
@@ -294,7 +294,7 @@ IPv4 addresses:
 but when it comes to supporting IPv6 addresses the programmer has no choice but
 to resort to runtime dispatching:
 
-  some_function(const ip::address& a)
+  void some_function(const ip::address& a)
   {
     if (a.is_v6())
     {
