@@ -21,7 +21,7 @@ my $docno =
 "<pre>" .
 "Doc. no:  N3603\n" .
 "Date:     2013-03-17\n" .
-"Author:   Christopher Kohlhoff &lt;chris\@kohlhoff.com&gt;\n" .
+"Reply-To: Christopher Kohlhoff &lt;chris\@kohlhoff.com&gt;\n" .
 "</pre>\n";
 
 my @lines = ();
