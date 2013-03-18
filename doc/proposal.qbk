@@ -165,6 +165,11 @@ the future, but in practice the choice may not be that important; most
 addresses should be obtained from a string, name resolution, or one of the
 well-known addresses.)
 
+In general, the `ip::address` interface is designed to provide just enough
+support to use IP addresses in version-independent networking contexts. When a
+program requires a facility that applies to only IPv4 or IPv6 addresses, the
+developer is expected to use one of the version-specific types described below.
+
 [section Why Type Erasure?]
 
 The question of whether to use a type-erased vocabulary type was discussed
