@@ -166,11 +166,11 @@ the table below.]
   [[expression][value]]
   [
     [`is_v4()`]
-    [`true`]
+    [`false`]
   ]
   [
     [`is_v6()`]
-    [`false`]
+    [`true`]
   ]
   [
     [`to_v6()`]
