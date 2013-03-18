@@ -158,6 +158,13 @@ source holds the correct underlying type.)
 * Provides various operations, for testing and manipulating addresses, that
 apply to both IPv4 and IPv6.
 
+* When default constructed, initialises the `ip::address` object so that it
+corresponds to a default-constructed IPv4 address. (This approach was chosen in
+__Asio__ as IPv6 support is not universal. IPv6 may be a better choice for
+the future, but in practice the choice may not be that important; most
+addresses should be obtained from a string, name resolution, or one of the
+well-known addresses.)
+
 [section Why Type Erasure?]
 
 The question of whether to use a type-erased vocabulary type was discussed
