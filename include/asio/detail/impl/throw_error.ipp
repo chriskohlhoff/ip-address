@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_DETAIL_IMPL_THROW_ERROR_IPP
-#define ASIO_DETAIL_IMPL_THROW_ERROR_IPP
+#ifndef STDNET_DETAIL_IMPL_THROW_ERROR_IPP
+#define STDNET_DETAIL_IMPL_THROW_ERROR_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -42,4 +42,4 @@ void do_throw_error(const std::error_code& err, const char* location)
 
 #include "asio/detail/pop_options.hpp"
 
-#endif // ASIO_DETAIL_IMPL_THROW_ERROR_IPP
+#endif // STDNET_DETAIL_IMPL_THROW_ERROR_IPP

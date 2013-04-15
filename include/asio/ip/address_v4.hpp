@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_IP_ADDRESS_V4_HPP
-#define ASIO_IP_ADDRESS_V4_HPP
+#ifndef STDNET_IP_ADDRESS_V4_HPP
+#define STDNET_IP_ADDRESS_V4_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -22,9 +22,9 @@
 #include "asio/detail/socket_types.hpp"
 #include "asio/detail/winsock_init.hpp"
 
-#if !defined(ASIO_NO_IOSTREAM)
+#if !defined(STDNET_NO_IOSTREAM)
 # include <iosfwd>
-#endif // !defined(ASIO_NO_IOSTREAM)
+#endif // !defined(STDNET_NO_IOSTREAM)
 
 #include "asio/detail/push_options.hpp"
 
@@ -57,10 +57,10 @@ public:
   }
 
   /// Construct an address from raw bytes.
-  ASIO_DECL explicit address_v4(const bytes_type& bytes);
+  STDNET_DECL explicit address_v4(const bytes_type& bytes);
 
   /// Construct an address from a unsigned long in host byte order.
-  ASIO_DECL explicit address_v4(unsigned long addr);
+  STDNET_DECL explicit address_v4(unsigned long addr);
 
   /// Copy constructor.
   address_v4(const address_v4& other)
@@ -68,13 +68,13 @@ public:
   {
   }
 
-#if defined(ASIO_HAS_MOVE)
+#if defined(STDNET_HAS_MOVE)
   /// Move constructor.
   address_v4(address_v4&& other)
     : addr_(other.addr_)
   {
   }
-#endif // defined(ASIO_HAS_MOVE)
+#endif // defined(STDNET_HAS_MOVE)
 
   /// Assign from another address.
   address_v4& operator=(const address_v4& other)
@@ -83,58 +83,58 @@ public:
     return *this;
   }
 
-#if defined(ASIO_HAS_MOVE)
+#if defined(STDNET_HAS_MOVE)
   /// Move-assign from another address.
   address_v4& operator=(address_v4&& other)
   {
     addr_ = other.addr_;
     return *this;
   }
-#endif // defined(ASIO_HAS_MOVE)
+#endif // defined(STDNET_HAS_MOVE)
 
   /// Get the address in bytes, in network byte order.
-  ASIO_DECL bytes_type to_bytes() const;
+  STDNET_DECL bytes_type to_bytes() const;
 
   /// Get the address as an unsigned long in host byte order
-  ASIO_DECL unsigned long to_ulong() const;
+  STDNET_DECL unsigned long to_ulong() const;
 
   /// Get the address as a string in dotted decimal format.
-  ASIO_DECL std::string to_string() const;
+  STDNET_DECL std::string to_string() const;
 
   /// Get the address as a string in dotted decimal format.
-  ASIO_DECL std::string to_string(std::error_code& ec) const;
+  STDNET_DECL std::string to_string(std::error_code& ec) const;
 
   /// Create an address from an IP address string in dotted decimal form.
-  ASIO_DECL static address_v4 from_string(const char* str);
+  STDNET_DECL static address_v4 from_string(const char* str);
 
   /// Create an address from an IP address string in dotted decimal form.
-  ASIO_DECL static address_v4 from_string(
+  STDNET_DECL static address_v4 from_string(
       const char* str, std::error_code& ec);
 
   /// Create an address from an IP address string in dotted decimal form.
-  ASIO_DECL static address_v4 from_string(const std::string& str);
+  STDNET_DECL static address_v4 from_string(const std::string& str);
 
   /// Create an address from an IP address string in dotted decimal form.
-  ASIO_DECL static address_v4 from_string(
+  STDNET_DECL static address_v4 from_string(
       const std::string& str, std::error_code& ec);
 
   /// Determine whether the address is a loopback address.
-  ASIO_DECL bool is_loopback() const;
+  STDNET_DECL bool is_loopback() const;
 
   /// Determine whether the address is unspecified.
-  ASIO_DECL bool is_unspecified() const;
+  STDNET_DECL bool is_unspecified() const;
 
   /// Determine whether the address is a class A address.
-  ASIO_DECL bool is_class_a() const;
+  STDNET_DECL bool is_class_a() const;
 
   /// Determine whether the address is a class B address.
-  ASIO_DECL bool is_class_b() const;
+  STDNET_DECL bool is_class_b() const;
 
   /// Determine whether the address is a class C address.
-  ASIO_DECL bool is_class_c() const;
+  STDNET_DECL bool is_class_c() const;
 
   /// Determine whether the address is a multicast address.
-  ASIO_DECL bool is_multicast() const;
+  STDNET_DECL bool is_multicast() const;
 
   /// Compare two addresses for equality.
   friend bool operator==(const address_v4& a1, const address_v4& a2)
@@ -192,19 +192,19 @@ public:
 
   /// Obtain an address object that represents the broadcast address that
   /// corresponds to the specified address and netmask.
-  ASIO_DECL static address_v4 broadcast(
+  STDNET_DECL static address_v4 broadcast(
       const address_v4& addr, const address_v4& mask);
 
   /// Obtain the netmask that corresponds to the address, based on its address
   /// class.
-  ASIO_DECL static address_v4 netmask(const address_v4& addr);
+  STDNET_DECL static address_v4 netmask(const address_v4& addr);
 
 private:
   // The underlying IPv4 address.
   asio::detail::in4_addr_type addr_;
 };
 
-#if !defined(ASIO_NO_IOSTREAM)
+#if !defined(STDNET_NO_IOSTREAM)
 
 /// Output an address as a string.
 /**
@@ -222,7 +222,7 @@ template <typename Elem, typename Traits>
 std::basic_ostream<Elem, Traits>& operator<<(
     std::basic_ostream<Elem, Traits>& os, const address_v4& addr);
 
-#endif // !defined(ASIO_NO_IOSTREAM)
+#endif // !defined(STDNET_NO_IOSTREAM)
 
 } // namespace ip
 } // namespace asio
@@ -230,8 +230,8 @@ std::basic_ostream<Elem, Traits>& operator<<(
 #include "asio/detail/pop_options.hpp"
 
 #include "asio/ip/impl/address_v4.hpp"
-#if defined(ASIO_HEADER_ONLY)
+#if defined(STDNET_HEADER_ONLY)
 # include "asio/ip/impl/address_v4.ipp"
-#endif // defined(ASIO_HEADER_ONLY)
+#endif // defined(STDNET_HEADER_ONLY)
 
-#endif // ASIO_IP_ADDRESS_V4_HPP
+#endif // STDNET_IP_ADDRESS_V4_HPP

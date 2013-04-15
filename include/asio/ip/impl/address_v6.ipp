@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_IP_IMPL_ADDRESS_V6_IPP
-#define ASIO_IP_IMPL_ADDRESS_V6_IPP
+#ifndef STDNET_IP_IMPL_ADDRESS_V6_IPP
+#define STDNET_IP_IMPL_ADDRESS_V6_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -61,13 +61,13 @@ address_v6::address_v6(const address_v6& other)
 {
 }
 
-#if defined(ASIO_HAS_MOVE)
+#if defined(STDNET_HAS_MOVE)
 address_v6::address_v6(address_v6&& other)
   : addr_(other.addr_),
     scope_id_(other.scope_id_)
 {
 }
-#endif // defined(ASIO_HAS_MOVE)
+#endif // defined(STDNET_HAS_MOVE)
 
 address_v6& address_v6::operator=(const address_v6& other)
 {
@@ -76,14 +76,14 @@ address_v6& address_v6::operator=(const address_v6& other)
   return *this;
 }
 
-#if defined(ASIO_HAS_MOVE)
+#if defined(STDNET_HAS_MOVE)
 address_v6& address_v6::operator=(address_v6&& other)
 {
   addr_ = other.addr_;
   scope_id_ = other.scope_id_;
   return *this;
 }
-#endif // defined(ASIO_HAS_MOVE)
+#endif // defined(STDNET_HAS_MOVE)
 
 address_v6::bytes_type address_v6::to_bytes() const
 {
@@ -290,4 +290,4 @@ address_v6 address_v6::v4_compatible(const address_v4& addr)
 
 #include "asio/detail/pop_options.hpp"
 
-#endif // ASIO_IP_IMPL_ADDRESS_V6_IPP
+#endif // STDNET_IP_IMPL_ADDRESS_V6_IPP

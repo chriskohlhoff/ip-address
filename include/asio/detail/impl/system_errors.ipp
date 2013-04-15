@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_DETAIL_IMPL_SYSTEM_ERRORS_IPP
-#define ASIO_DETAIL_IMPL_SYSTEM_ERRORS_IPP
+#ifndef STDNET_DETAIL_IMPL_SYSTEM_ERRORS_IPP
+#define STDNET_DETAIL_IMPL_SYSTEM_ERRORS_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -27,14 +27,14 @@ namespace syserrc {
 class system_category : public std::error_category
 {
 public:
-  const char* name() const ASIO_ERROR_CATEGORY_NOEXCEPT
+  const char* name() const STDNET_ERROR_CATEGORY_NOEXCEPT
   {
     return "asio.system";
   }
 
   std::string message(int value) const
   {
-#if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
     char* msg = 0;
     DWORD length = ::FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER
         | FORMAT_MESSAGE_FROM_SYSTEM
@@ -49,7 +49,7 @@ public:
       return msg;
     else
       return "asio.system error";
-#else // defined(ASIO_WINDOWS)
+#else // defined(STDNET_WINDOWS)
 #if !defined(__sun)
     if (value == ECANCELED)
       return "Operation aborted.";
@@ -69,7 +69,7 @@ public:
     char buf[256] = "";
     return strerror_r(value, buf, sizeof(buf));
 #endif
-#endif // defined(ASIO_WINDOWS)
+#endif // defined(STDNET_WINDOWS)
   }
 };
 
@@ -86,4 +86,4 @@ const std::error_category& system_category()
 
 #include "asio/detail/pop_options.hpp"
 
-#endif // ASIO_DETAIL_IMPL_SYSTEM_ERRORS_IPP
+#endif // STDNET_DETAIL_IMPL_SYSTEM_ERRORS_IPP

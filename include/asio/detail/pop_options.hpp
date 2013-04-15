@@ -33,10 +33,10 @@
 
 # if defined(__OBJC__)
 #  if !defined(__APPLE_CC__) || (__APPLE_CC__ <= 1)
-#   if defined(ASIO_OBJC_WORKAROUND)
+#   if defined(STDNET_OBJC_WORKAROUND)
 #    undef Protocol
 #    undef id
-#    undef ASIO_OBJC_WORKAROUND
+#    undef STDNET_OBJC_WORKAROUND
 #   endif
 #  endif
 # endif

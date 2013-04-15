@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_DETAIL_IMPL_WINSOCK_INIT_IPP
-#define ASIO_DETAIL_IMPL_WINSOCK_INIT_IPP
+#ifndef STDNET_DETAIL_IMPL_WINSOCK_INIT_IPP
+#define STDNET_DETAIL_IMPL_WINSOCK_INIT_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -17,7 +17,7 @@
 
 #include "asio/detail/config.hpp"
 
-#if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 
 #include "asio/detail/socket_types.hpp"
 #include "asio/detail/system_errors.hpp"
@@ -64,6 +64,6 @@ void winsock_init_base::throw_on_error(data& d)
 
 #include "asio/detail/pop_options.hpp"
 
-#endif // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#endif // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 
-#endif // ASIO_DETAIL_IMPL_WINSOCK_INIT_IPP
+#endif // STDNET_DETAIL_IMPL_WINSOCK_INIT_IPP

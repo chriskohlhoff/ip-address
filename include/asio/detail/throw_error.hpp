@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_DETAIL_THROW_ERROR_HPP
-#define ASIO_DETAIL_THROW_ERROR_HPP
+#ifndef STDNET_DETAIL_THROW_ERROR_HPP
+#define STDNET_DETAIL_THROW_ERROR_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -23,9 +23,9 @@
 namespace asio {
 namespace detail {
 
-ASIO_DECL void do_throw_error(const std::error_code& err);
+STDNET_DECL void do_throw_error(const std::error_code& err);
 
-ASIO_DECL void do_throw_error(const std::error_code& err,
+STDNET_DECL void do_throw_error(const std::error_code& err,
     const char* location);
 
 inline void throw_error(const std::error_code& err)
@@ -46,8 +46,8 @@ inline void throw_error(const std::error_code& err,
 
 #include "asio/detail/pop_options.hpp"
 
-#if defined(ASIO_HEADER_ONLY)
+#if defined(STDNET_HEADER_ONLY)
 # include "asio/detail/impl/throw_error.ipp"
-#endif // defined(ASIO_HEADER_ONLY)
+#endif // defined(STDNET_HEADER_ONLY)
 
-#endif // ASIO_DETAIL_THROW_ERROR_HPP
+#endif // STDNET_DETAIL_THROW_ERROR_HPP

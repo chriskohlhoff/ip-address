@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_IP_ADDRESS_V6_HPP
-#define ASIO_IP_ADDRESS_V6_HPP
+#ifndef STDNET_IP_ADDRESS_V6_HPP
+#define STDNET_IP_ADDRESS_V6_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -23,9 +23,9 @@
 #include "asio/detail/winsock_init.hpp"
 #include "asio/ip/address_v4.hpp"
 
-#if !defined(ASIO_NO_IOSTREAM)
+#if !defined(STDNET_NO_IOSTREAM)
 # include <iosfwd>
-#endif // !defined(ASIO_NO_IOSTREAM)
+#endif // !defined(STDNET_NO_IOSTREAM)
 
 #include "asio/detail/push_options.hpp"
 
@@ -52,27 +52,27 @@ public:
   typedef std::array<unsigned char, 16> bytes_type;
 
   /// Default constructor.
-  ASIO_DECL address_v6();
+  STDNET_DECL address_v6();
 
   /// Construct an address from raw bytes and scope ID.
-  ASIO_DECL explicit address_v6(const bytes_type& bytes,
+  STDNET_DECL explicit address_v6(const bytes_type& bytes,
       unsigned long scope_id = 0);
 
   /// Copy constructor.
-  ASIO_DECL address_v6(const address_v6& other);
+  STDNET_DECL address_v6(const address_v6& other);
 
-#if defined(ASIO_HAS_MOVE)
+#if defined(STDNET_HAS_MOVE)
   /// Move constructor.
-  ASIO_DECL address_v6(address_v6&& other);
-#endif // defined(ASIO_HAS_MOVE)
+  STDNET_DECL address_v6(address_v6&& other);
+#endif // defined(STDNET_HAS_MOVE)
 
   /// Assign from another address.
-  ASIO_DECL address_v6& operator=(const address_v6& other);
+  STDNET_DECL address_v6& operator=(const address_v6& other);
 
-#if defined(ASIO_HAS_MOVE)
+#if defined(STDNET_HAS_MOVE)
   /// Move-assign from another address.
-  ASIO_DECL address_v6& operator=(address_v6&& other);
-#endif // defined(ASIO_HAS_MOVE)
+  STDNET_DECL address_v6& operator=(address_v6&& other);
+#endif // defined(STDNET_HAS_MOVE)
 
   /// The scope ID of the address.
   /**
@@ -93,69 +93,69 @@ public:
   }
 
   /// Get the address in bytes, in network byte order.
-  ASIO_DECL bytes_type to_bytes() const;
+  STDNET_DECL bytes_type to_bytes() const;
 
   /// Get the address as a string.
-  ASIO_DECL std::string to_string() const;
+  STDNET_DECL std::string to_string() const;
 
   /// Get the address as a string.
-  ASIO_DECL std::string to_string(std::error_code& ec) const;
+  STDNET_DECL std::string to_string(std::error_code& ec) const;
 
   /// Create an address from an IP address string.
-  ASIO_DECL static address_v6 from_string(const char* str);
+  STDNET_DECL static address_v6 from_string(const char* str);
 
   /// Create an address from an IP address string.
-  ASIO_DECL static address_v6 from_string(
+  STDNET_DECL static address_v6 from_string(
       const char* str, std::error_code& ec);
 
   /// Create an address from an IP address string.
-  ASIO_DECL static address_v6 from_string(const std::string& str);
+  STDNET_DECL static address_v6 from_string(const std::string& str);
 
   /// Create an address from an IP address string.
-  ASIO_DECL static address_v6 from_string(
+  STDNET_DECL static address_v6 from_string(
       const std::string& str, std::error_code& ec);
 
   /// Converts an IPv4-mapped or IPv4-compatible address to an IPv4 address.
-  ASIO_DECL address_v4 to_v4() const;
+  STDNET_DECL address_v4 to_v4() const;
 
   /// Determine whether the address is a loopback address.
-  ASIO_DECL bool is_loopback() const;
+  STDNET_DECL bool is_loopback() const;
 
   /// Determine whether the address is unspecified.
-  ASIO_DECL bool is_unspecified() const;
+  STDNET_DECL bool is_unspecified() const;
 
   /// Determine whether the address is link local.
-  ASIO_DECL bool is_link_local() const;
+  STDNET_DECL bool is_link_local() const;
 
   /// Determine whether the address is site local.
-  ASIO_DECL bool is_site_local() const;
+  STDNET_DECL bool is_site_local() const;
 
   /// Determine whether the address is a mapped IPv4 address.
-  ASIO_DECL bool is_v4_mapped() const;
+  STDNET_DECL bool is_v4_mapped() const;
 
   /// Determine whether the address is an IPv4-compatible address.
-  ASIO_DECL bool is_v4_compatible() const;
+  STDNET_DECL bool is_v4_compatible() const;
 
   /// Determine whether the address is a multicast address.
-  ASIO_DECL bool is_multicast() const;
+  STDNET_DECL bool is_multicast() const;
 
   /// Determine whether the address is a global multicast address.
-  ASIO_DECL bool is_multicast_global() const;
+  STDNET_DECL bool is_multicast_global() const;
 
   /// Determine whether the address is a link-local multicast address.
-  ASIO_DECL bool is_multicast_link_local() const;
+  STDNET_DECL bool is_multicast_link_local() const;
 
   /// Determine whether the address is a node-local multicast address.
-  ASIO_DECL bool is_multicast_node_local() const;
+  STDNET_DECL bool is_multicast_node_local() const;
 
   /// Determine whether the address is a org-local multicast address.
-  ASIO_DECL bool is_multicast_org_local() const;
+  STDNET_DECL bool is_multicast_org_local() const;
 
   /// Determine whether the address is a site-local multicast address.
-  ASIO_DECL bool is_multicast_site_local() const;
+  STDNET_DECL bool is_multicast_site_local() const;
 
   /// Compare two addresses for equality.
-  ASIO_DECL friend bool operator==(
+  STDNET_DECL friend bool operator==(
       const address_v6& a1, const address_v6& a2);
 
   /// Compare two addresses for inequality.
@@ -165,7 +165,7 @@ public:
   }
 
   /// Compare addresses for ordering.
-  ASIO_DECL friend bool operator<(
+  STDNET_DECL friend bool operator<(
       const address_v6& a1, const address_v6& a2);
 
   /// Compare addresses for ordering.
@@ -193,13 +193,13 @@ public:
   }
 
   /// Obtain an address object that represents the loopback address.
-  ASIO_DECL static address_v6 loopback();
+  STDNET_DECL static address_v6 loopback();
 
   /// Create an IPv4-mapped IPv6 address.
-  ASIO_DECL static address_v6 v4_mapped(const address_v4& addr);
+  STDNET_DECL static address_v6 v4_mapped(const address_v4& addr);
 
   /// Create an IPv4-compatible IPv6 address.
-  ASIO_DECL static address_v6 v4_compatible(const address_v4& addr);
+  STDNET_DECL static address_v6 v4_compatible(const address_v4& addr);
 
 private:
   // The underlying IPv6 address.
@@ -209,7 +209,7 @@ private:
   unsigned long scope_id_;
 };
 
-#if !defined(ASIO_NO_IOSTREAM)
+#if !defined(STDNET_NO_IOSTREAM)
 
 /// Output an address as a string.
 /**
@@ -227,7 +227,7 @@ template <typename Elem, typename Traits>
 std::basic_ostream<Elem, Traits>& operator<<(
     std::basic_ostream<Elem, Traits>& os, const address_v6& addr);
 
-#endif // !defined(ASIO_NO_IOSTREAM)
+#endif // !defined(STDNET_NO_IOSTREAM)
 
 } // namespace ip
 } // namespace asio
@@ -235,8 +235,8 @@ std::basic_ostream<Elem, Traits>& operator<<(
 #include "asio/detail/pop_options.hpp"
 
 #include "asio/ip/impl/address_v6.hpp"
-#if defined(ASIO_HEADER_ONLY)
+#if defined(STDNET_HEADER_ONLY)
 # include "asio/ip/impl/address_v6.ipp"
-#endif // defined(ASIO_HEADER_ONLY)
+#endif // defined(STDNET_HEADER_ONLY)
 
-#endif // ASIO_IP_ADDRESS_V6_HPP
+#endif // STDNET_IP_ADDRESS_V6_HPP

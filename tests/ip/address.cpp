@@ -117,8 +117,8 @@ void test()
 
 //------------------------------------------------------------------------------
 
-ASIO_TEST_SUITE
+STDNET_TEST_SUITE
 (
   "ip/address",
-  ASIO_TEST_CASE(ip_address_compile::test)
+  STDNET_TEST_CASE(ip_address_compile::test)
 )

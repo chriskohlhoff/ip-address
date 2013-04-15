@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_IP_IMPL_ADDRESS_IPP
-#define ASIO_IP_IMPL_ADDRESS_IPP
+#ifndef STDNET_IP_IMPL_ADDRESS_IPP
+#define STDNET_IP_IMPL_ADDRESS_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -56,14 +56,14 @@ address::address(const address& other)
 {
 }
 
-#if defined(ASIO_HAS_MOVE)
+#if defined(STDNET_HAS_MOVE)
 address::address(address&& other)
   : type_(other.type_),
     ipv4_address_(other.ipv4_address_),
     ipv6_address_(other.ipv6_address_)
 {
 }
-#endif // defined(ASIO_HAS_MOVE)
+#endif // defined(STDNET_HAS_MOVE)
 
 address& address::operator=(const address& other)
 {
@@ -73,7 +73,7 @@ address& address::operator=(const address& other)
   return *this;
 }
 
-#if defined(ASIO_HAS_MOVE)
+#if defined(STDNET_HAS_MOVE)
 address& address::operator=(address&& other)
 {
   type_ = other.type_;
@@ -81,7 +81,7 @@ address& address::operator=(address&& other)
   ipv6_address_ = other.ipv6_address_;
   return *this;
 }
-#endif // defined(ASIO_HAS_MOVE)
+#endif // defined(STDNET_HAS_MOVE)
 
 address& address::operator=(const asio::ip::address_v4& ipv4_address)
 {
@@ -223,4 +223,4 @@ bool operator<(const address& a1, const address& a2)
 
 #include "asio/detail/pop_options.hpp"
 
-#endif // ASIO_IP_IMPL_ADDRESS_IPP
+#endif // STDNET_IP_IMPL_ADDRESS_IPP

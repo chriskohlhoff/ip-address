@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_IP_ADDRESS_HPP
-#define ASIO_IP_ADDRESS_HPP
+#ifndef STDNET_IP_ADDRESS_HPP
+#define STDNET_IP_ADDRESS_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -21,9 +21,9 @@
 #include "asio/ip/address_v4.hpp"
 #include "asio/ip/address_v6.hpp"
 
-#if !defined(ASIO_NO_IOSTREAM)
+#if !defined(STDNET_NO_IOSTREAM)
 # include <iosfwd>
-#endif // !defined(ASIO_NO_IOSTREAM)
+#endif // !defined(STDNET_NO_IOSTREAM)
 
 #include "asio/detail/push_options.hpp"
 
@@ -43,36 +43,36 @@ class address
 {
 public:
   /// Default constructor.
-  ASIO_DECL address();
+  STDNET_DECL address();
 
   /// Construct an address from an IPv4 address.
-  ASIO_DECL address(const asio::ip::address_v4& ipv4_address);
+  STDNET_DECL address(const asio::ip::address_v4& ipv4_address);
 
   /// Construct an address from an IPv6 address.
-  ASIO_DECL address(const asio::ip::address_v6& ipv6_address);
+  STDNET_DECL address(const asio::ip::address_v6& ipv6_address);
 
   /// Copy constructor.
-  ASIO_DECL address(const address& other);
+  STDNET_DECL address(const address& other);
 
-#if defined(ASIO_HAS_MOVE)
+#if defined(STDNET_HAS_MOVE)
   /// Move constructor.
-  ASIO_DECL address(address&& other);
-#endif // defined(ASIO_HAS_MOVE)
+  STDNET_DECL address(address&& other);
+#endif // defined(STDNET_HAS_MOVE)
 
   /// Assign from another address.
-  ASIO_DECL address& operator=(const address& other);
+  STDNET_DECL address& operator=(const address& other);
 
-#if defined(ASIO_HAS_MOVE)
+#if defined(STDNET_HAS_MOVE)
   /// Move-assign from another address.
-  ASIO_DECL address& operator=(address&& other);
-#endif // defined(ASIO_HAS_MOVE)
+  STDNET_DECL address& operator=(address&& other);
+#endif // defined(STDNET_HAS_MOVE)
 
   /// Assign from an IPv4 address.
-  ASIO_DECL address& operator=(
+  STDNET_DECL address& operator=(
       const asio::ip::address_v4& ipv4_address);
 
   /// Assign from an IPv6 address.
-  ASIO_DECL address& operator=(
+  STDNET_DECL address& operator=(
       const asio::ip::address_v6& ipv6_address);
 
   /// Get whether the address is an IP version 4 address.
@@ -88,46 +88,46 @@ public:
   }
 
   /// Get the address as an IP version 4 address.
-  ASIO_DECL asio::ip::address_v4 to_v4() const;
+  STDNET_DECL asio::ip::address_v4 to_v4() const;
 
   /// Get the address as an IP version 6 address.
-  ASIO_DECL asio::ip::address_v6 to_v6() const;
+  STDNET_DECL asio::ip::address_v6 to_v6() const;
 
   /// Get the address as a string in dotted decimal format.
-  ASIO_DECL std::string to_string() const;
+  STDNET_DECL std::string to_string() const;
 
   /// Get the address as a string in dotted decimal format.
-  ASIO_DECL std::string to_string(std::error_code& ec) const;
+  STDNET_DECL std::string to_string(std::error_code& ec) const;
 
   /// Create an address from an IPv4 address string in dotted decimal form,
   /// or from an IPv6 address in hexadecimal notation.
-  ASIO_DECL static address from_string(const char* str);
+  STDNET_DECL static address from_string(const char* str);
 
   /// Create an address from an IPv4 address string in dotted decimal form,
   /// or from an IPv6 address in hexadecimal notation.
-  ASIO_DECL static address from_string(
+  STDNET_DECL static address from_string(
       const char* str, std::error_code& ec);
 
   /// Create an address from an IPv4 address string in dotted decimal form,
   /// or from an IPv6 address in hexadecimal notation.
-  ASIO_DECL static address from_string(const std::string& str);
+  STDNET_DECL static address from_string(const std::string& str);
 
   /// Create an address from an IPv4 address string in dotted decimal form,
   /// or from an IPv6 address in hexadecimal notation.
-  ASIO_DECL static address from_string(
+  STDNET_DECL static address from_string(
       const std::string& str, std::error_code& ec);
 
   /// Determine whether the address is a loopback address.
-  ASIO_DECL bool is_loopback() const;
+  STDNET_DECL bool is_loopback() const;
 
   /// Determine whether the address is unspecified.
-  ASIO_DECL bool is_unspecified() const;
+  STDNET_DECL bool is_unspecified() const;
 
   /// Determine whether the address is a multicast address.
-  ASIO_DECL bool is_multicast() const;
+  STDNET_DECL bool is_multicast() const;
 
   /// Compare two addresses for equality.
-  ASIO_DECL friend bool operator==(const address& a1, const address& a2);
+  STDNET_DECL friend bool operator==(const address& a1, const address& a2);
 
   /// Compare two addresses for inequality.
   friend bool operator!=(const address& a1, const address& a2)
@@ -136,7 +136,7 @@ public:
   }
 
   /// Compare addresses for ordering.
-  ASIO_DECL friend bool operator<(const address& a1, const address& a2);
+  STDNET_DECL friend bool operator<(const address& a1, const address& a2);
 
   /// Compare addresses for ordering.
   friend bool operator>(const address& a1, const address& a2)
@@ -167,7 +167,7 @@ private:
   asio::ip::address_v6 ipv6_address_;
 };
 
-#if !defined(ASIO_NO_IOSTREAM)
+#if !defined(STDNET_NO_IOSTREAM)
 
 /// Output an address as a string.
 /**
@@ -185,7 +185,7 @@ template <typename Elem, typename Traits>
 std::basic_ostream<Elem, Traits>& operator<<(
     std::basic_ostream<Elem, Traits>& os, const address& addr);
 
-#endif // !defined(ASIO_NO_IOSTREAM)
+#endif // !defined(STDNET_NO_IOSTREAM)
 
 } // namespace ip
 } // namespace asio
@@ -193,8 +193,8 @@ std::basic_ostream<Elem, Traits>& operator<<(
 #include "asio/detail/pop_options.hpp"
 
 #include "asio/ip/impl/address.hpp"
-#if defined(ASIO_HEADER_ONLY)
+#if defined(STDNET_HEADER_ONLY)
 # include "asio/ip/impl/address.ipp"
-#endif // defined(ASIO_HEADER_ONLY)
+#endif // defined(STDNET_HEADER_ONLY)
 
-#endif // ASIO_IP_ADDRESS_HPP
+#endif // STDNET_IP_ADDRESS_HPP

@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_DETAIL_WINSOCK_INIT_HPP
-#define ASIO_DETAIL_WINSOCK_INIT_HPP
+#ifndef STDNET_DETAIL_WINSOCK_INIT_HPP
+#define STDNET_DETAIL_WINSOCK_INIT_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -17,7 +17,7 @@
 
 #include "asio/detail/config.hpp"
 
-#if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 
 #include "asio/detail/push_options.hpp"
 
@@ -35,12 +35,12 @@ protected:
     long result_;
   };
 
-  ASIO_DECL static void startup(data& d,
+  STDNET_DECL static void startup(data& d,
       unsigned char major, unsigned char minor);
 
-  ASIO_DECL static void cleanup(data& d);
+  STDNET_DECL static void cleanup(data& d);
 
-  ASIO_DECL static void throw_on_error(data& d);
+  STDNET_DECL static void throw_on_error(data& d);
 };
 
 template <int Major = 2, int Minor = 0>
@@ -81,10 +81,10 @@ static const winsock_init<>& winsock_init_instance = winsock_init<>(false);
 
 #include "asio/detail/pop_options.hpp"
 
-#if defined(ASIO_HEADER_ONLY)
+#if defined(STDNET_HEADER_ONLY)
 # include "asio/detail/impl/winsock_init.ipp"
-#endif // defined(ASIO_HEADER_ONLY)
+#endif // defined(STDNET_HEADER_ONLY)
 
-#endif // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#endif // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 
-#endif // ASIO_DETAIL_WINSOCK_INIT_HPP
+#endif // STDNET_DETAIL_WINSOCK_INIT_HPP

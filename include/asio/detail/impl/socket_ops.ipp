@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_DETAIL_SOCKET_OPS_IPP
-#define ASIO_DETAIL_SOCKET_OPS_IPP
+#ifndef STDNET_DETAIL_SOCKET_OPS_IPP
+#define STDNET_DETAIL_SOCKET_OPS_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -40,7 +40,7 @@ extern "C" unsigned int if_nametoindex(const char*);
 
 inline void clear_last_error()
 {
-#if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
   WSASetLastError(0);
 #else
   errno = 0;
@@ -51,7 +51,7 @@ template <typename ReturnType>
 inline ReturnType error_wrapper(ReturnType return_value,
     std::error_code& ec)
 {
-#if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
   ec = std::error_code(WSAGetLastError(),
       asio::detail::syserrc::system_category());
 #else
@@ -65,7 +65,7 @@ const char* inet_ntop(int af, const void* src, char* dest, size_t length,
     unsigned long scope_id, std::error_code& ec)
 {
   clear_last_error();
-#if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
   using namespace std; // For memcpy.
 
   if (af != AF_INET && af != AF_INET6)
@@ -119,7 +119,7 @@ const char* inet_ntop(int af, const void* src, char* dest, size_t length,
     ec = asio::detail::invalid_argument;
 
   return result == socket_error_retval ? 0 : dest;
-#else // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#else // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
   const char* result = error_wrapper(::inet_ntop(
         af, src, dest, static_cast<int>(length)), ec);
   if (result == 0 && !ec)
@@ -137,14 +137,14 @@ const char* inet_ntop(int af, const void* src, char* dest, size_t length,
     strcat(dest, if_name);
   }
   return result;
-#endif // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#endif // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 }
 
 int inet_pton(int af, const char* src, void* dest,
     unsigned long* scope_id, std::error_code& ec)
 {
   clear_last_error();
-#if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
   using namespace std; // For memcpy and strcmp.
 
   if (af != AF_INET && af != AF_INET6)
@@ -204,7 +204,7 @@ int inet_pton(int af, const char* src, void* dest,
     ec = std::error_code();
 
   return result == socket_error_retval ? -1 : 1;
-#else // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#else // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
   int result = error_wrapper(::inet_pton(af, src, dest), ec);
   if (result <= 0 && !ec)
     ec = asio::detail::syserrc::invalid_argument;
@@ -224,7 +224,7 @@ int inet_pton(int af, const char* src, void* dest,
     }
   }
   return result;
-#endif // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#endif // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 }
 
 u_long_type network_to_host_long(u_long_type value)
@@ -253,4 +253,4 @@ u_short_type host_to_network_short(u_short_type value)
 
 #include "asio/detail/pop_options.hpp"
 
-#endif // ASIO_DETAIL_SOCKET_OPS_IPP
+#endif // STDNET_DETAIL_SOCKET_OPS_IPP

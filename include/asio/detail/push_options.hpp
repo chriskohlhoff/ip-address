@@ -33,11 +33,11 @@
 
 # if defined(__OBJC__)
 #  if !defined(__APPLE_CC__) || (__APPLE_CC__ <= 1)
-#   if !defined(ASIO_DISABLE_OBJC_WORKAROUND)
+#   if !defined(STDNET_DISABLE_OBJC_WORKAROUND)
 #    if !defined(Protocol) && !defined(id)
 #     define Protocol cpp_Protocol
 #     define id cpp_id
-#     define ASIO_OBJC_WORKAROUND
+#     define STDNET_OBJC_WORKAROUND
 #    endif
 #   endif
 #  endif

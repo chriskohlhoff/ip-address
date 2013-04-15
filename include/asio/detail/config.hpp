@@ -8,284 +8,284 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_DETAIL_CONFIG_HPP
-#define ASIO_DETAIL_CONFIG_HPP
+#ifndef STDNET_DETAIL_CONFIG_HPP
+#define STDNET_DETAIL_CONFIG_HPP
 
 // Default to a header-only implementation. The user must specifically request
-// separate compilation by defining either ASIO_SEPARATE_COMPILATION or
-// ASIO_DYN_LINK (as a DLL/shared library implies separate compilation).
-#if !defined(ASIO_HEADER_ONLY)
-# if !defined(ASIO_SEPARATE_COMPILATION)
-#  if !defined(ASIO_DYN_LINK)
-#   define ASIO_HEADER_ONLY 1
-#  endif // !defined(ASIO_DYN_LINK)
-# endif // !defined(ASIO_SEPARATE_COMPILATION)
-#endif // !defined(ASIO_HEADER_ONLY)
+// separate compilation by defining either STDNET_SEPARATE_COMPILATION or
+// STDNET_DYN_LINK (as a DLL/shared library implies separate compilation).
+#if !defined(STDNET_HEADER_ONLY)
+# if !defined(STDNET_SEPARATE_COMPILATION)
+#  if !defined(STDNET_DYN_LINK)
+#   define STDNET_HEADER_ONLY 1
+#  endif // !defined(STDNET_DYN_LINK)
+# endif // !defined(STDNET_SEPARATE_COMPILATION)
+#endif // !defined(STDNET_HEADER_ONLY)
 
-#if defined(ASIO_HEADER_ONLY)
-# define ASIO_DECL inline
-#else // defined(ASIO_HEADER_ONLY)
+#if defined(STDNET_HEADER_ONLY)
+# define STDNET_DECL inline
+#else // defined(STDNET_HEADER_ONLY)
 # if defined(_MSC_VER) || defined(__BORLANDC__) || defined(__CODEGEARC__)
 // We need to import/export our code only if the user has specifically asked
-// for it by defining ASIO_DYN_LINK.
-#  if defined(ASIO_DYN_LINK)
+// for it by defining STDNET_DYN_LINK.
+#  if defined(STDNET_DYN_LINK)
 // Export if this is our own source, otherwise import.
-#   if defined(ASIO_SOURCE)
-#    define ASIO_DECL __declspec(dllexport)
-#   else // defined(ASIO_SOURCE)
-#    define ASIO_DECL __declspec(dllimport)
-#   endif // defined(ASIO_SOURCE)
-#  endif // defined(ASIO_DYN_LINK)
+#   if defined(STDNET_SOURCE)
+#    define STDNET_DECL __declspec(dllexport)
+#   else // defined(STDNET_SOURCE)
+#    define STDNET_DECL __declspec(dllimport)
+#   endif // defined(STDNET_SOURCE)
+#  endif // defined(STDNET_DYN_LINK)
 # endif // defined(_MSC_VER) || defined(__BORLANDC__) || defined(__CODEGEARC__)
-#endif // defined(ASIO_HEADER_ONLY)
+#endif // defined(STDNET_HEADER_ONLY)
 
-// If ASIO_DECL isn't defined yet define it now.
-#if !defined(ASIO_DECL)
-# define ASIO_DECL
-#endif // !defined(ASIO_DECL)
+// If STDNET_DECL isn't defined yet define it now.
+#if !defined(STDNET_DECL)
+# define STDNET_DECL
+#endif // !defined(STDNET_DECL)
 
 // Microsoft Visual C++ detection.
-#if !defined(ASIO_MSVC)
-# if defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_MSVC)
-#  define ASIO_MSVC BOOST_MSVC
+#if !defined(STDNET_MSVC)
+# if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_MSVC)
+#  define STDNET_MSVC BOOST_MSVC
 # elif defined(_MSC_VER) && !defined(__MWERKS__) && !defined(__EDG_VERSION__)
-#  define ASIO_MSVC _MSC_VER
-# endif // defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_MSVC)
-#endif // defined(ASIO_MSVC)
+#  define STDNET_MSVC _MSC_VER
+# endif // defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_MSVC)
+#endif // defined(STDNET_MSVC)
 
 // Support move construction and assignment on compilers known to allow it.
-#if !defined(ASIO_HAS_MOVE)
-# if !defined(ASIO_DISABLE_MOVE)
+#if !defined(STDNET_HAS_MOVE)
+# if !defined(STDNET_DISABLE_MOVE)
 #  if defined(__GNUC__)
 #   if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
 #    if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#     define ASIO_HAS_MOVE 1
+#     define STDNET_HAS_MOVE 1
 #    endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #   endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
 #  endif // defined(__GNUC__)
-# endif // !defined(ASIO_DISABLE_MOVE)
-#endif // !defined(ASIO_HAS_MOVE)
+# endif // !defined(STDNET_DISABLE_MOVE)
+#endif // !defined(STDNET_HAS_MOVE)
 
-// If ASIO_MOVE_CAST isn't defined, and move support is available, define
-// ASIO_MOVE_ARG and ASIO_MOVE_CAST to take advantage of rvalue
+// If STDNET_MOVE_CAST isn't defined, and move support is available, define
+// STDNET_MOVE_ARG and STDNET_MOVE_CAST to take advantage of rvalue
 // references and perfect forwarding.
-#if defined(ASIO_HAS_MOVE) && !defined(ASIO_MOVE_CAST)
-# define ASIO_MOVE_ARG(type) type&&
-# define ASIO_MOVE_CAST(type) static_cast<type&&>
-#endif // defined(ASIO_HAS_MOVE) && !defined(ASIO_MOVE_CAST)
+#if defined(STDNET_HAS_MOVE) && !defined(STDNET_MOVE_CAST)
+# define STDNET_MOVE_ARG(type) type&&
+# define STDNET_MOVE_CAST(type) static_cast<type&&>
+#endif // defined(STDNET_HAS_MOVE) && !defined(STDNET_MOVE_CAST)
 
-// If ASIO_MOVE_CAST still isn't defined, default to a C++03-compatible
+// If STDNET_MOVE_CAST still isn't defined, default to a C++03-compatible
 // implementation. Note that older g++ and MSVC versions don't like it when you
 // pass a non-member function through a const reference, so for most compilers
 // we'll play it safe and stick with the old approach of passing the handler by
 // value.
-#if !defined(ASIO_MOVE_CAST)
+#if !defined(STDNET_MOVE_CAST)
 # if defined(__GNUC__)
 #  if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1)) || (__GNUC__ > 4)
-#   define ASIO_MOVE_ARG(type) const type&
+#   define STDNET_MOVE_ARG(type) const type&
 #  else // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1)) || (__GNUC__ > 4)
-#   define ASIO_MOVE_ARG(type) type
+#   define STDNET_MOVE_ARG(type) type
 #  endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1)) || (__GNUC__ > 4)
-# elif defined(ASIO_MSVC)
+# elif defined(STDNET_MSVC)
 #  if (_MSC_VER >= 1400)
-#   define ASIO_MOVE_ARG(type) const type&
+#   define STDNET_MOVE_ARG(type) const type&
 #  else // (_MSC_VER >= 1400)
-#   define ASIO_MOVE_ARG(type) type
+#   define STDNET_MOVE_ARG(type) type
 #  endif // (_MSC_VER >= 1400)
 # else
-#  define ASIO_MOVE_ARG(type) type
+#  define STDNET_MOVE_ARG(type) type
 # endif
-# define ASIO_MOVE_CAST(type) static_cast<const type&>
-#endif // !defined_ASIO_MOVE_CAST
+# define STDNET_MOVE_CAST(type) static_cast<const type&>
+#endif // !defined_STDNET_MOVE_CAST
 
 // Support variadic templates on compilers known to allow it.
-#if !defined(ASIO_HAS_VARIADIC_TEMPLATES)
-# if !defined(ASIO_DISABLE_VARIADIC_TEMPLATES)
+#if !defined(STDNET_HAS_VARIADIC_TEMPLATES)
+# if !defined(STDNET_DISABLE_VARIADIC_TEMPLATES)
 #  if defined(__GNUC__)
 #   if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)) || (__GNUC__ > 4)
 #    if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#     define ASIO_HAS_VARIADIC_TEMPLATES 1
+#     define STDNET_HAS_VARIADIC_TEMPLATES 1
 #    endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #   endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)) || (__GNUC__ > 4)
 #  endif // defined(__GNUC__)
-# endif // !defined(ASIO_DISABLE_VARIADIC_TEMPLATES)
-#endif // !defined(ASIO_HAS_VARIADIC_TEMPLATES)
+# endif // !defined(STDNET_DISABLE_VARIADIC_TEMPLATES)
+#endif // !defined(STDNET_HAS_VARIADIC_TEMPLATES)
 
 // Standard library support for system errors.
-#if !defined(ASIO_HAS_STD_SYSTEM_ERROR)
-# if !defined(ASIO_DISABLE_STD_SYSTEM_ERROR)
+#if !defined(STDNET_HAS_STD_SYSTEM_ERROR)
+# if !defined(STDNET_DISABLE_STD_SYSTEM_ERROR)
 #  if defined(__GNUC__)
 #   if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 6)) || (__GNUC__ > 4)
 #    if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#     define ASIO_HAS_STD_SYSTEM_ERROR 1
+#     define STDNET_HAS_STD_SYSTEM_ERROR 1
 #    endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #   endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 6)) || (__GNUC__ > 4)
 #  endif // defined(__GNUC__)
-# endif // !defined(ASIO_DISABLE_STD_SYSTEM_ERROR)
-#endif // !defined(ASIO_HAS_STD_SYSTEM_ERROR)
+# endif // !defined(STDNET_DISABLE_STD_SYSTEM_ERROR)
+#endif // !defined(STDNET_HAS_STD_SYSTEM_ERROR)
 
 // Compliant C++11 compilers put noexcept specifiers on error_category members.
-#if !defined(ASIO_ERROR_CATEGORY_NOEXCEPT)
+#if !defined(STDNET_ERROR_CATEGORY_NOEXCEPT)
 # if (BOOST_VERSION >= 105300)
-#  define ASIO_ERROR_CATEGORY_NOEXCEPT BOOST_NOEXCEPT
+#  define STDNET_ERROR_CATEGORY_NOEXCEPT BOOST_NOEXCEPT
 # elif defined(__GNUC__)
 #  if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4)
 #   if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#     define ASIO_ERROR_CATEGORY_NOEXCEPT noexcept(true)
+#     define STDNET_ERROR_CATEGORY_NOEXCEPT noexcept(true)
 #   endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #  endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4)
 # endif // defined(__GNUC__)
-# if !defined(ASIO_ERROR_CATEGORY_NOEXCEPT)
-#  define ASIO_ERROR_CATEGORY_NOEXCEPT
-# endif // !defined(ASIO_ERROR_CATEGORY_NOEXCEPT)
-#endif // !defined(ASIO_ERROR_CATEGORY_NOEXCEPT)
+# if !defined(STDNET_ERROR_CATEGORY_NOEXCEPT)
+#  define STDNET_ERROR_CATEGORY_NOEXCEPT
+# endif // !defined(STDNET_ERROR_CATEGORY_NOEXCEPT)
+#endif // !defined(STDNET_ERROR_CATEGORY_NOEXCEPT)
 
 // Standard library support for arrays.
-#if !defined(ASIO_HAS_STD_ARRAY)
-# if !defined(ASIO_DISABLE_STD_ARRAY)
+#if !defined(STDNET_HAS_STD_ARRAY)
+# if !defined(STDNET_DISABLE_STD_ARRAY)
 #  if defined(__GNUC__)
 #   if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)) || (__GNUC__ > 4)
 #    if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#     define ASIO_HAS_STD_ARRAY 1
+#     define STDNET_HAS_STD_ARRAY 1
 #    endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #   endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)) || (__GNUC__ > 4)
 #  endif // defined(__GNUC__)
-#  if defined(ASIO_MSVC)
+#  if defined(STDNET_MSVC)
 #   if (_MSC_VER >= 1600)
-#    define ASIO_HAS_STD_ARRAY 1
+#    define STDNET_HAS_STD_ARRAY 1
 #   endif // (_MSC_VER >= 1600)
-#  endif // defined(ASIO_MSVC)
-# endif // !defined(ASIO_DISABLE_STD_ARRAY)
-#endif // !defined(ASIO_HAS_STD_ARRAY)
+#  endif // defined(STDNET_MSVC)
+# endif // !defined(STDNET_DISABLE_STD_ARRAY)
+#endif // !defined(STDNET_HAS_STD_ARRAY)
 
 // Standard library support for shared_ptr and weak_ptr.
-#if !defined(ASIO_HAS_STD_SHARED_PTR)
-# if !defined(ASIO_DISABLE_STD_SHARED_PTR)
+#if !defined(STDNET_HAS_STD_SHARED_PTR)
+# if !defined(STDNET_DISABLE_STD_SHARED_PTR)
 #  if defined(__GNUC__)
 #   if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)) || (__GNUC__ > 4)
 #    if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#     define ASIO_HAS_STD_SHARED_PTR 1
+#     define STDNET_HAS_STD_SHARED_PTR 1
 #    endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #   endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)) || (__GNUC__ > 4)
 #  endif // defined(__GNUC__)
-#  if defined(ASIO_MSVC)
+#  if defined(STDNET_MSVC)
 #   if (_MSC_VER >= 1600)
-#    define ASIO_HAS_STD_SHARED_PTR 1
+#    define STDNET_HAS_STD_SHARED_PTR 1
 #   endif // (_MSC_VER >= 1600)
-#  endif // defined(ASIO_MSVC)
-# endif // !defined(ASIO_DISABLE_STD_SHARED_PTR)
-#endif // !defined(ASIO_HAS_STD_SHARED_PTR)
+#  endif // defined(STDNET_MSVC)
+# endif // !defined(STDNET_DISABLE_STD_SHARED_PTR)
+#endif // !defined(STDNET_HAS_STD_SHARED_PTR)
 
 // Standard library support for atomic operations.
-#if !defined(ASIO_HAS_STD_ATOMIC)
-# if !defined(ASIO_DISABLE_STD_ATOMIC)
+#if !defined(STDNET_HAS_STD_ATOMIC)
+# if !defined(STDNET_DISABLE_STD_ATOMIC)
 #  if defined(__GNUC__)
 #   if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
 #    if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#     define ASIO_HAS_STD_ATOMIC 1
+#     define STDNET_HAS_STD_ATOMIC 1
 #    endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #   endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
 #  endif // defined(__GNUC__)
-# endif // !defined(ASIO_DISABLE_STD_ATOMIC)
-#endif // !defined(ASIO_HAS_STD_ATOMIC)
+# endif // !defined(STDNET_DISABLE_STD_ATOMIC)
+#endif // !defined(STDNET_HAS_STD_ATOMIC)
 
 // Standard library support for chrono. Some standard libraries (such as the
 // libstdc++ shipped with gcc 4.6) provide monotonic_clock as per early C++0x
 // drafts, rather than the eventually standardised name of steady_clock.
-#if !defined(ASIO_HAS_STD_CHRONO)
-# if !defined(ASIO_DISABLE_STD_CHRONO)
+#if !defined(STDNET_HAS_STD_CHRONO)
+# if !defined(STDNET_DISABLE_STD_CHRONO)
 #  if defined(__GNUC__)
 #   if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 6)) || (__GNUC__ > 4)
 #    if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#     define ASIO_HAS_STD_CHRONO 1
+#     define STDNET_HAS_STD_CHRONO 1
 #     if ((__GNUC__ == 4) && (__GNUC_MINOR__ == 6))
-#      define ASIO_HAS_STD_CHRONO_MONOTONIC_CLOCK 1
+#      define STDNET_HAS_STD_CHRONO_MONOTONIC_CLOCK 1
 #     endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ == 6))
 #    endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #   endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 6)) || (__GNUC__ > 4)
 #  endif // defined(__GNUC__)
-# endif // !defined(ASIO_DISABLE_STD_CHRONO)
-#endif // !defined(ASIO_HAS_STD_CHRONO)
+# endif // !defined(STDNET_DISABLE_STD_CHRONO)
+#endif // !defined(STDNET_HAS_STD_CHRONO)
 
 // Boost support for chrono.
-#if !defined(ASIO_HAS_BOOST_CHRONO)
-# if !defined(ASIO_DISABLE_BOOST_CHRONO)
+#if !defined(STDNET_HAS_BOOST_CHRONO)
+# if !defined(STDNET_DISABLE_BOOST_CHRONO)
 #  if (BOOST_VERSION >= 104700)
-#   define ASIO_HAS_BOOST_CHRONO 1
+#   define STDNET_HAS_BOOST_CHRONO 1
 #  endif // (BOOST_VERSION >= 104700)
-# endif // !defined(ASIO_DISABLE_BOOST_CHRONO)
-#endif // !defined(ASIO_HAS_BOOST_CHRONO)
+# endif // !defined(STDNET_DISABLE_BOOST_CHRONO)
+#endif // !defined(STDNET_HAS_BOOST_CHRONO)
 
 // Boost support for the DateTime library.
-#if !defined(ASIO_HAS_BOOST_DATE_TIME)
-# if !defined(ASIO_DISABLE_BOOST_DATE_TIME)
-#  define ASIO_HAS_BOOST_DATE_TIME 1
-# endif // !defined(ASIO_DISABLE_BOOST_DATE_TIME)
-#endif // !defined(ASIO_HAS_BOOST_DATE_TIME)
+#if !defined(STDNET_HAS_BOOST_DATE_TIME)
+# if !defined(STDNET_DISABLE_BOOST_DATE_TIME)
+#  define STDNET_HAS_BOOST_DATE_TIME 1
+# endif // !defined(STDNET_DISABLE_BOOST_DATE_TIME)
+#endif // !defined(STDNET_HAS_BOOST_DATE_TIME)
 
 // Standard library support for addressof.
-#if !defined(ASIO_HAS_STD_ADDRESSOF)
-# if !defined(ASIO_DISABLE_STD_ADDRESSOF)
+#if !defined(STDNET_HAS_STD_ADDRESSOF)
+# if !defined(STDNET_DISABLE_STD_ADDRESSOF)
 #  if defined(__GNUC__)
 #   if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
 #    if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#     define ASIO_HAS_STD_ADDRESSOF 1
+#     define STDNET_HAS_STD_ADDRESSOF 1
 #    endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #   endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
 #  endif // defined(__GNUC__)
-# endif // !defined(ASIO_DISABLE_STD_ADDRESSOF)
-#endif // !defined(ASIO_HAS_STD_ADDRESSOF)
+# endif // !defined(STDNET_DISABLE_STD_ADDRESSOF)
+#endif // !defined(STDNET_HAS_STD_ADDRESSOF)
 
 // Standard library support for the function class.
-#if !defined(ASIO_HAS_STD_FUNCTION)
-# if !defined(ASIO_DISABLE_STD_FUNCTION)
+#if !defined(STDNET_HAS_STD_FUNCTION)
+# if !defined(STDNET_DISABLE_STD_FUNCTION)
 #  if defined(__GNUC__)
 #   if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
 #    if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#     define ASIO_HAS_STD_FUNCTION 1
+#     define STDNET_HAS_STD_FUNCTION 1
 #    endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #   endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
 #  endif // defined(__GNUC__)
-# endif // !defined(ASIO_DISABLE_STD_FUNCTION)
-#endif // !defined(ASIO_HAS_STD_FUNCTION)
+# endif // !defined(STDNET_DISABLE_STD_FUNCTION)
+#endif // !defined(STDNET_HAS_STD_FUNCTION)
 
 // Standard library support for type traits.
-#if !defined(ASIO_HAS_STD_TYPE_TRAITS)
-# if !defined(ASIO_DISABLE_STD_TYPE_TRAITS)
+#if !defined(STDNET_HAS_STD_TYPE_TRAITS)
+# if !defined(STDNET_DISABLE_STD_TYPE_TRAITS)
 #  if defined(__GNUC__)
 #   if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
 #    if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#     define ASIO_HAS_STD_TYPE_TRAITS 1
+#     define STDNET_HAS_STD_TYPE_TRAITS 1
 #    endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #   endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
 #  endif // defined(__GNUC__)
-# endif // !defined(ASIO_DISABLE_STD_TYPE_TRAITS)
-#endif // !defined(ASIO_HAS_STD_TYPE_TRAITS)
+# endif // !defined(STDNET_DISABLE_STD_TYPE_TRAITS)
+#endif // !defined(STDNET_HAS_STD_TYPE_TRAITS)
 
 // Standard library support for the cstdint header.
-#if !defined(ASIO_HAS_CSTDINT)
-# if !defined(ASIO_DISABLE_CSTDINT)
+#if !defined(STDNET_HAS_CSTDINT)
+# if !defined(STDNET_DISABLE_CSTDINT)
 #  if defined(__GNUC__)
 #   if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
 #    if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#     define ASIO_HAS_CSTDINT 1
+#     define STDNET_HAS_CSTDINT 1
 #    endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #   endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
 #  endif // defined(__GNUC__)
-# endif // !defined(ASIO_DISABLE_CSTDINT)
-#endif // !defined(ASIO_HAS_CSTDINT)
+# endif // !defined(STDNET_DISABLE_CSTDINT)
+#endif // !defined(STDNET_HAS_CSTDINT)
 
 // Windows target.
-#if !defined(ASIO_WINDOWS)
-# if defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_WINDOWS)
-#  define ASIO_WINDOWS 1
+#if !defined(STDNET_WINDOWS)
+# if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_WINDOWS)
+#  define STDNET_WINDOWS 1
 # elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
-#  define ASIO_WINDOWS 1
-# endif // defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_WINDOWS)
-#endif // !defined(ASIO_WINDOWS)
+#  define STDNET_WINDOWS 1
+# endif // defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_WINDOWS)
+#endif // !defined(STDNET_WINDOWS)
 
 // Windows: target OS version.
-#if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 # if !defined(_WIN32_WINNT) && !defined(_WIN32_WINDOWS)
 #  if defined(_MSC_VER) || defined(__BORLANDC__)
 #   pragma message( \
@@ -323,63 +323,63 @@
 #   error You must add -D__USE_W32_SOCKETS to your compiler options.
 #  endif // !defined(__USE_W32_SOCKETS)
 # endif // defined(__CYGWIN__)
-#endif // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#endif // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 
 // Windows: minimise header inclusion.
-#if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
-# if !defined(ASIO_NO_WIN32_LEAN_AND_MEAN)
+#if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
+# if !defined(STDNET_NO_WIN32_LEAN_AND_MEAN)
 #  if !defined(WIN32_LEAN_AND_MEAN)
 #   define WIN32_LEAN_AND_MEAN
 #  endif // !defined(WIN32_LEAN_AND_MEAN)
-# endif // !defined(ASIO_NO_WIN32_LEAN_AND_MEAN)
-#endif // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+# endif // !defined(STDNET_NO_WIN32_LEAN_AND_MEAN)
+#endif // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 
 // Windows: suppress definition of "min" and "max" macros.
-#if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
-# if !defined(ASIO_NO_NOMINMAX)
+#if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
+# if !defined(STDNET_NO_NOMINMAX)
 #  if !defined(NOMINMAX)
 #   define NOMINMAX 1
 #  endif // !defined(NOMINMAX)
-# endif // !defined(ASIO_NO_NOMINMAX)
-#endif // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+# endif // !defined(STDNET_NO_NOMINMAX)
+#endif // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 
 // Windows: IO Completion Ports.
-#if !defined(ASIO_HAS_IOCP)
-# if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#if !defined(STDNET_HAS_IOCP)
+# if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 #  if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400)
 #   if !defined(UNDER_CE)
-#    if !defined(ASIO_DISABLE_IOCP)
-#     define ASIO_HAS_IOCP 1
-#    endif // !defined(ASIO_DISABLE_IOCP)
+#    if !defined(STDNET_DISABLE_IOCP)
+#     define STDNET_HAS_IOCP 1
+#    endif // !defined(STDNET_DISABLE_IOCP)
 #   endif // !defined(UNDER_CE)
 #  endif // defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400)
-# endif // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
-#endif // !defined(ASIO_HAS_IOCP)
+# endif // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
+#endif // !defined(STDNET_HAS_IOCP)
 
 // Linux: epoll, eventfd and timerfd.
 #if defined(__linux__)
 # include <linux/version.h>
-# if !defined(ASIO_HAS_EPOLL)
-#  if !defined(ASIO_DISABLE_EPOLL)
+# if !defined(STDNET_HAS_EPOLL)
+#  if !defined(STDNET_DISABLE_EPOLL)
 #   if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,45)
-#    define ASIO_HAS_EPOLL 1
+#    define STDNET_HAS_EPOLL 1
 #   endif // LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,45)
-#  endif // !defined(ASIO_DISABLE_EPOLL)
-# endif // !defined(ASIO_HAS_EPOLL)
-# if !defined(ASIO_HAS_EVENTFD)
-#  if !defined(ASIO_DISABLE_EVENTFD)
+#  endif // !defined(STDNET_DISABLE_EPOLL)
+# endif // !defined(STDNET_HAS_EPOLL)
+# if !defined(STDNET_HAS_EVENTFD)
+#  if !defined(STDNET_DISABLE_EVENTFD)
 #   if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,22)
-#    define ASIO_HAS_EVENTFD 1
+#    define STDNET_HAS_EVENTFD 1
 #   endif // LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,22)
-#  endif // !defined(ASIO_DISABLE_EVENTFD)
-# endif // !defined(ASIO_HAS_EVENTFD)
-# if !defined(ASIO_HAS_TIMERFD)
-#  if defined(ASIO_HAS_EPOLL)
+#  endif // !defined(STDNET_DISABLE_EVENTFD)
+# endif // !defined(STDNET_HAS_EVENTFD)
+# if !defined(STDNET_HAS_TIMERFD)
+#  if defined(STDNET_HAS_EPOLL)
 #   if (__GLIBC__ > 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 8)
-#    define ASIO_HAS_TIMERFD 1
+#    define STDNET_HAS_TIMERFD 1
 #   endif // (__GLIBC__ > 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 8)
-#  endif // defined(ASIO_HAS_EPOLL)
-# endif // !defined(ASIO_HAS_TIMERFD)
+#  endif // defined(STDNET_HAS_EPOLL)
+# endif // !defined(STDNET_HAS_TIMERFD)
 #endif // defined(__linux__)
 
 // Mac OS X, FreeBSD, NetBSD, OpenBSD: kqueue.
@@ -387,11 +387,11 @@
   || defined(__FreeBSD__) \
   || defined(__NetBSD__) \
   || defined(__OpenBSD__)
-# if !defined(ASIO_HAS_KQUEUE)
-#  if !defined(ASIO_DISABLE_KQUEUE)
-#   define ASIO_HAS_KQUEUE 1
-#  endif // !defined(ASIO_DISABLE_KQUEUE)
-# endif // !defined(ASIO_HAS_KQUEUE)
+# if !defined(STDNET_HAS_KQUEUE)
+#  if !defined(STDNET_DISABLE_KQUEUE)
+#   define STDNET_HAS_KQUEUE 1
+#  endif // !defined(STDNET_DISABLE_KQUEUE)
+# endif // !defined(STDNET_HAS_KQUEUE)
 #endif // (defined(__MACH__) && defined(__APPLE__))
        //   || defined(__FreeBSD__)
        //   || defined(__NetBSD__)
@@ -399,126 +399,126 @@
 
 // Solaris: /dev/poll.
 #if defined(__sun)
-# if !defined(ASIO_HAS_DEV_POLL)
-#  if !defined(ASIO_DISABLE_DEV_POLL)
-#   define ASIO_HAS_DEV_POLL 1
-#  endif // !defined(ASIO_DISABLE_DEV_POLL)
-# endif // !defined(ASIO_HAS_DEV_POLL)
+# if !defined(STDNET_HAS_DEV_POLL)
+#  if !defined(STDNET_DISABLE_DEV_POLL)
+#   define STDNET_HAS_DEV_POLL 1
+#  endif // !defined(STDNET_DISABLE_DEV_POLL)
+# endif // !defined(STDNET_HAS_DEV_POLL)
 #endif // defined(__sun)
 
 // Serial ports.
-#if !defined(ASIO_HAS_SERIAL_PORT)
-# if defined(ASIO_HAS_IOCP) \
-    || !defined(ASIO_WINDOWS) && !defined(__CYGWIN__)
+#if !defined(STDNET_HAS_SERIAL_PORT)
+# if defined(STDNET_HAS_IOCP) \
+    || !defined(STDNET_WINDOWS) && !defined(__CYGWIN__)
 #  if !defined(__SYMBIAN32__)
-#   if !defined(ASIO_DISABLE_SERIAL_PORT)
-#    define ASIO_HAS_SERIAL_PORT 1
-#   endif // !defined(ASIO_DISABLE_SERIAL_PORT)
+#   if !defined(STDNET_DISABLE_SERIAL_PORT)
+#    define STDNET_HAS_SERIAL_PORT 1
+#   endif // !defined(STDNET_DISABLE_SERIAL_PORT)
 #  endif // !defined(__SYMBIAN32__)
-# endif // defined(ASIO_HAS_IOCP)
-        //   || !defined(ASIO_WINDOWS) && !defined(__CYGWIN__)
-#endif // !defined(ASIO_HAS_SERIAL_PORT)
+# endif // defined(STDNET_HAS_IOCP)
+        //   || !defined(STDNET_WINDOWS) && !defined(__CYGWIN__)
+#endif // !defined(STDNET_HAS_SERIAL_PORT)
 
 // Windows: stream handles.
-#if !defined(ASIO_HAS_WINDOWS_STREAM_HANDLE)
-# if !defined(ASIO_DISABLE_WINDOWS_STREAM_HANDLE)
-#  if defined(ASIO_HAS_IOCP)
-#   define ASIO_HAS_WINDOWS_STREAM_HANDLE 1
-#  endif // defined(ASIO_HAS_IOCP)
-# endif // !defined(ASIO_DISABLE_WINDOWS_STREAM_HANDLE)
-#endif // !defined(ASIO_HAS_WINDOWS_STREAM_HANDLE)
+#if !defined(STDNET_HAS_WINDOWS_STREAM_HANDLE)
+# if !defined(STDNET_DISABLE_WINDOWS_STREAM_HANDLE)
+#  if defined(STDNET_HAS_IOCP)
+#   define STDNET_HAS_WINDOWS_STREAM_HANDLE 1
+#  endif // defined(STDNET_HAS_IOCP)
+# endif // !defined(STDNET_DISABLE_WINDOWS_STREAM_HANDLE)
+#endif // !defined(STDNET_HAS_WINDOWS_STREAM_HANDLE)
 
 // Windows: random access handles.
-#if !defined(ASIO_HAS_WINDOWS_RANDOM_ACCESS_HANDLE)
-# if !defined(ASIO_DISABLE_WINDOWS_RANDOM_ACCESS_HANDLE)
-#  if defined(ASIO_HAS_IOCP)
-#   define ASIO_HAS_WINDOWS_RANDOM_ACCESS_HANDLE 1
-#  endif // defined(ASIO_HAS_IOCP)
-# endif // !defined(ASIO_DISABLE_WINDOWS_RANDOM_ACCESS_HANDLE)
-#endif // !defined(ASIO_HAS_WINDOWS_RANDOM_ACCESS_HANDLE)
+#if !defined(STDNET_HAS_WINDOWS_RANDOM_ACCESS_HANDLE)
+# if !defined(STDNET_DISABLE_WINDOWS_RANDOM_ACCESS_HANDLE)
+#  if defined(STDNET_HAS_IOCP)
+#   define STDNET_HAS_WINDOWS_RANDOM_ACCESS_HANDLE 1
+#  endif // defined(STDNET_HAS_IOCP)
+# endif // !defined(STDNET_DISABLE_WINDOWS_RANDOM_ACCESS_HANDLE)
+#endif // !defined(STDNET_HAS_WINDOWS_RANDOM_ACCESS_HANDLE)
 
 // Windows: object handles.
-#if !defined(ASIO_HAS_WINDOWS_OBJECT_HANDLE)
-# if !defined(ASIO_DISABLE_WINDOWS_OBJECT_HANDLE)
-#  if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#if !defined(STDNET_HAS_WINDOWS_OBJECT_HANDLE)
+# if !defined(STDNET_DISABLE_WINDOWS_OBJECT_HANDLE)
+#  if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 #   if !defined(UNDER_CE)
-#    define ASIO_HAS_WINDOWS_OBJECT_HANDLE 1
+#    define STDNET_HAS_WINDOWS_OBJECT_HANDLE 1
 #   endif // !defined(UNDER_CE)
-#  endif // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
-# endif // !defined(ASIO_DISABLE_WINDOWS_OBJECT_HANDLE)
-#endif // !defined(ASIO_HAS_WINDOWS_OBJECT_HANDLE)
+#  endif // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
+# endif // !defined(STDNET_DISABLE_WINDOWS_OBJECT_HANDLE)
+#endif // !defined(STDNET_HAS_WINDOWS_OBJECT_HANDLE)
 
 // Windows: OVERLAPPED wrapper.
-#if !defined(ASIO_HAS_WINDOWS_OVERLAPPED_PTR)
-# if !defined(ASIO_DISABLE_WINDOWS_OVERLAPPED_PTR)
-#  if defined(ASIO_HAS_IOCP)
-#   define ASIO_HAS_WINDOWS_OVERLAPPED_PTR 1
-#  endif // defined(ASIO_HAS_IOCP)
-# endif // !defined(ASIO_DISABLE_WINDOWS_OVERLAPPED_PTR)
-#endif // !defined(ASIO_HAS_WINDOWS_OVERLAPPED_PTR)
+#if !defined(STDNET_HAS_WINDOWS_OVERLAPPED_PTR)
+# if !defined(STDNET_DISABLE_WINDOWS_OVERLAPPED_PTR)
+#  if defined(STDNET_HAS_IOCP)
+#   define STDNET_HAS_WINDOWS_OVERLAPPED_PTR 1
+#  endif // defined(STDNET_HAS_IOCP)
+# endif // !defined(STDNET_DISABLE_WINDOWS_OVERLAPPED_PTR)
+#endif // !defined(STDNET_HAS_WINDOWS_OVERLAPPED_PTR)
 
 // POSIX: stream-oriented file descriptors.
-#if !defined(ASIO_HAS_POSIX_STREAM_DESCRIPTOR)
-# if !defined(ASIO_DISABLE_POSIX_STREAM_DESCRIPTOR)
-#  if !defined(ASIO_WINDOWS) && !defined(__CYGWIN__)
-#   define ASIO_HAS_POSIX_STREAM_DESCRIPTOR 1
-#  endif // !defined(ASIO_WINDOWS) && !defined(__CYGWIN__)
-# endif // !defined(ASIO_DISABLE_POSIX_STREAM_DESCRIPTOR)
-#endif // !defined(ASIO_HAS_POSIX_STREAM_DESCRIPTOR)
+#if !defined(STDNET_HAS_POSIX_STREAM_DESCRIPTOR)
+# if !defined(STDNET_DISABLE_POSIX_STREAM_DESCRIPTOR)
+#  if !defined(STDNET_WINDOWS) && !defined(__CYGWIN__)
+#   define STDNET_HAS_POSIX_STREAM_DESCRIPTOR 1
+#  endif // !defined(STDNET_WINDOWS) && !defined(__CYGWIN__)
+# endif // !defined(STDNET_DISABLE_POSIX_STREAM_DESCRIPTOR)
+#endif // !defined(STDNET_HAS_POSIX_STREAM_DESCRIPTOR)
 
 // UNIX domain sockets.
-#if !defined(ASIO_HAS_LOCAL_SOCKETS)
-# if !defined(ASIO_DISABLE_LOCAL_SOCKETS)
-#  if !defined(ASIO_WINDOWS) && !defined(__CYGWIN__)
-#   define ASIO_HAS_LOCAL_SOCKETS 1
-#  endif // !defined(ASIO_WINDOWS) && !defined(__CYGWIN__)
-# endif // !defined(ASIO_DISABLE_LOCAL_SOCKETS)
-#endif // !defined(ASIO_HAS_LOCAL_SOCKETS)
+#if !defined(STDNET_HAS_LOCAL_SOCKETS)
+# if !defined(STDNET_DISABLE_LOCAL_SOCKETS)
+#  if !defined(STDNET_WINDOWS) && !defined(__CYGWIN__)
+#   define STDNET_HAS_LOCAL_SOCKETS 1
+#  endif // !defined(STDNET_WINDOWS) && !defined(__CYGWIN__)
+# endif // !defined(STDNET_DISABLE_LOCAL_SOCKETS)
+#endif // !defined(STDNET_HAS_LOCAL_SOCKETS)
 
 // Can use sigaction() instead of signal().
-#if !defined(ASIO_HAS_SIGACTION)
-# if !defined(ASIO_DISABLE_SIGACTION)
-#  if !defined(ASIO_WINDOWS) && !defined(__CYGWIN__)
-#   define ASIO_HAS_SIGACTION 1
-#  endif // !defined(ASIO_WINDOWS) && !defined(__CYGWIN__)
-# endif // !defined(ASIO_DISABLE_SIGACTION)
-#endif // !defined(ASIO_HAS_SIGACTION)
+#if !defined(STDNET_HAS_SIGACTION)
+# if !defined(STDNET_DISABLE_SIGACTION)
+#  if !defined(STDNET_WINDOWS) && !defined(__CYGWIN__)
+#   define STDNET_HAS_SIGACTION 1
+#  endif // !defined(STDNET_WINDOWS) && !defined(__CYGWIN__)
+# endif // !defined(STDNET_DISABLE_SIGACTION)
+#endif // !defined(STDNET_HAS_SIGACTION)
 
 // Can use signal().
-#if !defined(ASIO_HAS_SIGNAL)
-# if !defined(ASIO_DISABLE_SIGNAL)
+#if !defined(STDNET_HAS_SIGNAL)
+# if !defined(STDNET_DISABLE_SIGNAL)
 #  if !defined(UNDER_CE)
-#   define ASIO_HAS_SIGNAL 1
+#   define STDNET_HAS_SIGNAL 1
 #  endif // !defined(UNDER_CE)
-# endif // !defined(ASIO_DISABLE_SIGNAL)
-#endif // !defined(ASIO_HAS_SIGNAL)
+# endif // !defined(STDNET_DISABLE_SIGNAL)
+#endif // !defined(STDNET_HAS_SIGNAL)
 
 // Whether standard iostreams are disabled.
-#if !defined(ASIO_NO_IOSTREAM)
-# if defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_NO_IOSTREAM)
-#  define ASIO_NO_IOSTREAM 1
+#if !defined(STDNET_NO_IOSTREAM)
+# if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_NO_IOSTREAM)
+#  define STDNET_NO_IOSTREAM 1
 # endif // !defined(BOOST_NO_IOSTREAM)
-#endif // !defined(ASIO_NO_IOSTREAM)
+#endif // !defined(STDNET_NO_IOSTREAM)
 
 // Whether exception handling is disabled.
-#if !defined(ASIO_NO_EXCEPTIONS)
-# if defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_NO_EXCEPTIONS)
-#  define ASIO_NO_EXCEPTIONS 1
+#if !defined(STDNET_NO_EXCEPTIONS)
+# if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_NO_EXCEPTIONS)
+#  define STDNET_NO_EXCEPTIONS 1
 # endif // !defined(BOOST_NO_EXCEPTIONS)
-#endif // !defined(ASIO_NO_EXCEPTIONS)
+#endif // !defined(STDNET_NO_EXCEPTIONS)
 
 // Whether the typeid operator is supported.
-#if !defined(ASIO_NO_TYPEID)
-# if defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_NO_TYPEID)
-#  define ASIO_NO_TYPEID 1
+#if !defined(STDNET_NO_TYPEID)
+# if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_NO_TYPEID)
+#  define STDNET_NO_TYPEID 1
 # endif // !defined(BOOST_NO_TYPEID)
-#endif // !defined(ASIO_NO_TYPEID)
+#endif // !defined(STDNET_NO_TYPEID)
 
 // On POSIX (and POSIX-like) platforms we need to include unistd.h in order to
 // get access to the various platform feature macros, e.g. to be able to test
 // for threads support.
-#if !defined(ASIO_HAS_UNISTD_H)
-# if !defined(ASIO_HAS_BOOST_CONFIG)
+#if !defined(STDNET_HAS_UNISTD_H)
+# if !defined(STDNET_HAS_BOOST_CONFIG)
 #  if defined(unix) \
    || defined(__unix) \
    || defined(_XOPEN_SOURCE) \
@@ -528,151 +528,151 @@
    || defined(__NetBSD__) \
    || defined(__OpenBSD__) \
    || defined(__linux__)
-#   define ASIO_HAS_UNISTD_H 1
+#   define STDNET_HAS_UNISTD_H 1
 #  endif
-# endif // !defined(ASIO_HAS_BOOST_CONFIG)
-#endif // !defined(ASIO_HAS_UNISTD_H)
-#if defined(ASIO_HAS_UNISTD_H)
+# endif // !defined(STDNET_HAS_BOOST_CONFIG)
+#endif // !defined(STDNET_HAS_UNISTD_H)
+#if defined(STDNET_HAS_UNISTD_H)
 # include <unistd.h>
-#endif // defined(ASIO_HAS_UNISTD_H)
+#endif // defined(STDNET_HAS_UNISTD_H)
 
 // Threads.
-#if !defined(ASIO_HAS_THREADS)
-# if !defined(ASIO_DISABLE_THREADS)
-#  if defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_HAS_THREADS)
-#   define ASIO_HAS_THREADS 1
+#if !defined(STDNET_HAS_THREADS)
+# if !defined(STDNET_DISABLE_THREADS)
+#  if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_HAS_THREADS)
+#   define STDNET_HAS_THREADS 1
 #  elif defined(_MSC_VER) && defined(_MT)
-#   define ASIO_HAS_THREADS 1
+#   define STDNET_HAS_THREADS 1
 #  elif defined(__BORLANDC__) && defined(__MT__)
-#   define ASIO_HAS_THREADS 1
+#   define STDNET_HAS_THREADS 1
 #  elif defined(_POSIX_THREADS)
-#   define ASIO_HAS_THREADS 1
-#  endif // defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_HAS_THREADS)
-# endif // !defined(ASIO_DISABLE_THREADS)
-#endif // !defined(ASIO_HAS_THREADS)
+#   define STDNET_HAS_THREADS 1
+#  endif // defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_HAS_THREADS)
+# endif // !defined(STDNET_DISABLE_THREADS)
+#endif // !defined(STDNET_HAS_THREADS)
 
 // POSIX threads.
-#if !defined(ASIO_HAS_PTHREADS)
-# if defined(ASIO_HAS_THREADS)
-#  if defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_HAS_PTHREADS)
-#   define ASIO_HAS_PTHREADS 1
+#if !defined(STDNET_HAS_PTHREADS)
+# if defined(STDNET_HAS_THREADS)
+#  if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_HAS_PTHREADS)
+#   define STDNET_HAS_PTHREADS 1
 #  elif defined(_POSIX_THREADS)
-#   define ASIO_HAS_PTHREADS 1
-#  endif // defined(ASIO_HAS_BOOST_CONFIG) && defined(BOOST_HAS_PTHREADS)
-# endif // defined(ASIO_HAS_THREADS)
-#endif // !defined(ASIO_HAS_PTHREADS)
+#   define STDNET_HAS_PTHREADS 1
+#  endif // defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_HAS_PTHREADS)
+# endif // defined(STDNET_HAS_THREADS)
+#endif // !defined(STDNET_HAS_PTHREADS)
 
 // Helper to prevent macro expansion.
-#define ASIO_PREVENT_MACRO_SUBSTITUTION
+#define STDNET_PREVENT_MACRO_SUBSTITUTION
 
 // Helper to define in-class constants.
-#if !defined(ASIO_STATIC_CONSTANT)
-# if !defined(ASIO_DISABLE_BOOST_STATIC_CONSTANT)
-#  define ASIO_STATIC_CONSTANT(type, assignment) \
+#if !defined(STDNET_STATIC_CONSTANT)
+# if !defined(STDNET_DISABLE_BOOST_STATIC_CONSTANT)
+#  define STDNET_STATIC_CONSTANT(type, assignment) \
     BOOST_STATIC_CONSTANT(type, assignment)
-# else // !defined(ASIO_DISABLE_BOOST_STATIC_CONSTANT)
-#  define ASIO_STATIC_CONSTANT(type, assignment) \
+# else // !defined(STDNET_DISABLE_BOOST_STATIC_CONSTANT)
+#  define STDNET_STATIC_CONSTANT(type, assignment) \
     static const type assignment
-# endif // !defined(ASIO_DISABLE_BOOST_STATIC_CONSTANT)
-#endif // !defined(ASIO_STATIC_CONSTANT)
+# endif // !defined(STDNET_DISABLE_BOOST_STATIC_CONSTANT)
+#endif // !defined(STDNET_STATIC_CONSTANT)
 
 // Boost array library.
-#if !defined(ASIO_HAS_BOOST_ARRAY)
-# if !defined(ASIO_DISABLE_BOOST_ARRAY)
-#  define ASIO_HAS_BOOST_ARRAY 1
-# endif // !defined(ASIO_DISABLE_BOOST_ARRAY)
-#endif // !defined(ASIO_HAS_BOOST_ARRAY)
+#if !defined(STDNET_HAS_BOOST_ARRAY)
+# if !defined(STDNET_DISABLE_BOOST_ARRAY)
+#  define STDNET_HAS_BOOST_ARRAY 1
+# endif // !defined(STDNET_DISABLE_BOOST_ARRAY)
+#endif // !defined(STDNET_HAS_BOOST_ARRAY)
 
 // Boost assert macro.
-#if !defined(ASIO_HAS_BOOST_ASSERT)
-# if !defined(ASIO_DISABLE_BOOST_ASSERT)
-#  define ASIO_HAS_BOOST_ASSERT 1
-# endif // !defined(ASIO_DISABLE_BOOST_ASSERT)
-#endif // !defined(ASIO_HAS_BOOST_ASSERT)
+#if !defined(STDNET_HAS_BOOST_ASSERT)
+# if !defined(STDNET_DISABLE_BOOST_ASSERT)
+#  define STDNET_HAS_BOOST_ASSERT 1
+# endif // !defined(STDNET_DISABLE_BOOST_ASSERT)
+#endif // !defined(STDNET_HAS_BOOST_ASSERT)
 
 // Boost limits header.
-#if !defined(ASIO_HAS_BOOST_LIMITS)
-# if !defined(ASIO_DISABLE_BOOST_LIMITS)
-#  define ASIO_HAS_BOOST_LIMITS 1
-# endif // !defined(ASIO_DISABLE_BOOST_LIMITS)
-#endif // !defined(ASIO_HAS_BOOST_LIMITS)
+#if !defined(STDNET_HAS_BOOST_LIMITS)
+# if !defined(STDNET_DISABLE_BOOST_LIMITS)
+#  define STDNET_HAS_BOOST_LIMITS 1
+# endif // !defined(STDNET_DISABLE_BOOST_LIMITS)
+#endif // !defined(STDNET_HAS_BOOST_LIMITS)
 
 // Boost throw_exception function.
-#if !defined(ASIO_HAS_BOOST_THROW_EXCEPTION)
-# if !defined(ASIO_DISABLE_BOOST_THROW_EXCEPTION)
-#  define ASIO_HAS_BOOST_THROW_EXCEPTION 1
-# endif // !defined(ASIO_DISABLE_BOOST_THROW_EXCEPTION)
-#endif // !defined(ASIO_HAS_BOOST_THROW_EXCEPTION)
+#if !defined(STDNET_HAS_BOOST_THROW_EXCEPTION)
+# if !defined(STDNET_DISABLE_BOOST_THROW_EXCEPTION)
+#  define STDNET_HAS_BOOST_THROW_EXCEPTION 1
+# endif // !defined(STDNET_DISABLE_BOOST_THROW_EXCEPTION)
+#endif // !defined(STDNET_HAS_BOOST_THROW_EXCEPTION)
 
 // Boost regex library.
-#if !defined(ASIO_HAS_BOOST_REGEX)
-# if !defined(ASIO_DISABLE_BOOST_REGEX)
-#  define ASIO_HAS_BOOST_REGEX 1
-# endif // !defined(ASIO_DISABLE_BOOST_REGEX)
-#endif // !defined(ASIO_HAS_BOOST_REGEX)
+#if !defined(STDNET_HAS_BOOST_REGEX)
+# if !defined(STDNET_DISABLE_BOOST_REGEX)
+#  define STDNET_HAS_BOOST_REGEX 1
+# endif // !defined(STDNET_DISABLE_BOOST_REGEX)
+#endif // !defined(STDNET_HAS_BOOST_REGEX)
 
 // Boost bind function.
-#if !defined(ASIO_HAS_BOOST_BIND)
-# if !defined(ASIO_DISABLE_BOOST_BIND)
-#  define ASIO_HAS_BOOST_BIND 1
-# endif // !defined(ASIO_DISABLE_BOOST_BIND)
-#endif // !defined(ASIO_HAS_BOOST_BIND)
+#if !defined(STDNET_HAS_BOOST_BIND)
+# if !defined(STDNET_DISABLE_BOOST_BIND)
+#  define STDNET_HAS_BOOST_BIND 1
+# endif // !defined(STDNET_DISABLE_BOOST_BIND)
+#endif // !defined(STDNET_HAS_BOOST_BIND)
 
 // Boost's BOOST_WORKAROUND macro.
-#if !defined(ASIO_HAS_BOOST_WORKAROUND)
-# if !defined(ASIO_DISABLE_BOOST_WORKAROUND)
-#  define ASIO_HAS_BOOST_WORKAROUND 1
-# endif // !defined(ASIO_DISABLE_BOOST_WORKAROUND)
-#endif // !defined(ASIO_HAS_BOOST_WORKAROUND)
+#if !defined(STDNET_HAS_BOOST_WORKAROUND)
+# if !defined(STDNET_DISABLE_BOOST_WORKAROUND)
+#  define STDNET_HAS_BOOST_WORKAROUND 1
+# endif // !defined(STDNET_DISABLE_BOOST_WORKAROUND)
+#endif // !defined(STDNET_HAS_BOOST_WORKAROUND)
 
 // Microsoft Visual C++'s secure C runtime library.
-#if !defined(ASIO_HAS_SECURE_RTL)
-# if !defined(ASIO_DISABLE_SECURE_RTL)
-#  if defined(ASIO_MSVC) \
-    && (ASIO_MSVC >= 1400) \
+#if !defined(STDNET_HAS_SECURE_RTL)
+# if !defined(STDNET_DISABLE_SECURE_RTL)
+#  if defined(STDNET_MSVC) \
+    && (STDNET_MSVC >= 1400) \
     && !defined(UNDER_CE)
-#   define ASIO_HAS_SECURE_RTL 1
-#  endif // defined(ASIO_MSVC)
-         // && (ASIO_MSVC >= 1400)
+#   define STDNET_HAS_SECURE_RTL 1
+#  endif // defined(STDNET_MSVC)
+         // && (STDNET_MSVC >= 1400)
          // && !defined(UNDER_CE)
-# endif // !defined(ASIO_DISABLE_SECURE_RTL)
-#endif // !defined(ASIO_HAS_SECURE_RTL)
+# endif // !defined(STDNET_DISABLE_SECURE_RTL)
+#endif // !defined(STDNET_HAS_SECURE_RTL)
 
 // Handler hooking. Disabled for ancient Borland C++ and gcc compilers.
-#if !defined(ASIO_HAS_HANDLER_HOOKS)
-# if !defined(ASIO_DISABLE_HANDLER_HOOKS)
+#if !defined(STDNET_HAS_HANDLER_HOOKS)
+# if !defined(STDNET_DISABLE_HANDLER_HOOKS)
 #  if defined(__GNUC__)
 #   if (__GNUC__ >= 3)
-#    define ASIO_HAS_HANDLER_HOOKS 1
+#    define STDNET_HAS_HANDLER_HOOKS 1
 #   endif // (__GNUC__ >= 3)
 #  elif !defined(__BORLANDC__)
-#   define ASIO_HAS_HANDLER_HOOKS 1
+#   define STDNET_HAS_HANDLER_HOOKS 1
 #  endif // !defined(__BORLANDC__)
-# endif // !defined(ASIO_DISABLE_HANDLER_HOOKS)
-#endif // !defined(ASIO_HAS_HANDLER_HOOKS)
+# endif // !defined(STDNET_DISABLE_HANDLER_HOOKS)
+#endif // !defined(STDNET_HAS_HANDLER_HOOKS)
 
 // Support for the __thread keyword extension.
-#if !defined(ASIO_DISABLE_THREAD_KEYWORD_EXTENSION)
+#if !defined(STDNET_DISABLE_THREAD_KEYWORD_EXTENSION)
 # if defined(__linux__)
 #  if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 #   if ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3)) || (__GNUC__ > 3)
 #    if !defined(__INTEL_COMPILER) && !defined(__ICL)
-#     define ASIO_HAS_THREAD_KEYWORD_EXTENSION 1
+#     define STDNET_HAS_THREAD_KEYWORD_EXTENSION 1
 #    elif defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 1100)
-#     define ASIO_HAS_THREAD_KEYWORD_EXTENSION 1
+#     define STDNET_HAS_THREAD_KEYWORD_EXTENSION 1
 #    endif // defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 1100)
 #   endif // ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3)) || (__GNUC__ > 3)
 #  endif // defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 # endif // defined(__linux__)
-#endif // !defined(ASIO_DISABLE_THREAD_KEYWORD_EXTENSION)
+#endif // !defined(STDNET_DISABLE_THREAD_KEYWORD_EXTENSION)
 
 // Support for POSIX ssize_t typedef.
-#if !defined(ASIO_DISABLE_SSIZE_T)
+#if !defined(STDNET_DISABLE_SSIZE_T)
 # if defined(__linux__) \
    || (defined(__MACH__) && defined(__APPLE__))
-#  define ASIO_HAS_SSIZE_T 1
+#  define STDNET_HAS_SSIZE_T 1
 # endif // defined(__linux__)
         //   || (defined(__MACH__) && defined(__APPLE__))
-#endif // !defined(ASIO_DISABLE_SSIZE_T)
+#endif // !defined(STDNET_DISABLE_SSIZE_T)
 
-#endif // ASIO_DETAIL_CONFIG_HPP
+#endif // STDNET_DETAIL_CONFIG_HPP

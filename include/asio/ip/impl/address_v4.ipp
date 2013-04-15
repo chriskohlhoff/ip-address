@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_IP_IMPL_ADDRESS_V4_IPP
-#define ASIO_IP_IMPL_ADDRESS_V4_IPP
+#ifndef STDNET_IP_IMPL_ADDRESS_V4_IPP
+#define STDNET_IP_IMPL_ADDRESS_V4_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -170,4 +170,4 @@ address_v4 address_v4::netmask(const address_v4& addr)
 
 #include "asio/detail/pop_options.hpp"
 
-#endif // ASIO_IP_IMPL_ADDRESS_V4_IPP
+#endif // STDNET_IP_IMPL_ADDRESS_V4_IPP

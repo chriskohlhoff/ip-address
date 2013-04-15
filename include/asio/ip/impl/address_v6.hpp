@@ -8,14 +8,14 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_IP_IMPL_ADDRESS_V6_HPP
-#define ASIO_IP_IMPL_ADDRESS_V6_HPP
+#ifndef STDNET_IP_IMPL_ADDRESS_V6_HPP
+#define STDNET_IP_IMPL_ADDRESS_V6_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#if !defined(ASIO_NO_IOSTREAM)
+#if !defined(STDNET_NO_IOSTREAM)
 
 #include "asio/detail/throw_error.hpp"
 
@@ -48,6 +48,6 @@ std::basic_ostream<Elem, Traits>& operator<<(
 
 #include "asio/detail/pop_options.hpp"
 
-#endif // !defined(ASIO_NO_IOSTREAM)
+#endif // !defined(STDNET_NO_IOSTREAM)
 
-#endif // ASIO_IP_IMPL_ADDRESS_V6_HPP
+#endif // STDNET_IP_IMPL_ADDRESS_V6_HPP

@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_DETAIL_SOCKET_TYPES_HPP
-#define ASIO_DETAIL_SOCKET_TYPES_HPP
+#ifndef STDNET_DETAIL_SOCKET_TYPES_HPP
+#define STDNET_DETAIL_SOCKET_TYPES_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -17,7 +17,7 @@
 
 #include "asio/detail/config.hpp"
 
-#if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 # if defined(_WINSOCKAPI_) && !defined(_WINSOCK2API_)
 #  error WinSock.h has already been included
 # endif // defined(_WINSOCKAPI_) && !defined(_WINSOCK2API_)
@@ -25,24 +25,24 @@
 #  include <stdlib.h> // Needed for __errno
 #  if !defined(_WSPIAPI_H_)
 #   define _WSPIAPI_H_
-#   define ASIO_WSPIAPI_H_DEFINED
+#   define STDNET_WSPIAPI_H_DEFINED
 #  endif // !defined(_WSPIAPI_H_)
 # endif // defined(__BORLANDC__)
 # include <winsock2.h>
 # include <ws2tcpip.h>
 # include <mswsock.h>
-# if defined(ASIO_WSPIAPI_H_DEFINED)
+# if defined(STDNET_WSPIAPI_H_DEFINED)
 #  undef _WSPIAPI_H_
-#  undef ASIO_WSPIAPI_H_DEFINED
-# endif // defined(ASIO_WSPIAPI_H_DEFINED)
-# if !defined(ASIO_NO_DEFAULT_LINKED_LIBS)
+#  undef STDNET_WSPIAPI_H_DEFINED
+# endif // defined(STDNET_WSPIAPI_H_DEFINED)
+# if !defined(STDNET_NO_DEFAULT_LINKED_LIBS)
 #  if defined(UNDER_CE)
 #   pragma comment(lib, "ws2.lib")
 #  elif defined(_MSC_VER) || defined(__BORLANDC__)
 #   pragma comment(lib, "ws2_32.lib")
 #   pragma comment(lib, "mswsock.lib")
 #  endif // defined(_MSC_VER) || defined(__BORLANDC__)
-# endif // !defined(ASIO_NO_DEFAULT_LINKED_LIBS)
+# endif // !defined(STDNET_NO_DEFAULT_LINKED_LIBS)
 # include "asio/detail/old_win_sdk_compat.hpp"
 #else
 # include <sys/ioctl.h>
@@ -80,7 +80,7 @@
 namespace asio {
 namespace detail {
 
-#if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
+#if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 typedef SOCKET socket_type;
 const SOCKET invalid_socket = INVALID_SOCKET;
 const int socket_error_retval = SOCKET_ERROR;
@@ -90,7 +90,7 @@ typedef sockaddr socket_addr_type;
 typedef in_addr in4_addr_type;
 typedef ip_mreq in4_mreq_type;
 typedef sockaddr_in sockaddr_in4_type;
-# if defined(ASIO_HAS_OLD_WIN_SDK)
+# if defined(STDNET_HAS_OLD_WIN_SDK)
 typedef in6_addr_emulation in6_addr_type;
 typedef ipv6_mreq_emulation in6_mreq_type;
 typedef sockaddr_in6_emulation sockaddr_in6_type;
@@ -151,11 +151,11 @@ typedef addrinfo addrinfo_type;
 typedef int ioctl_arg_type;
 typedef uint32_t u_long_type;
 typedef uint16_t u_short_type;
-#if defined(ASIO_HAS_SSIZE_T)
+#if defined(STDNET_HAS_SSIZE_T)
 typedef ssize_t signed_size_type;
-#else // defined(ASIO_HAS_SSIZE_T)
+#else // defined(STDNET_HAS_SSIZE_T)
 typedef int signed_size_type;
-#endif // defined(ASIO_HAS_SSIZE_T)
+#endif // defined(STDNET_HAS_SSIZE_T)
 const int shutdown_receive = SHUT_RD;
 const int shutdown_send = SHUT_WR;
 const int shutdown_both = SHUT_RDWR;
@@ -179,4 +179,4 @@ const int always_fail_option = 2;
 
 #include "asio/detail/pop_options.hpp"
 
-#endif // ASIO_DETAIL_SOCKET_TYPES_HPP
+#endif // STDNET_DETAIL_SOCKET_TYPES_HPP

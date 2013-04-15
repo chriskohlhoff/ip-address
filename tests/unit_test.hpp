@@ -28,11 +28,11 @@
 
 #endif // defined(__BORLANDC__)
 
-#if defined(ASIO_MSVC)
+#if defined(STDNET_MSVC)
 # pragma warning (push)
 # pragma warning (disable:4244)
 # pragma warning (disable:4702)
-#endif // defined(ASIO_MSVC)
+#endif // defined(STDNET_MSVC)
 
 #include <cassert>
 #include <iostream>
@@ -41,17 +41,17 @@
 # error NDEBUG must not be defined when building these unit tests
 #endif // defined(NDEBUG)
 
-#define ASIO_CHECK(expr) assert(expr)
+#define STDNET_CHECK(expr) assert(expr)
 
-#define ASIO_CHECK_MESSAGE(expr, message) \
+#define STDNET_CHECK_MESSAGE(expr, message) \
   do { if (!(expr)) { std::cout << message << std::endl; assert(expr); } } while (0)
 
-#define ASIO_WARN_MESSAGE(expr, message) \
+#define STDNET_WARN_MESSAGE(expr, message) \
   do { if (!(expr)) { std::cout << message << std::endl; } } while (0)
 
-#define ASIO_ERROR(message) assert(0 && message)
+#define STDNET_ERROR(message) assert(0 && message)
 
-#define ASIO_TEST_SUITE(name, tests) \
+#define STDNET_TEST_SUITE(name, tests) \
   int main() \
   { \
     std::cout << name << " test suite begins" << std::endl; \
@@ -60,13 +60,13 @@
     return 0; \
   }
 
-#define ASIO_TEST_CASE(test) \
+#define STDNET_TEST_CASE(test) \
   test(); \
   std::cout << #test << " passed" << std::endl;
 
-#if defined(ASIO_MSVC)
+#if defined(STDNET_MSVC)
 # pragma warning (pop)
-#endif // defined(ASIO_MSVC)
+#endif // defined(STDNET_MSVC)
 
 inline void null_test()
 {
