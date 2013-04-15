@@ -21,7 +21,8 @@
 
 #include "asio/detail/push_options.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace ip {
 
 template <typename Elem, typename Traits>
@@ -33,7 +34,7 @@ std::basic_ostream<Elem, Traits>& operator<<(
   if (ec)
   {
     if (os.exceptions() & std::basic_ostream<Elem, Traits>::failbit)
-      asio::detail::throw_error(ec);
+      std::net::detail::throw_error(ec);
     else
       os.setstate(std::basic_ostream<Elem, Traits>::failbit);
   }
@@ -44,7 +45,8 @@ std::basic_ostream<Elem, Traits>& operator<<(
 }
 
 } // namespace ip
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #include "asio/detail/pop_options.hpp"
 

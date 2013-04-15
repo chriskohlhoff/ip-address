@@ -30,8 +30,7 @@ namespace ip_address_compile {
 
 void test()
 {
-  using namespace asio;
-  namespace ip = asio::ip;
+  namespace ip = std::net::ip;
 
   try
   {

@@ -28,13 +28,14 @@
 
 #include "asio/detail/push_options.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace ip {
 
 /// Implements IP version 4 style addresses.
 /**
- * The asio::ip::address_v4 class provides the ability to use and
- * manipulate IP version 4 addresses.
+ * The ip::address_v4 class provides the ability to use and manipulate IP
+ * version 4 addresses.
  *
  * @par Thread Safety
  * @e Distinct @e objects: Safe.@n
@@ -44,10 +45,6 @@ class address_v4
 {
 public:
   /// The type used to represent an address as an array of bytes.
-  /**
-   * @note This type is defined in terms of the C++0x template @c std::array
-   * when it is available. Otherwise, it uses @c boost:array.
-   */
   typedef std::array<unsigned char, 4> bytes_type;
 
   /// Default constructor.
@@ -201,7 +198,7 @@ public:
 
 private:
   // The underlying IPv4 address.
-  asio::detail::in4_addr_type addr_;
+  std::net::detail::in4_addr_type addr_;
 };
 
 #if !defined(STDNET_NO_IOSTREAM)
@@ -216,7 +213,7 @@ private:
  *
  * @return The output stream.
  *
- * @relates asio::ip::address_v4
+ * @relates std::net::ip::address_v4
  */
 template <typename Elem, typename Traits>
 std::basic_ostream<Elem, Traits>& operator<<(
@@ -225,7 +222,8 @@ std::basic_ostream<Elem, Traits>& operator<<(
 #endif // !defined(STDNET_NO_IOSTREAM)
 
 } // namespace ip
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #include "asio/detail/pop_options.hpp"
 

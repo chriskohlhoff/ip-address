@@ -20,7 +20,8 @@
 
 #include "asio/detail/push_options.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace detail {
 namespace syserrc {
 
@@ -29,7 +30,7 @@ class system_category : public std::error_category
 public:
   const char* name() const STDNET_ERROR_CATEGORY_NOEXCEPT
   {
-    return "asio.system";
+    return "std.net.system";
   }
 
   std::string message(int value) const
@@ -48,7 +49,7 @@ public:
     if (length)
       return msg;
     else
-      return "asio.system error";
+      return "std.net.system error";
 #else // defined(STDNET_WINDOWS)
 #if !defined(__sun)
     if (value == ECANCELED)
@@ -82,7 +83,8 @@ const std::error_category& system_category()
 }
 
 } // namespace detail
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #include "asio/detail/pop_options.hpp"
 

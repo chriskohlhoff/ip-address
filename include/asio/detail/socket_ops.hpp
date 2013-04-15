@@ -22,7 +22,8 @@
 
 #include "asio/detail/push_options.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace detail {
 namespace socket_ops {
 
@@ -42,7 +43,8 @@ STDNET_DECL u_short_type host_to_network_short(u_short_type value);
 
 } // namespace socket_ops
 } // namespace detail
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #include "asio/detail/pop_options.hpp"
 

@@ -26,7 +26,8 @@
 
 #include "asio/detail/push_options.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace detail {
 
 void winsock_init_base::startup(data& d,
@@ -54,13 +55,14 @@ void winsock_init_base::throw_on_error(data& d)
   if (result != 0)
   {
     std::error_code ec(result,
-        asio::error::get_system_category());
-    asio::detail::throw_error(ec, "winsock");
+        std::net::detail::system_category());
+    std::net::detail::throw_error(ec, "winsock");
   }
 }
 
 } // namespace detail
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #include "asio/detail/pop_options.hpp"
 

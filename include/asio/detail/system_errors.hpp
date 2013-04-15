@@ -50,7 +50,8 @@
 
 #include "asio/detail/push_options.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace detail {
 namespace syserrc {
 
@@ -168,34 +169,37 @@ enum system_errors
 
 } // namespace syserrc
 
-/// Returns the error category used for the system errors produced by asio.
+/// Returns the error category used for the system errors.
 extern STDNET_DECL const std::error_category& system_category();
 
 } // namespace detail
-} // namespace asio
+} // namespace net
+} // namespace std
 
 namespace std {
 
-template<> struct is_error_code_enum<asio::detail::syserrc::system_errors>
+template<> struct is_error_code_enum<std::net::detail::syserrc::system_errors>
 {
   static const bool value = true;
 };
 
 } // namespace std
 
-namespace asio {
+namespace std {
+namespace net {
 namespace detail {
 namespace syserrc {
 
 inline std::error_code make_error_code(system_errors e)
 {
   return std::error_code(
-      static_cast<int>(e), asio::detail::system_category());
+      static_cast<int>(e), std::net::detail::system_category());
 }
 
 } // namespace syserrc
 } // namespace detail
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #include "asio/detail/pop_options.hpp"
 

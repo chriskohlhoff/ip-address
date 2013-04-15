@@ -29,13 +29,14 @@
 
 #include "asio/detail/push_options.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace ip {
 
 /// Implements IP version 6 style addresses.
 /**
- * The asio::ip::address_v6 class provides the ability to use and
- * manipulate IP version 6 addresses.
+ * The ip::address_v6 class provides the ability to use and manipulate IP
+ * version 6 addresses.
  *
  * @par Thread Safety
  * @e Distinct @e objects: Safe.@n
@@ -45,10 +46,6 @@ class address_v6
 {
 public:
   /// The type used to represent an address as an array of bytes.
-  /**
-   * @note This type is defined in terms of the C++0x template @c std::array
-   * when it is available. Otherwise, it uses @c boost:array.
-   */
   typedef std::array<unsigned char, 16> bytes_type;
 
   /// Default constructor.
@@ -203,7 +200,7 @@ public:
 
 private:
   // The underlying IPv6 address.
-  asio::detail::in6_addr_type addr_;
+  std::net::detail::in6_addr_type addr_;
 
   // The scope ID associated with the address.
   unsigned long scope_id_;
@@ -221,7 +218,7 @@ private:
  *
  * @return The output stream.
  *
- * @relates asio::ip::address_v6
+ * @relates std::net::ip::address_v6
  */
 template <typename Elem, typename Traits>
 std::basic_ostream<Elem, Traits>& operator<<(
@@ -230,7 +227,8 @@ std::basic_ostream<Elem, Traits>& operator<<(
 #endif // !defined(STDNET_NO_IOSTREAM)
 
 } // namespace ip
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #include "asio/detail/pop_options.hpp"
 

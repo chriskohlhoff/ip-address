@@ -21,7 +21,8 @@
 
 #include "asio/detail/push_options.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace detail {
 
 class winsock_init_base
@@ -77,7 +78,8 @@ winsock_init_base::data winsock_init<Major, Minor>::data_;
 static const winsock_init<>& winsock_init_instance = winsock_init<>(false);
 
 } // namespace detail
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #include "asio/detail/pop_options.hpp"
 

@@ -77,7 +77,8 @@
 
 #include "asio/detail/push_options.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace detail {
 
 #if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
@@ -175,7 +176,8 @@ const int enable_connection_aborted_option = 1;
 const int always_fail_option = 2;
 
 } // namespace detail
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #include "asio/detail/pop_options.hpp"
 

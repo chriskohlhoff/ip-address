@@ -30,8 +30,7 @@ namespace ip_address_v6_compile {
 
 void test()
 {
-  using namespace asio;
-  namespace ip = asio::ip;
+  namespace ip = std::net::ip;
 
   try
   {
@@ -155,7 +154,7 @@ namespace ip_address_v6_runtime {
 
 void test()
 {
-  using asio::ip::address_v6;
+  using std::net::ip::address_v6;
 
   address_v6 a1;
   STDNET_CHECK(a1.is_unspecified());

@@ -17,7 +17,8 @@
 
 #include "asio/detail/config.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace detail {
 
 // Declare the throw_exception function for all targets.
@@ -36,6 +37,7 @@ void throw_exception(const Exception& e)
 # endif // !defined(STDNET_NO_EXCEPTIONS)
 
 } // namespace detail
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #endif // STDNET_DETAIL_THROW_EXCEPTION_HPP

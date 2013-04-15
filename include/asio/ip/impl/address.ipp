@@ -25,7 +25,8 @@
 
 #include "asio/detail/push_options.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace ip {
 
 address::address()
@@ -35,14 +36,14 @@ address::address()
 {
 }
 
-address::address(const asio::ip::address_v4& ipv4_address)
+address::address(const address_v4& ipv4_address)
   : type_(ipv4),
     ipv4_address_(ipv4_address),
     ipv6_address_()
 {
 }
 
-address::address(const asio::ip::address_v6& ipv6_address)
+address::address(const address_v6& ipv6_address)
   : type_(ipv6),
     ipv4_address_(),
     ipv6_address_(ipv6_address)
@@ -83,38 +84,38 @@ address& address::operator=(address&& other)
 }
 #endif // defined(STDNET_HAS_MOVE)
 
-address& address::operator=(const asio::ip::address_v4& ipv4_address)
+address& address::operator=(const address_v4& ipv4_address)
 {
   type_ = ipv4;
   ipv4_address_ = ipv4_address;
-  ipv6_address_ = asio::ip::address_v6();
+  ipv6_address_ = address_v6();
   return *this;
 }
 
-address& address::operator=(const asio::ip::address_v6& ipv6_address)
+address& address::operator=(const address_v6& ipv6_address)
 {
   type_ = ipv6;
-  ipv4_address_ = asio::ip::address_v4();
+  ipv4_address_ = address_v4();
   ipv6_address_ = ipv6_address;
   return *this;
 }
 
-asio::ip::address_v4 address::to_v4() const
+address_v4 address::to_v4() const
 {
   if (type_ != ipv4)
   {
     std::bad_cast ex;
-    asio::detail::throw_exception(ex);
+    std::net::detail::throw_exception(ex);
   }
   return ipv4_address_;
 }
 
-asio::ip::address_v6 address::to_v6() const
+address_v6 address::to_v6() const
 {
   if (type_ != ipv6)
   {
     std::bad_cast ex;
-    asio::detail::throw_exception(ex);
+    std::net::detail::throw_exception(ex);
   }
   return ipv6_address_;
 }
@@ -137,14 +138,13 @@ address address::from_string(const char* str)
 {
   std::error_code ec;
   address addr = from_string(str, ec);
-  asio::detail::throw_error(ec);
+  std::net::detail::throw_error(ec);
   return addr;
 }
 
 address address::from_string(const char* str, std::error_code& ec)
 {
-  asio::ip::address_v6 ipv6_address =
-    asio::ip::address_v6::from_string(str, ec);
+  address_v6 ipv6_address = address_v6::from_string(str, ec);
   if (!ec)
   {
     address tmp;
@@ -153,8 +153,7 @@ address address::from_string(const char* str, std::error_code& ec)
     return tmp;
   }
 
-  asio::ip::address_v4 ipv4_address =
-    asio::ip::address_v4::from_string(str, ec);
+  address_v4 ipv4_address = address_v4::from_string(str, ec);
   if (!ec)
   {
     address tmp;
@@ -219,7 +218,8 @@ bool operator<(const address& a1, const address& a2)
 }
 
 } // namespace ip
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #include "asio/detail/pop_options.hpp"
 

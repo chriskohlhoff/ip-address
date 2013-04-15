@@ -20,7 +20,8 @@
 
 #include "asio/detail/push_options.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace detail {
 
 STDNET_DECL void do_throw_error(const std::error_code& err);
@@ -42,7 +43,8 @@ inline void throw_error(const std::error_code& err,
 }
 
 } // namespace detail
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #include "asio/detail/pop_options.hpp"
 

@@ -22,23 +22,25 @@
 
 #include "asio/detail/push_options.hpp"
 
-namespace asio {
+namespace std {
+namespace net {
 namespace detail {
 
 void do_throw_error(const std::error_code& err)
 {
   std::system_error e(err);
-  asio::detail::throw_exception(e);
+  std::net::detail::throw_exception(e);
 }
 
 void do_throw_error(const std::error_code& err, const char* location)
 {
   std::system_error e(err, location);
-  asio::detail::throw_exception(e);
+  std::net::detail::throw_exception(e);
 }
 
 } // namespace detail
-} // namespace asio
+} // namespace net
+} // namespace std
 
 #include "asio/detail/pop_options.hpp"
 
