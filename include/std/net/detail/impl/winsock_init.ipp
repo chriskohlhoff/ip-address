@@ -15,16 +15,16 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
+#include "std/net/detail/config.hpp"
 
 #if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 
-#include "asio/detail/socket_types.hpp"
-#include "asio/detail/system_errors.hpp"
-#include "asio/detail/winsock_init.hpp"
-#include "asio/detail/throw_error.hpp"
+#include "std/net/detail/socket_types.hpp"
+#include "std/net/detail/system_errors.hpp"
+#include "std/net/detail/winsock_init.hpp"
+#include "std/net/detail/throw_error.hpp"
 
-#include "asio/detail/push_options.hpp"
+#include "std/net/detail/push_options.hpp"
 
 namespace std {
 namespace net {
@@ -64,7 +64,7 @@ void winsock_init_base::throw_on_error(data& d)
 } // namespace net
 } // namespace std
 
-#include "asio/detail/pop_options.hpp"
+#include "std/net/detail/pop_options.hpp"
 
 #endif // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 

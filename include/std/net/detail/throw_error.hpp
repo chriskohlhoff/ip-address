@@ -15,10 +15,10 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
+#include "std/net/detail/config.hpp"
 #include <system_error>
 
-#include "asio/detail/push_options.hpp"
+#include "std/net/detail/push_options.hpp"
 
 namespace std {
 namespace net {
@@ -46,10 +46,10 @@ inline void throw_error(const std::error_code& err,
 } // namespace net
 } // namespace std
 
-#include "asio/detail/pop_options.hpp"
+#include "std/net/detail/pop_options.hpp"
 
 #if defined(STDNET_HEADER_ONLY)
-# include "asio/detail/impl/throw_error.ipp"
+# include "std/net/detail/impl/throw_error.ipp"
 #endif // defined(STDNET_HEADER_ONLY)
 
 #endif // STDNET_DETAIL_THROW_ERROR_HPP

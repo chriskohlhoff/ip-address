@@ -15,11 +15,11 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
+#include "std/net/detail/config.hpp"
 
 #if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 
-#include "asio/detail/push_options.hpp"
+#include "std/net/detail/push_options.hpp"
 
 namespace std {
 namespace net {
@@ -81,10 +81,10 @@ static const winsock_init<>& winsock_init_instance = winsock_init<>(false);
 } // namespace net
 } // namespace std
 
-#include "asio/detail/pop_options.hpp"
+#include "std/net/detail/pop_options.hpp"
 
 #if defined(STDNET_HEADER_ONLY)
-# include "asio/detail/impl/winsock_init.ipp"
+# include "std/net/detail/impl/winsock_init.ipp"
 #endif // defined(STDNET_HEADER_ONLY)
 
 #endif // defined(STDNET_WINDOWS) || defined(__CYGWIN__)

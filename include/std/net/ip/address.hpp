@@ -15,17 +15,17 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
+#include "std/net/detail/config.hpp"
 #include <string>
 #include <system_error>
-#include "asio/ip/address_v4.hpp"
-#include "asio/ip/address_v6.hpp"
+#include "std/net/ip/address_v4.hpp"
+#include "std/net/ip/address_v6.hpp"
 
 #if !defined(STDNET_NO_IOSTREAM)
 # include <iosfwd>
 #endif // !defined(STDNET_NO_IOSTREAM)
 
-#include "asio/detail/push_options.hpp"
+#include "std/net/detail/push_options.hpp"
 
 namespace std {
 namespace net {
@@ -192,11 +192,11 @@ std::basic_ostream<Elem, Traits>& operator<<(
 } // namespace net
 } // namespace std
 
-#include "asio/detail/pop_options.hpp"
+#include "std/net/detail/pop_options.hpp"
 
-#include "asio/ip/impl/address.hpp"
+#include "std/net/ip/impl/address.hpp"
 #if defined(STDNET_HEADER_ONLY)
-# include "asio/ip/impl/address.ipp"
+# include "std/net/ip/impl/address.ipp"
 #endif // defined(STDNET_HEADER_ONLY)
 
 #endif // STDNET_IP_ADDRESS_HPP

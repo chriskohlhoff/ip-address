@@ -15,16 +15,16 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
+#include "std/net/detail/config.hpp"
 #include <climits>
 #include <stdexcept>
-#include "asio/detail/socket_ops.hpp"
-#include "asio/detail/system_errors.hpp"
-#include "asio/detail/throw_error.hpp"
-#include "asio/detail/throw_exception.hpp"
-#include "asio/ip/address_v4.hpp"
+#include "std/net/detail/socket_ops.hpp"
+#include "std/net/detail/system_errors.hpp"
+#include "std/net/detail/throw_error.hpp"
+#include "std/net/detail/throw_exception.hpp"
+#include "std/net/ip/address_v4.hpp"
 
-#include "asio/detail/push_options.hpp"
+#include "std/net/detail/push_options.hpp"
 
 namespace std {
 namespace net {
@@ -170,6 +170,6 @@ address_v4 address_v4::netmask(const address_v4& addr)
 } // namespace net
 } // namespace std
 
-#include "asio/detail/pop_options.hpp"
+#include "std/net/detail/pop_options.hpp"
 
 #endif // STDNET_IP_IMPL_ADDRESS_V4_IPP

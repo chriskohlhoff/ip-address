@@ -15,7 +15,7 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
+#include "std/net/detail/config.hpp"
 #include <system_error>
 #if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 # include <winerror.h>
@@ -48,7 +48,7 @@
 # define STDNET_WIN_OR_POSIX(e_win, e_posix) e_posix
 #endif
 
-#include "asio/detail/push_options.hpp"
+#include "std/net/detail/push_options.hpp"
 
 namespace std {
 namespace net {
@@ -201,7 +201,7 @@ inline std::error_code make_error_code(system_errors e)
 } // namespace net
 } // namespace std
 
-#include "asio/detail/pop_options.hpp"
+#include "std/net/detail/pop_options.hpp"
 
 #undef STDNET_NATIVE_ERROR
 #undef STDNET_SOCKET_ERROR
@@ -210,7 +210,7 @@ inline std::error_code make_error_code(system_errors e)
 #undef STDNET_WIN_OR_POSIX
 
 #if defined(STDNET_HEADER_ONLY)
-# include "asio/detail/impl/system_errors.ipp"
+# include "std/net/detail/impl/system_errors.ipp"
 #endif // defined(STDNET_HEADER_ONLY)
 
 #endif // STDNET_DETAIL_SYSTEM_ERRORS_HPP

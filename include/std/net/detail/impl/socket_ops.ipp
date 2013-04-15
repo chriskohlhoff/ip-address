@@ -15,17 +15,17 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
+#include "std/net/detail/config.hpp"
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <cerrno>
 #include <new>
-#include "asio/detail/socket_ops.hpp"
-#include "asio/detail/system_errors.hpp"
+#include "std/net/detail/socket_ops.hpp"
+#include "std/net/detail/system_errors.hpp"
 
-#include "asio/detail/push_options.hpp"
+#include "std/net/detail/push_options.hpp"
 
 namespace std {
 namespace net {
@@ -253,6 +253,6 @@ u_short_type host_to_network_short(u_short_type value)
 } // namespace net
 } // namespace std
 
-#include "asio/detail/pop_options.hpp"
+#include "std/net/detail/pop_options.hpp"
 
 #endif // STDNET_DETAIL_SOCKET_OPS_IPP

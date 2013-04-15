@@ -15,15 +15,15 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
+#include "std/net/detail/config.hpp"
 #include <system_error>
 #include <typeinfo>
-#include "asio/detail/throw_error.hpp"
-#include "asio/detail/throw_exception.hpp"
-#include "asio/detail/system_errors.hpp"
-#include "asio/ip/address.hpp"
+#include "std/net/detail/throw_error.hpp"
+#include "std/net/detail/throw_exception.hpp"
+#include "std/net/detail/system_errors.hpp"
+#include "std/net/ip/address.hpp"
 
-#include "asio/detail/push_options.hpp"
+#include "std/net/detail/push_options.hpp"
 
 namespace std {
 namespace net {
@@ -221,6 +221,6 @@ bool operator<(const address& a1, const address& a2)
 } // namespace net
 } // namespace std
 
-#include "asio/detail/pop_options.hpp"
+#include "std/net/detail/pop_options.hpp"
 
 #endif // STDNET_IP_IMPL_ADDRESS_IPP

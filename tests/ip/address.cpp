@@ -14,7 +14,7 @@
 #endif // !defined(BOOST_ALL_NO_LIB)
 
 // Test that header file is self-contained.
-#include "asio/ip/address.hpp"
+#include "std/net/ip/address.hpp"
 
 #include "../unit_test.hpp"
 #include <sstream>

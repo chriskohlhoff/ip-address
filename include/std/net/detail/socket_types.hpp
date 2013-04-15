@@ -15,7 +15,7 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
+#include "std/net/detail/config.hpp"
 
 #if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
 # if defined(_WINSOCKAPI_) && !defined(_WINSOCK2API_)
@@ -43,7 +43,7 @@
 #   pragma comment(lib, "mswsock.lib")
 #  endif // defined(_MSC_VER) || defined(__BORLANDC__)
 # endif // !defined(STDNET_NO_DEFAULT_LINKED_LIBS)
-# include "asio/detail/old_win_sdk_compat.hpp"
+# include "std/net/detail/old_win_sdk_compat.hpp"
 #else
 # include <sys/ioctl.h>
 # if !defined(__SYMBIAN32__)
@@ -75,7 +75,7 @@
 # endif
 #endif
 
-#include "asio/detail/push_options.hpp"
+#include "std/net/detail/push_options.hpp"
 
 namespace std {
 namespace net {
@@ -179,6 +179,6 @@ const int always_fail_option = 2;
 } // namespace net
 } // namespace std
 
-#include "asio/detail/pop_options.hpp"
+#include "std/net/detail/pop_options.hpp"
 
 #endif // STDNET_DETAIL_SOCKET_TYPES_HPP

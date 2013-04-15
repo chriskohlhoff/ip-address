@@ -11,7 +11,7 @@
 #ifndef UNIT_TEST_HPP
 #define UNIT_TEST_HPP
 
-#include "asio/detail/config.hpp"
+#include "std/net/detail/config.hpp"
 
 #if defined(__sun)
 # include <stdlib.h> // Needed for lrand48.

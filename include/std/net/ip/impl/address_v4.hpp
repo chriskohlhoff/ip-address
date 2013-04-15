@@ -1,6 +1,6 @@
 //
-// ip/impl/address.hpp
-// ~~~~~~~~~~~~~~~~~~~
+// ip/impl/address_v4.hpp
+// ~~~~~~~~~~~~~~~~~~~~~~
 //
 // Copyright (c) 2003-2013 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
@@ -8,8 +8,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef STDNET_IP_IMPL_ADDRESS_HPP
-#define STDNET_IP_IMPL_ADDRESS_HPP
+#ifndef STDNET_IP_IMPL_ADDRESS_V4_HPP
+#define STDNET_IP_IMPL_ADDRESS_V4_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -17,9 +17,9 @@
 
 #if !defined(STDNET_NO_IOSTREAM)
 
-#include "asio/detail/throw_error.hpp"
+#include "std/net/detail/throw_error.hpp"
 
-#include "asio/detail/push_options.hpp"
+#include "std/net/detail/push_options.hpp"
 
 namespace std {
 namespace net {
@@ -27,7 +27,7 @@ namespace ip {
 
 template <typename Elem, typename Traits>
 std::basic_ostream<Elem, Traits>& operator<<(
-    std::basic_ostream<Elem, Traits>& os, const address& addr)
+    std::basic_ostream<Elem, Traits>& os, const address_v4& addr)
 {
   std::error_code ec;
   std::string s = addr.to_string(ec);
@@ -48,8 +48,8 @@ std::basic_ostream<Elem, Traits>& operator<<(
 } // namespace net
 } // namespace std
 
-#include "asio/detail/pop_options.hpp"
+#include "std/net/detail/pop_options.hpp"
 
 #endif // !defined(STDNET_NO_IOSTREAM)
 
-#endif // STDNET_IP_IMPL_ADDRESS_HPP
+#endif // STDNET_IP_IMPL_ADDRESS_V4_HPP
