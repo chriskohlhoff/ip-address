@@ -46,11 +46,9 @@
 
 // Microsoft Visual C++ detection.
 #if !defined(STDNET_MSVC)
-# if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_MSVC)
-#  define STDNET_MSVC BOOST_MSVC
-# elif defined(_MSC_VER) && !defined(__MWERKS__) && !defined(__EDG_VERSION__)
+# if defined(_MSC_VER) && !defined(__MWERKS__) && !defined(__EDG_VERSION__)
 #  define STDNET_MSVC _MSC_VER
-# endif // defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_MSVC)
+# endif // defined(_MSC_VER) && !defined(__MWERKS__) && !defined(__EDG_VERSION__)
 #endif // defined(STDNET_MSVC)
 
 // Support move construction and assignment on compilers known to allow it.
@@ -126,9 +124,7 @@
 
 // Compliant C++11 compilers put noexcept specifiers on error_category members.
 #if !defined(STDNET_ERROR_CATEGORY_NOEXCEPT)
-# if (BOOST_VERSION >= 105300)
-#  define STDNET_ERROR_CATEGORY_NOEXCEPT BOOST_NOEXCEPT
-# elif defined(__GNUC__)
+# if defined(__GNUC__)
 #  if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4)
 #   if defined(__GXX_EXPERIMENTAL_CXX0X__)
 #     define STDNET_ERROR_CATEGORY_NOEXCEPT noexcept(true)
@@ -207,22 +203,6 @@
 # endif // !defined(STDNET_DISABLE_STD_CHRONO)
 #endif // !defined(STDNET_HAS_STD_CHRONO)
 
-// Boost support for chrono.
-#if !defined(STDNET_HAS_BOOST_CHRONO)
-# if !defined(STDNET_DISABLE_BOOST_CHRONO)
-#  if (BOOST_VERSION >= 104700)
-#   define STDNET_HAS_BOOST_CHRONO 1
-#  endif // (BOOST_VERSION >= 104700)
-# endif // !defined(STDNET_DISABLE_BOOST_CHRONO)
-#endif // !defined(STDNET_HAS_BOOST_CHRONO)
-
-// Boost support for the DateTime library.
-#if !defined(STDNET_HAS_BOOST_DATE_TIME)
-# if !defined(STDNET_DISABLE_BOOST_DATE_TIME)
-#  define STDNET_HAS_BOOST_DATE_TIME 1
-# endif // !defined(STDNET_DISABLE_BOOST_DATE_TIME)
-#endif // !defined(STDNET_HAS_BOOST_DATE_TIME)
-
 // Standard library support for addressof.
 #if !defined(STDNET_HAS_STD_ADDRESSOF)
 # if !defined(STDNET_DISABLE_STD_ADDRESSOF)
@@ -277,11 +257,9 @@
 
 // Windows target.
 #if !defined(STDNET_WINDOWS)
-# if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_WINDOWS)
+# if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #  define STDNET_WINDOWS 1
-# elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
-#  define STDNET_WINDOWS 1
-# endif // defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_WINDOWS)
+# endif // defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #endif // !defined(STDNET_WINDOWS)
 
 // Windows: target OS version.
@@ -342,6 +320,13 @@
 #  endif // !defined(NOMINMAX)
 # endif // !defined(STDNET_NO_NOMINMAX)
 #endif // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
+
+// Windows: No ANSI API calls.
+#if !defined(STDNET_NO_ANSI_APIS)
+# if defined(STDNET_WINDOWS) && defined(UNDER_CE)
+#  define STDNET_NO_ANSI_APIS 1
+# endif // defined(STDNET_WINDOWS) && defined(UNDER_CE)
+#endif // !defined(STDNET_NO_ANSI_APIS)
 
 // Windows: IO Completion Ports.
 #if !defined(STDNET_HAS_IOCP)
@@ -494,43 +479,35 @@
 #endif // !defined(STDNET_HAS_SIGNAL)
 
 // Whether standard iostreams are disabled.
-#if !defined(STDNET_NO_IOSTREAM)
-# if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_NO_IOSTREAM)
-#  define STDNET_NO_IOSTREAM 1
-# endif // !defined(BOOST_NO_IOSTREAM)
-#endif // !defined(STDNET_NO_IOSTREAM)
+//#if !defined(STDNET_NO_IOSTREAM)
+//# define STDNET_NO_IOSTREAM 1
+//#endif // !defined(STDNET_NO_IOSTREAM)
 
 // Whether exception handling is disabled.
-#if !defined(STDNET_NO_EXCEPTIONS)
-# if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_NO_EXCEPTIONS)
-#  define STDNET_NO_EXCEPTIONS 1
-# endif // !defined(BOOST_NO_EXCEPTIONS)
-#endif // !defined(STDNET_NO_EXCEPTIONS)
+//#if !defined(STDNET_NO_EXCEPTIONS)
+//# define STDNET_NO_EXCEPTIONS 1
+//#endif // !defined(STDNET_NO_EXCEPTIONS)
 
 // Whether the typeid operator is supported.
-#if !defined(STDNET_NO_TYPEID)
-# if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_NO_TYPEID)
-#  define STDNET_NO_TYPEID 1
-# endif // !defined(BOOST_NO_TYPEID)
-#endif // !defined(STDNET_NO_TYPEID)
+//#if !defined(STDNET_NO_TYPEID)
+//# define STDNET_NO_TYPEID 1
+//#endif // !defined(STDNET_NO_TYPEID)
 
 // On POSIX (and POSIX-like) platforms we need to include unistd.h in order to
 // get access to the various platform feature macros, e.g. to be able to test
 // for threads support.
 #if !defined(STDNET_HAS_UNISTD_H)
-# if !defined(STDNET_HAS_BOOST_CONFIG)
-#  if defined(unix) \
-   || defined(__unix) \
-   || defined(_XOPEN_SOURCE) \
-   || defined(_POSIX_SOURCE) \
-   || (defined(__MACH__) && defined(__APPLE__)) \
-   || defined(__FreeBSD__) \
-   || defined(__NetBSD__) \
-   || defined(__OpenBSD__) \
-   || defined(__linux__)
-#   define STDNET_HAS_UNISTD_H 1
-#  endif
-# endif // !defined(STDNET_HAS_BOOST_CONFIG)
+# if defined(unix) \
+  || defined(__unix) \
+  || defined(_XOPEN_SOURCE) \
+  || defined(_POSIX_SOURCE) \
+  || (defined(__MACH__) && defined(__APPLE__)) \
+  || defined(__FreeBSD__) \
+  || defined(__NetBSD__) \
+  || defined(__OpenBSD__) \
+  || defined(__linux__)
+#  define STDNET_HAS_UNISTD_H 1
+# endif
 #endif // !defined(STDNET_HAS_UNISTD_H)
 #if defined(STDNET_HAS_UNISTD_H)
 # include <unistd.h>
@@ -539,26 +516,22 @@
 // Threads.
 #if !defined(STDNET_HAS_THREADS)
 # if !defined(STDNET_DISABLE_THREADS)
-#  if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_HAS_THREADS)
-#   define STDNET_HAS_THREADS 1
-#  elif defined(_MSC_VER) && defined(_MT)
+#  if defined(_MSC_VER) && defined(_MT)
 #   define STDNET_HAS_THREADS 1
 #  elif defined(__BORLANDC__) && defined(__MT__)
 #   define STDNET_HAS_THREADS 1
 #  elif defined(_POSIX_THREADS)
 #   define STDNET_HAS_THREADS 1
-#  endif // defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_HAS_THREADS)
+#  endif // defined(_MSC_VER) && defined(_MT)
 # endif // !defined(STDNET_DISABLE_THREADS)
 #endif // !defined(STDNET_HAS_THREADS)
 
 // POSIX threads.
 #if !defined(STDNET_HAS_PTHREADS)
 # if defined(STDNET_HAS_THREADS)
-#  if defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_HAS_PTHREADS)
+#  if defined(_POSIX_THREADS)
 #   define STDNET_HAS_PTHREADS 1
-#  elif defined(_POSIX_THREADS)
-#   define STDNET_HAS_PTHREADS 1
-#  endif // defined(STDNET_HAS_BOOST_CONFIG) && defined(BOOST_HAS_PTHREADS)
+#  endif // defined(_POSIX_THREADS)
 # endif // defined(STDNET_HAS_THREADS)
 #endif // !defined(STDNET_HAS_PTHREADS)
 
@@ -567,63 +540,9 @@
 
 // Helper to define in-class constants.
 #if !defined(STDNET_STATIC_CONSTANT)
-# if !defined(STDNET_DISABLE_BOOST_STATIC_CONSTANT)
-#  define STDNET_STATIC_CONSTANT(type, assignment) \
-    BOOST_STATIC_CONSTANT(type, assignment)
-# else // !defined(STDNET_DISABLE_BOOST_STATIC_CONSTANT)
-#  define STDNET_STATIC_CONSTANT(type, assignment) \
-    static const type assignment
-# endif // !defined(STDNET_DISABLE_BOOST_STATIC_CONSTANT)
+# define STDNET_STATIC_CONSTANT(type, assignment) \
+   static const type assignment
 #endif // !defined(STDNET_STATIC_CONSTANT)
-
-// Boost array library.
-#if !defined(STDNET_HAS_BOOST_ARRAY)
-# if !defined(STDNET_DISABLE_BOOST_ARRAY)
-#  define STDNET_HAS_BOOST_ARRAY 1
-# endif // !defined(STDNET_DISABLE_BOOST_ARRAY)
-#endif // !defined(STDNET_HAS_BOOST_ARRAY)
-
-// Boost assert macro.
-#if !defined(STDNET_HAS_BOOST_ASSERT)
-# if !defined(STDNET_DISABLE_BOOST_ASSERT)
-#  define STDNET_HAS_BOOST_ASSERT 1
-# endif // !defined(STDNET_DISABLE_BOOST_ASSERT)
-#endif // !defined(STDNET_HAS_BOOST_ASSERT)
-
-// Boost limits header.
-#if !defined(STDNET_HAS_BOOST_LIMITS)
-# if !defined(STDNET_DISABLE_BOOST_LIMITS)
-#  define STDNET_HAS_BOOST_LIMITS 1
-# endif // !defined(STDNET_DISABLE_BOOST_LIMITS)
-#endif // !defined(STDNET_HAS_BOOST_LIMITS)
-
-// Boost throw_exception function.
-#if !defined(STDNET_HAS_BOOST_THROW_EXCEPTION)
-# if !defined(STDNET_DISABLE_BOOST_THROW_EXCEPTION)
-#  define STDNET_HAS_BOOST_THROW_EXCEPTION 1
-# endif // !defined(STDNET_DISABLE_BOOST_THROW_EXCEPTION)
-#endif // !defined(STDNET_HAS_BOOST_THROW_EXCEPTION)
-
-// Boost regex library.
-#if !defined(STDNET_HAS_BOOST_REGEX)
-# if !defined(STDNET_DISABLE_BOOST_REGEX)
-#  define STDNET_HAS_BOOST_REGEX 1
-# endif // !defined(STDNET_DISABLE_BOOST_REGEX)
-#endif // !defined(STDNET_HAS_BOOST_REGEX)
-
-// Boost bind function.
-#if !defined(STDNET_HAS_BOOST_BIND)
-# if !defined(STDNET_DISABLE_BOOST_BIND)
-#  define STDNET_HAS_BOOST_BIND 1
-# endif // !defined(STDNET_DISABLE_BOOST_BIND)
-#endif // !defined(STDNET_HAS_BOOST_BIND)
-
-// Boost's BOOST_WORKAROUND macro.
-#if !defined(STDNET_HAS_BOOST_WORKAROUND)
-# if !defined(STDNET_DISABLE_BOOST_WORKAROUND)
-#  define STDNET_HAS_BOOST_WORKAROUND 1
-# endif // !defined(STDNET_DISABLE_BOOST_WORKAROUND)
-#endif // !defined(STDNET_HAS_BOOST_WORKAROUND)
 
 // Microsoft Visual C++'s secure C runtime library.
 #if !defined(STDNET_HAS_SECURE_RTL)

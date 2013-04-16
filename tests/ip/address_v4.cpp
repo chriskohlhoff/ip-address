@@ -8,11 +8,6 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// Disable autolinking for unit tests.
-#if !defined(BOOST_ALL_NO_LIB)
-#define BOOST_ALL_NO_LIB 1
-#endif // !defined(BOOST_ALL_NO_LIB)
-
 // Test that header file is self-contained.
 #include "std/net/ip/address_v4.hpp"
 
@@ -115,10 +110,8 @@ void test()
     std::ostringstream os;
     os << addr1;
 
-#if !defined(BOOST_NO_STD_WSTREAMBUF)
     std::wostringstream wos;
     wos << addr1;
-#endif // !defined(BOOST_NO_STD_WSTREAMBUF)
   }
   catch (std::exception&)
   {

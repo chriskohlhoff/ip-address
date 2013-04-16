@@ -1,7 +1,3 @@
-ifndef CXX
-CXX = g++-4.7
-endif
-
 ifndef CXXFLAGS
 CXXFLAGS = -std=c++11 -O2 -Wall -Wextra
 endif
