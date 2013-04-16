@@ -16,6 +16,7 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "std/net/detail/config.hpp"
+#include "std/net/detail/local_free_on_block_exit.hpp"
 #include "std/net/detail/system_errors.hpp"
 
 #include "std/net/detail/push_options.hpp"
