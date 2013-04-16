@@ -71,7 +71,7 @@ const char* inet_ntop(int af, const void* src, char* dest, size_t length,
 
   if (af != AF_INET && af != AF_INET6)
   {
-    ec = std::net::detail::address_family_not_supported;
+    ec = std::net::detail::syserrc::address_family_not_supported;
     return 0;
   }
 
