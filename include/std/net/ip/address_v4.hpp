@@ -133,6 +133,12 @@ public:
   /// Determine whether the address is a multicast address.
   STDNET_DECL bool is_multicast() const;
 
+  /// Determine the successor address.
+  STDNET_DECL address_v4 successor() const;
+
+  /// Determine the predeccessor address.
+  STDNET_DECL address_v4 predeccessor() const;
+
   /// Compare two addresses for equality.
   friend bool operator==(const address_v4& a1, const address_v4& a2)
   {

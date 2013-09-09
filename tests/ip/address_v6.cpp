@@ -351,6 +351,11 @@ void test()
   STDNET_CHECK(mcast_site_local_address.is_multicast_site_local());
 
   STDNET_CHECK(address_v6::loopback().is_loopback());
+
+  STDNET_CHECK(address_v6::from_string("2001::1") == address_v6::from_string("2001::").successor() );
+  STDNET_CHECK(address_v6::from_string("2001::1:0") == address_v6::from_string("2001::ffff").successor() );
+  STDNET_CHECK(address_v6::from_string("2001::") == address_v6::from_string("2001::1").predeccessor() );
+  STDNET_CHECK(address_v6::from_string("2001::ffff") == address_v6::from_string("2001::1:0").predeccessor() );
 }
 
 } // namespace ip_address_v6_runtime

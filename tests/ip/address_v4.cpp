@@ -246,6 +246,14 @@ void test()
   STDNET_CHECK(address_v4::netmask(address_v4(0xEFFFFFFF)) == other_net);
   STDNET_CHECK(address_v4::netmask(address_v4(0xF0000000)) == other_net);
   STDNET_CHECK(address_v4::netmask(address_v4(0xFFFFFFFF)) == other_net);
+
+  STDNET_CHECK(address_v4::from_string("172.1.1.2") == address_v4::from_string("172.1.1.1").successor() );
+  STDNET_CHECK(address_v4::from_string("224.0.0.0") == address_v4::from_string("223.255.255.255").successor() );
+  STDNET_CHECK(address_v4() == address_v4::from_string("255.255.255.255").successor() );
+
+  STDNET_CHECK(address_v4::from_string("172.1.1.1") == address_v4::from_string("172.1.1.2").predeccessor() );
+  STDNET_CHECK(address_v4::from_string("223.255.255.255") == address_v4::from_string("224.0.0.0").predeccessor() );
+  STDNET_CHECK(address_v4() == address_v4::any().predeccessor() );
 }
 
 } // namespace ip_address_v4_runtime
