@@ -151,6 +151,12 @@ public:
   /// Determine whether the address is a site-local multicast address.
   STDNET_DECL bool is_multicast_site_local() const;
 
+  /// Determine the successor address.
+  STDNET_DECL address_v6 successor() const;
+
+  /// Determine the predeccessor address.
+  STDNET_DECL address_v6 predeccessor() const;
+
   /// Compare two addresses for equality.
   STDNET_DECL friend bool operator==(
       const address_v6& a1, const address_v6& a2);

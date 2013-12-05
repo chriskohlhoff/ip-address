@@ -150,6 +150,22 @@ bool address_v4::is_multicast() const
   return (to_ulong() & 0xF0000000) == 0xE0000000;
 }
 
+address_v4 address_v4::successor() const
+{
+  if ( 0xFFFFFFFF == to_ulong() )
+    return address_v4();
+  else
+    return address_v4( to_ulong() + 1);
+}
+
+address_v4 address_v4::predeccessor() const
+{
+  if ( 0 == to_ulong() )
+    return address_v4();
+  else
+    return address_v4( to_ulong() - 1);
+}
+
 address_v4 address_v4::broadcast(const address_v4& addr, const address_v4& mask)
 {
   return address_v4(addr.to_ulong() | (mask.to_ulong() ^ 0xFFFFFFFF));
