@@ -109,6 +109,25 @@
 # endif // !defined(STDNET_DISABLE_VARIADIC_TEMPLATES)
 #endif // !defined(STDNET_HAS_VARIADIC_TEMPLATES)
 
+// Support the noexcept specifier on compilers known to allow it.
+#if !defined(STDNET_NOEXCEPT)
+# if defined(__GNUC__)
+#  if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4)
+#   if defined(__GXX_EXPERIMENTAL_CXX0X__)
+#    define STDNET_NOEXCEPT noexcept
+#   endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
+#  endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4)
+# endif // defined(__GNUC__)
+# if defined(__clang__)
+#  if __has_feature(cxx_noexcept)
+#   define STDNET_NOEXCEPT noexcept
+#  endif // __has_feature(cxx_noexcept)
+# endif // defined(__clang__)
+# if !defined(STDNET_NOEXCEPT)
+#  define STDNET_NOEXCEPT
+# endif // !defined(STDNET_NOEXCEPT)
+#endif // !defined(STDNET_NOEXCEPT)
+
 // Standard library support for system errors.
 #if !defined(STDNET_HAS_STD_SYSTEM_ERROR)
 # if !defined(STDNET_DISABLE_STD_SYSTEM_ERROR)

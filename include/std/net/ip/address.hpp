@@ -44,14 +44,14 @@ class address
 {
 public:
   /// Default constructor.
-  STDNET_DECL address();
+  STDNET_DECL address() STDNET_NOEXCEPT;
 
   /// Copy constructor.
   STDNET_DECL address(const address& other);
 
 #if defined(STDNET_HAS_MOVE)
   /// Move constructor.
-  STDNET_DECL address(address&& other);
+  STDNET_DECL address(address&& other) STDNET_NOEXCEPT;
 #endif // defined(STDNET_HAS_MOVE)
 
   /// Assign from another address.
@@ -59,17 +59,17 @@ public:
 
 #if defined(STDNET_HAS_MOVE)
   /// Move-assign from another address.
-  STDNET_DECL address& operator=(address&& other);
+  STDNET_DECL address& operator=(address&& other) STDNET_NOEXCEPT;
 #endif // defined(STDNET_HAS_MOVE)
 
   /// Get whether the address is an IP version 4 address.
-  bool is_v4() const
+  bool is_v4() const STDNET_NOEXCEPT
   {
     return type_ == ipv4;
   }
 
   /// Get whether the address is an IP version 6 address.
-  bool is_v6() const
+  bool is_v6() const STDNET_NOEXCEPT
   {
     return type_ == ipv6;
   }
@@ -99,40 +99,42 @@ public:
       const std::string& str, std::error_code& ec);
 
   /// Determine whether the address is a loopback address.
-  STDNET_DECL bool is_loopback() const;
+  STDNET_DECL bool is_loopback() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is unspecified.
-  STDNET_DECL bool is_unspecified() const;
+  STDNET_DECL bool is_unspecified() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is a multicast address.
-  STDNET_DECL bool is_multicast() const;
+  STDNET_DECL bool is_multicast() const STDNET_NOEXCEPT;
 
   /// Compare two addresses for equality.
-  STDNET_DECL friend bool operator==(const address& a1, const address& a2);
+  STDNET_DECL friend bool operator==(const address& a1,
+      const address& a2) STDNET_NOEXCEPT;
 
   /// Compare two addresses for inequality.
-  friend bool operator!=(const address& a1, const address& a2)
+  friend bool operator!=(const address& a1, const address& a2) STDNET_NOEXCEPT
   {
     return !(a1 == a2);
   }
 
   /// Compare addresses for ordering.
-  STDNET_DECL friend bool operator<(const address& a1, const address& a2);
+  STDNET_DECL friend bool operator<(const address& a1,
+      const address& a2) STDNET_NOEXCEPT;
 
   /// Compare addresses for ordering.
-  friend bool operator>(const address& a1, const address& a2)
+  friend bool operator>(const address& a1, const address& a2) STDNET_NOEXCEPT
   {
     return a2 < a1;
   }
 
   /// Compare addresses for ordering.
-  friend bool operator<=(const address& a1, const address& a2)
+  friend bool operator<=(const address& a1, const address& a2) STDNET_NOEXCEPT
   {
     return !(a2 < a1);
   }
 
   /// Compare addresses for ordering.
-  friend bool operator>=(const address& a1, const address& a2)
+  friend bool operator>=(const address& a1, const address& a2) STDNET_NOEXCEPT
   {
     return !(a1 < a2);
   }

@@ -8,14 +8,20 @@
         {
         public:
           // constructors:
-          address();
+          address() noexcept;
+          address(const address& a);
+          address(address&& a) noexcept;
+
+          // assignment:
+          address& operator=(const address& a);
+          address& operator=(address&& a) noexcept;
 
           // members:
-          bool is_unspecified() const;
-          bool is_loopback() const;
-          bool is_multicast() const;
-          bool is_v4() const;
-          bool is_v6() const;
+          bool is_unspecified() const noexcept;
+          bool is_loopback() const noexcept;
+          bool is_multicast() const noexcept;
+          bool is_v4() const noexcept;
+          bool is_v6() const noexcept;
           string to_string() const;
           string to_string(error_code& ec) const;
 
@@ -25,12 +31,12 @@
         };
 
         // address comparisons:
-        bool operator==(const address& a, const address& b);
-        bool operator!=(const address& a, const address& b);
-        bool operator< (const address& a, const address& b);
-        bool operator> (const address& a, const address& b);
-        bool operator<=(const address& a, const address& b);
-        bool operator>=(const address& a, const address& b);
+        bool operator==(const address& a, const address& b) noexcept;
+        bool operator!=(const address& a, const address& b) noexcept;
+        bool operator< (const address& a, const address& b) noexcept;
+        bool operator> (const address& a, const address& b) noexcept;
+        bool operator<=(const address& a, const address& b) noexcept;
+        bool operator>=(const address& a, const address& b) noexcept;
 
         // address I/O:
         template<class CharT, class Traits>
@@ -43,7 +49,7 @@
 
 [section [^ip::address] constructors]
 
-  address();
+  address() noexcept;
 
 [function_effects Constructs an object of class `address`.]
 
@@ -66,27 +72,55 @@ the table below.]
   ]
 ]
 
+  address(const address& a);
+
+[function_effects Constructs an object of class `address`.]
+
+[function_postconditions `*this == a`]
+
+  address(address&& a) noexcept;
+
+[function_effects Constructs an object of class `address` using the value in
+`a`. The object `a` is left in a valid state with an unspecified value.]
+
+[endsect]
+
+[section [^ip::address] assignment]
+
+  address& operator=(const address& a);
+
+[function_postconditions `*this == a`]
+
+[function_returns `*this`]
+
+  address& operator=(address&& a) noexcept;
+
+[function_effects Modifies `*this` using the value in `a`. The object `a` is
+left in a valid state with an unspecified value.]
+
+[function_returns `*this`]
+
 [endsect]
 
 [section [^ip::address] members]
 
-  bool is_unspecified() const;
+  bool is_unspecified() const noexcept;
 
 [function_returns `is_v4() ? address_v4(*this).is_unspecified() : address_v6(*this).is_unspecified()`.]
 
-  bool is_loopback() const;
+  bool is_loopback() const noexcept;
 
 [function_returns `is_v4() ? address_v4(*this).is_loopback() : address_v6(*this).is_loopback()`.]
 
-  bool is_multicast() const;
+  bool is_multicast() const noexcept;
 
 [function_returns `is_v4() ? address_v4(*this).is_multicast() : address_v6(*this).is_multicast()`.]
 
-  bool is_v4() const;
+  bool is_v4() const noexcept;
 
 [function_returns `true` if the object contains an IP version 4 address.]
 
-  bool is_v6() const;
+  bool is_v6() const noexcept;
 
 [function_returns `true` if the object contains an IP version 6 address.]
 
@@ -123,30 +157,30 @@ of class `address`, as if by calling:
 
 [section [^ip::address] comparisons]
 
-  bool operator==(const address& a, const address& b);
+  bool operator==(const address& a, const address& b) noexcept;
 
 [function_returns `(a.is_v4() && b.is_v4() && address_v4(a) == address_v4(b)) ||
 (a.is_v6() && b.is_v6() && address_v6(a) == address_v6(b))`.]
 
-  bool operator!=(const address& a, const address& b);
+  bool operator!=(const address& a, const address& b) noexcept;
 
 [function_returns `!(a == b)`.]
 
-  bool operator< (const address& a, const address& b);
+  bool operator< (const address& a, const address& b) noexcept;
 
 [function_returns `(a.is_v4() && b.is_v4() && address_v4(a) < address_v4(b)) ||
 (a.is_v6() && b.is_v6() && address_v6(a) < address_v6(b)) ||
 (a.is_v4() && b.is_v6())`.]
 
-  bool operator> (const address& a, const address& b);
+  bool operator> (const address& a, const address& b) noexcept;
 
 [function_returns `b < a`.]
 
-  bool operator<=(const address& a, const address& b);
+  bool operator<=(const address& a, const address& b) noexcept;
   
 [function_returns `!(b < a)`.]
 
-  bool operator>=(const address& a, const address& b);
+  bool operator>=(const address& a, const address& b) noexcept;
 
 [function_returns `!(a < b)`.]
 

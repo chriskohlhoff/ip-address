@@ -11,48 +11,52 @@
           typedef array<unsigned char, 16> bytes_type;
 
           // constructors:
-          address_v6();
+          address_v6() noexcept;
+          address_v6(const address_v6& a) noexcept;
           explicit address_v6(const bytes_type& bytes,
                               unsigned long scope_id = 0);
           explicit address_v6(const address& addr);
 
+          // assignment:
+          address_v4& operator=(const address_v4& a) noexcept;
+
           // members:
           operator address() const;
-          void scope_id(unsigned long id);
-          unsigned long scope_id() const;
-          bool is_unspecified() const;
-          bool is_loopback() const;
-          bool is_multicast() const;
-          bool is_link_local() const;
-          bool is_site_local() const;
-          bool is_v4_mapped() const;
-          bool is_v4_compatible() const;
-          bool is_multicast_node_local() const;
-          bool is_multicast_link_local() const;
-          bool is_multicast_site_local() const;
-          bool is_multicast_org_local() const;
-          bool is_multicast_global() const;
-          bytes_type to_bytes() const;
+          void scope_id(unsigned long id) noexcept;
+          unsigned long scope_id() const noexcept;
+          bool is_unspecified() const noexcept;
+          bool is_loopback() const noexcept;
+          bool is_multicast() const noexcept;
+          bool is_link_local() const noexcept;
+          bool is_site_local() const noexcept;
+          bool is_v4_mapped() const noexcept;
+          bool is_v4_compatible() const noexcept;
+          bool is_multicast_node_local() const noexcept;
+          bool is_multicast_link_local() const noexcept;
+          bool is_multicast_site_local() const noexcept;
+          bool is_multicast_org_local() const noexcept;
+          bool is_multicast_global() const noexcept;
+          bytes_type to_bytes() const noexcept;
           string to_string() const;
           string to_string(error_code& ec) const;
-          address_v4 to_v4() const;
+          address_v4 to_v4() const noexcept;
 
           // static members:
           static address_v6 from_string(const string& str);
           static address_v6 from_string(const string& str, error_code& ec);
-          static address_v6 any();
-          static address_v6 loopback();
-          static address_v6 v4_mapped(const address_v4& addr);
-          static address_v6 v4_compatible(const address_v4& addr);
+          static address_v6 any() noexcept;
+          static address_v6 loopback() noexcept;
+          static address_v6 v4_mapped(const address_v4& addr) noexcept;
+          static address_v6 v4_compatible(const address_v4& addr) noexcept;
         };
 
         // address_v6 comparisons:
-        bool operator==(const address_v6& a, const address_v6& b);
-        bool operator!=(const address_v6& a, const address_v6& b);
-        bool operator< (const address_v6& a, const address_v6& b);
-        bool operator> (const address_v6& a, const address_v6& b);
-        bool operator<=(const address_v6& a, const address_v6& b);
-        bool operator>=(const address_v6& a, const address_v6& b);
+        bool operator==(const address_v6& a, const address_v6& b) noexcept;
+        bool operator!=(const address_v6& a, const address_v6& b) noexcept;
+        bool operator< (const address_v6& a, const address_v6& b) noexcept;
+        bool operator> (const address_v6& a, const address_v6& b) noexcept;
+        bool operator<=(const address_v6& a, const address_v6& b) noexcept;
+        bool operator>=(const address_v6& a, const address_v6& b) noexcept;
 
         // address_v6 I/O:
         template<class CharT, class Traits>
@@ -71,7 +75,7 @@ are determined by [RFC4291].]
 
 [section [^ip::address_v6] constructors]
 
-  address_v6();
+  address_v6() noexcept;
 
 [function_effects Constructs an object of class `address_v6`.]
 
@@ -116,15 +120,15 @@ object `addr`.]
 `a.is_v4()` returns false, `a.is_v6()` returns true, and
 `static_cast<a>(address_v6) == *this`.]
 
-  void scope_id(unsigned long id);
+  void scope_id(unsigned long id) noexcept;
 
 [function_postconditions `scope_id() == id`.]
 
-  unsigned long scope_id() const;
+  unsigned long scope_id() const noexcept;
 
 [function_returns The scope identifier associated with the address.]
 
-  bool is_unspecified() const;
+  bool is_unspecified() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
 represents an unspecified address, as if computed by the following method:
@@ -136,7 +140,7 @@ represents an unspecified address, as if computed by the following method:
       && b[12] == 0 && b[13] == 0 && b[14] == 0 && b[15] == 0;
 ``]
 
-  bool is_loopback() const;
+  bool is_loopback() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
 represents a loopback address, as if computed by the following method:
@@ -148,7 +152,7 @@ represents a loopback address, as if computed by the following method:
       && b[12] == 0 && b[13] == 0 && b[14] == 0 && b[15] == 1;
 ``]
 
-  bool is_multicast() const;
+  bool is_multicast() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
 represents a multicast address, as if computed by the following method:
@@ -157,7 +161,7 @@ represents a multicast address, as if computed by the following method:
   return b[0] == 0xFF;
 ``]
 
-  bool is_link_local() const;
+  bool is_link_local() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
 represents a unicast link-local address, as if computed by the following
@@ -167,7 +171,7 @@ method:
   return b[0] == 0xFE && (b[1] & 0xC0) == 0x80;
 ``]
 
-  bool is_site_local() const;
+  bool is_site_local() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
 represents a unicast site-local address, as if computed by the following
@@ -177,7 +181,7 @@ method:
   return b[0] == 0xFE && (b[1] & 0xC0) == 0xC0;
 ``]
 
-  bool is_v4_mapped() const;
+  bool is_v4_mapped() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
 represents an IPv4-mapped IPv6 address, as if computed by the following method:
@@ -188,7 +192,7 @@ represents an IPv4-mapped IPv6 address, as if computed by the following method:
       && b[ 8] == 0 && b[ 9] == 0 && b[10] == 0xFF && b[11] == 0xFF;
 ``]
 
-  bool is_v4_compatible() const;
+  bool is_v4_compatible() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
 represents an IPv4-compatible IPv6 address, as if computed by the following
@@ -201,7 +205,7 @@ method:
       && !is_unspecified() && !is_loopback();
 ``]
 
-  bool is_multicast_node_local() const;
+  bool is_multicast_node_local() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
 represents a multicast node-local address, as if computed by the following
@@ -211,7 +215,7 @@ method:
   return b[0] == 0xFF && (b[1] & 0x0F) == 0x01;
 ``]
 
-  bool is_multicast_link_local() const;
+  bool is_multicast_link_local() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
 represents a multicast link-local address, as if computed by the following
@@ -221,7 +225,7 @@ method:
   return b[0] == 0xFF && (b[1] & 0x0F) == 0x02;
 ``]
 
-  bool is_multicast_site_local() const;
+  bool is_multicast_site_local() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
 represents a multicast site-local address, as if computed by the following
@@ -231,7 +235,7 @@ method:
   return b[0] == 0xFF && (b[1] & 0x0F) == 0x05;
 ``]
 
-  bool is_multicast_org_local() const;
+  bool is_multicast_org_local() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
 represents a multicast organisation-local address, as if computed by the
@@ -241,7 +245,7 @@ following method:
   return b[0] == 0xFF && (b[1] & 0x0F) == 0x08;
 ``]
 
-  bool is_multicast_global() const;
+  bool is_multicast_global() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
 represents a multicast organisation-local address, as if computed by the
@@ -251,7 +255,7 @@ following method:
   return b[0] == 0xFF && (b[1] & 0x0F) == 0x0E;
 ``]
 
-  bytes_type to_bytes() const;
+  bytes_type to_bytes() const noexcept;
 
 [function_returns A representation of the address in [link
 definitions.network_byte_order network byte order].]
@@ -269,7 +273,7 @@ implementation-defined string representation of the scope identifier.]
 [function_returns If successful, the string representation of the address.
 Otherwise `string()`.]
 
-  address_v4 to_v4() const;
+  address_v4 to_v4() const noexcept;
 
 [function_requires `is_v4_mapped() || is_v4_compatible()`.]
 
@@ -305,16 +309,16 @@ supplied, an `address_v6` object shall be returned such that `scope_id() ==
 [function_returns If successful, an `address_v6` value corresponding to the
 string `str`. Otherwise returns `address_v6()`.]
 
-  static address_v6 any();
+  static address_v6 any() noexcept;
 
 [function_returns `address_v6()`.]
 
-  static address_v6 loopback();
+  static address_v6 loopback() noexcept;
 
 [function_returns An address `a` such that the condition `a.is_loopback()`
 holds.]
 
-  static address_v6 v4_mapped(const address_v4& addr);
+  static address_v6 v4_mapped(const address_v4& addr) noexcept;
 
 [function_returns An `address_v6` object containing the IPv4-mapped IPv6
 address corresponding to the specified IPv4 address, as if computed by the
@@ -326,7 +330,7 @@ following method:
   return address_v6(v6b);
 ``]
 
-  static address_v6 v4_compatible(const address_v4& addr);
+  static address_v6 v4_compatible(const address_v4& addr) noexcept;
 
 [function_returns An `address_v6` object containing the IPv4-compatible IPv6
 address corresponding to the specified IPv4 address, as if computed by the
@@ -342,29 +346,29 @@ following method:
 
 [section [^ip::address_v6] comparisons]
 
-  bool operator==(const address_v6& a, const address_v6& b);
+  bool operator==(const address_v6& a, const address_v6& b) noexcept;
 
 [function_returns `a.to_bytes() == b.to_bytes() && a.scope_id() ==
 b.scope_id()`.]
 
-  bool operator!=(const address_v6& a, const address_v6& b);
+  bool operator!=(const address_v6& a, const address_v6& b) noexcept;
 
 [function_returns `!(a == b)`.]
 
-  bool operator< (const address_v6& a, const address_v6& b);
+  bool operator< (const address_v6& a, const address_v6& b) noexcept;
 
 [function_returns `a.to_bytes() < b.to_bytes() || (!(b.to_bytes() <
 a.to_bytes()) && a.scope_id() < b.scope_id())`.]
 
-  bool operator> (const address_v6& a, const address_v6& b);
+  bool operator> (const address_v6& a, const address_v6& b) noexcept;
 
 [function_returns `b < a`.]
 
-  bool operator<=(const address_v6& a, const address_v6& b);
+  bool operator<=(const address_v6& a, const address_v6& b) noexcept;
 
 [function_returns `!(b < a)`.]
 
-  bool operator>=(const address_v6& a, const address_v6& b);
+  bool operator>=(const address_v6& a, const address_v6& b) noexcept;
 
 [function_returns `!(a < b)`.]
 

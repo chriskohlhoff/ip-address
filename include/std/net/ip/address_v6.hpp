@@ -51,7 +51,7 @@ public:
   typedef std::array<unsigned char, 16> bytes_type;
 
   /// Default constructor.
-  STDNET_DECL address_v6();
+  STDNET_DECL address_v6() STDNET_NOEXCEPT;
 
   /// Construct an address from raw bytes and scope ID.
   STDNET_DECL explicit address_v6(const bytes_type& bytes,
@@ -64,19 +64,19 @@ public:
   STDNET_DECL explicit address_v6(const address& addr);
 
   /// Copy constructor.
-  STDNET_DECL address_v6(const address_v6& other);
+  STDNET_DECL address_v6(const address_v6& other) STDNET_NOEXCEPT;
 
 #if defined(STDNET_HAS_MOVE)
   /// Move constructor.
-  STDNET_DECL address_v6(address_v6&& other);
+  STDNET_DECL address_v6(address_v6&& other) STDNET_NOEXCEPT;
 #endif // defined(STDNET_HAS_MOVE)
 
   /// Assign from another address.
-  STDNET_DECL address_v6& operator=(const address_v6& other);
+  STDNET_DECL address_v6& operator=(const address_v6& other) STDNET_NOEXCEPT;
 
 #if defined(STDNET_HAS_MOVE)
   /// Move-assign from another address.
-  STDNET_DECL address_v6& operator=(address_v6&& other);
+  STDNET_DECL address_v6& operator=(address_v6&& other) STDNET_NOEXCEPT;
 #endif // defined(STDNET_HAS_MOVE)
 
   /// Implicitly convert to a version-independent address.
@@ -86,7 +86,7 @@ public:
   /**
    * Returns the scope ID associated with the IPv6 address.
    */
-  unsigned long scope_id() const
+  unsigned long scope_id() const STDNET_NOEXCEPT
   {
     return scope_id_;
   }
@@ -95,13 +95,13 @@ public:
   /**
    * Modifies the scope ID associated with the IPv6 address.
    */
-  void scope_id(unsigned long id)
+  void scope_id(unsigned long id) STDNET_NOEXCEPT
   {
     scope_id_ = id;
   }
 
   /// Get the address in bytes, in network byte order.
-  STDNET_DECL bytes_type to_bytes() const;
+  STDNET_DECL bytes_type to_bytes() const STDNET_NOEXCEPT;
 
   /// Get the address as a string.
   STDNET_DECL std::string to_string() const;
@@ -127,87 +127,93 @@ public:
   STDNET_DECL address_v4 to_v4() const;
 
   /// Determine whether the address is a loopback address.
-  STDNET_DECL bool is_loopback() const;
+  STDNET_DECL bool is_loopback() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is unspecified.
-  STDNET_DECL bool is_unspecified() const;
+  STDNET_DECL bool is_unspecified() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is link local.
-  STDNET_DECL bool is_link_local() const;
+  STDNET_DECL bool is_link_local() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is site local.
-  STDNET_DECL bool is_site_local() const;
+  STDNET_DECL bool is_site_local() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is a mapped IPv4 address.
-  STDNET_DECL bool is_v4_mapped() const;
+  STDNET_DECL bool is_v4_mapped() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is an IPv4-compatible address.
-  STDNET_DECL bool is_v4_compatible() const;
+  STDNET_DECL bool is_v4_compatible() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is a multicast address.
-  STDNET_DECL bool is_multicast() const;
+  STDNET_DECL bool is_multicast() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is a global multicast address.
-  STDNET_DECL bool is_multicast_global() const;
+  STDNET_DECL bool is_multicast_global() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is a link-local multicast address.
-  STDNET_DECL bool is_multicast_link_local() const;
+  STDNET_DECL bool is_multicast_link_local() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is a node-local multicast address.
-  STDNET_DECL bool is_multicast_node_local() const;
+  STDNET_DECL bool is_multicast_node_local() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is a org-local multicast address.
-  STDNET_DECL bool is_multicast_org_local() const;
+  STDNET_DECL bool is_multicast_org_local() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is a site-local multicast address.
-  STDNET_DECL bool is_multicast_site_local() const;
+  STDNET_DECL bool is_multicast_site_local() const STDNET_NOEXCEPT;
 
   /// Compare two addresses for equality.
-  STDNET_DECL friend bool operator==(
-      const address_v6& a1, const address_v6& a2);
+  STDNET_DECL friend bool operator==( const address_v6& a1,
+      const address_v6& a2) STDNET_NOEXCEPT;
 
   /// Compare two addresses for inequality.
-  friend bool operator!=(const address_v6& a1, const address_v6& a2)
+  friend bool operator!=(const address_v6& a1,
+      const address_v6& a2) STDNET_NOEXCEPT
   {
     return !(a1 == a2);
   }
 
   /// Compare addresses for ordering.
-  STDNET_DECL friend bool operator<(
-      const address_v6& a1, const address_v6& a2);
+  STDNET_DECL friend bool operator<(const address_v6& a1,
+      const address_v6& a2) STDNET_NOEXCEPT;
 
   /// Compare addresses for ordering.
-  friend bool operator>(const address_v6& a1, const address_v6& a2)
+  friend bool operator>(const address_v6& a1,
+      const address_v6& a2) STDNET_NOEXCEPT
   {
     return a2 < a1;
   }
 
   /// Compare addresses for ordering.
-  friend bool operator<=(const address_v6& a1, const address_v6& a2)
+  friend bool operator<=(const address_v6& a1,
+      const address_v6& a2) STDNET_NOEXCEPT
   {
     return !(a2 < a1);
   }
 
   /// Compare addresses for ordering.
-  friend bool operator>=(const address_v6& a1, const address_v6& a2)
+  friend bool operator>=(const address_v6& a1,
+      const address_v6& a2) STDNET_NOEXCEPT
   {
     return !(a1 < a2);
   }
 
   /// Obtain an address object that represents any address.
-  static address_v6 any()
+  static address_v6 any() STDNET_NOEXCEPT
   {
     return address_v6();
   }
 
   /// Obtain an address object that represents the loopback address.
-  STDNET_DECL static address_v6 loopback();
+  STDNET_DECL static address_v6 loopback() STDNET_NOEXCEPT;
 
   /// Create an IPv4-mapped IPv6 address.
-  STDNET_DECL static address_v6 v4_mapped(const address_v4& addr);
+  STDNET_DECL static address_v6 v4_mapped(
+      const address_v4& addr) STDNET_NOEXCEPT;
 
   /// Create an IPv4-compatible IPv6 address.
-  STDNET_DECL static address_v6 v4_compatible(const address_v4& addr);
+  STDNET_DECL static address_v6 v4_compatible(
+      const address_v4& addr) STDNET_NOEXCEPT;
 
 private:
   // The underlying IPv6 address.

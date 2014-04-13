@@ -29,7 +29,7 @@ namespace std {
 namespace net {
 namespace ip {
 
-address::address()
+address::address() STDNET_NOEXCEPT
   : type_(ipv4),
     ipv4_address_(),
     ipv6_address_()
@@ -44,7 +44,7 @@ address::address(const address& other)
 }
 
 #if defined(STDNET_HAS_MOVE)
-address::address(address&& other)
+address::address(address&& other) STDNET_NOEXCEPT
   : type_(other.type_),
     ipv4_address_(other.ipv4_address_),
     ipv6_address_(other.ipv6_address_)
@@ -61,7 +61,7 @@ address& address::operator=(const address& other)
 }
 
 #if defined(STDNET_HAS_MOVE)
-address& address::operator=(address&& other)
+address& address::operator=(address&& other) STDNET_NOEXCEPT
 {
   type_ = other.type_;
   ipv4_address_ = other.ipv4_address_;
@@ -126,28 +126,28 @@ address address::from_string(const std::string& str,
   return from_string(str.c_str(), ec);
 }
 
-bool address::is_loopback() const
+bool address::is_loopback() const STDNET_NOEXCEPT
 {
   return (type_ == ipv4)
     ? ipv4_address_.is_loopback()
     : ipv6_address_.is_loopback();
 }
 
-bool address::is_unspecified() const
+bool address::is_unspecified() const STDNET_NOEXCEPT
 {
   return (type_ == ipv4)
     ? ipv4_address_.is_unspecified()
     : ipv6_address_.is_unspecified();
 }
 
-bool address::is_multicast() const
+bool address::is_multicast() const STDNET_NOEXCEPT
 {
   return (type_ == ipv4)
     ? ipv4_address_.is_multicast()
     : ipv6_address_.is_multicast();
 }
 
-bool operator==(const address& a1, const address& a2)
+bool operator==(const address& a1, const address& a2) STDNET_NOEXCEPT
 {
   if (a1.type_ != a2.type_)
     return false;
@@ -156,7 +156,7 @@ bool operator==(const address& a1, const address& a2)
   return a1.ipv4_address_ == a2.ipv4_address_;
 }
 
-bool operator<(const address& a1, const address& a2)
+bool operator<(const address& a1, const address& a2) STDNET_NOEXCEPT
 {
   if (a1.type_ < a2.type_)
     return true;

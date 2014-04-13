@@ -59,7 +59,7 @@ address_v4::address_v4(unsigned long addr)
       static_cast<std::net::detail::u_long_type>(addr));
 }
 
-address_v4::bytes_type address_v4::to_bytes() const
+address_v4::bytes_type address_v4::to_bytes() const STDNET_NOEXCEPT
 {
   using namespace std; // For memcpy.
   bytes_type bytes;
@@ -67,7 +67,7 @@ address_v4::bytes_type address_v4::to_bytes() const
   return bytes;
 }
 
-unsigned long address_v4::to_ulong() const
+unsigned long address_v4::to_ulong() const STDNET_NOEXCEPT
 {
   return std::net::detail::socket_ops::network_to_host_long(addr_.s_addr);
 }
@@ -120,42 +120,43 @@ address_v4 address_v4::from_string(
   return from_string(str.c_str(), ec);
 }
 
-bool address_v4::is_loopback() const
+bool address_v4::is_loopback() const STDNET_NOEXCEPT
 {
   return (to_ulong() & 0xFF000000) == 0x7F000000;
 }
 
-bool address_v4::is_unspecified() const
+bool address_v4::is_unspecified() const STDNET_NOEXCEPT
 {
   return to_ulong() == 0;
 }
 
-bool address_v4::is_class_a() const
+bool address_v4::is_class_a() const STDNET_NOEXCEPT
 {
   return (to_ulong() & 0x80000000) == 0;
 }
 
-bool address_v4::is_class_b() const
+bool address_v4::is_class_b() const STDNET_NOEXCEPT
 {
   return (to_ulong() & 0xC0000000) == 0x80000000;
 }
 
-bool address_v4::is_class_c() const
+bool address_v4::is_class_c() const STDNET_NOEXCEPT
 {
   return (to_ulong() & 0xE0000000) == 0xC0000000;
 }
 
-bool address_v4::is_multicast() const
+bool address_v4::is_multicast() const STDNET_NOEXCEPT
 {
   return (to_ulong() & 0xF0000000) == 0xE0000000;
 }
 
-address_v4 address_v4::broadcast(const address_v4& addr, const address_v4& mask)
+address_v4 address_v4::broadcast(const address_v4& addr,
+    const address_v4& mask) STDNET_NOEXCEPT
 {
   return address_v4(addr.to_ulong() | (mask.to_ulong() ^ 0xFFFFFFFF));
 }
 
-address_v4 address_v4::netmask(const address_v4& addr)
+address_v4 address_v4::netmask(const address_v4& addr) STDNET_NOEXCEPT
 {
   if (addr.is_class_a())
     return address_v4(0xFF000000);

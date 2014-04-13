@@ -32,14 +32,13 @@ namespace std {
 namespace net {
 namespace ip {
 
-address_v6::address_v6()
+address_v6::address_v6() STDNET_NOEXCEPT
   : addr_(),
     scope_id_(0)
 {
 }
 
-address_v6::address_v6(const address_v6::bytes_type& bytes,
-    unsigned long scope)
+address_v6::address_v6(const address_v6::bytes_type& bytes, unsigned long scope)
   : scope_id_(scope)
 {
 #if UCHAR_MAX > 0xFF
@@ -57,21 +56,21 @@ address_v6::address_v6(const address_v6::bytes_type& bytes,
   memcpy(addr_.s6_addr, bytes.data(), 16);
 }
 
-address_v6::address_v6(const address_v6& other)
+address_v6::address_v6(const address_v6& other) STDNET_NOEXCEPT
   : addr_(other.addr_),
     scope_id_(other.scope_id_)
 {
 }
 
 #if defined(STDNET_HAS_MOVE)
-address_v6::address_v6(address_v6&& other)
+address_v6::address_v6(address_v6&& other) STDNET_NOEXCEPT
   : addr_(other.addr_),
     scope_id_(other.scope_id_)
 {
 }
 #endif // defined(STDNET_HAS_MOVE)
 
-address_v6& address_v6::operator=(const address_v6& other)
+address_v6& address_v6::operator=(const address_v6& other) STDNET_NOEXCEPT
 {
   addr_ = other.addr_;
   scope_id_ = other.scope_id_;
@@ -79,7 +78,7 @@ address_v6& address_v6::operator=(const address_v6& other)
 }
 
 #if defined(STDNET_HAS_MOVE)
-address_v6& address_v6::operator=(address_v6&& other)
+address_v6& address_v6::operator=(address_v6&& other) STDNET_NOEXCEPT
 {
   addr_ = other.addr_;
   scope_id_ = other.scope_id_;
@@ -87,7 +86,7 @@ address_v6& address_v6::operator=(address_v6&& other)
 }
 #endif // defined(STDNET_HAS_MOVE)
 
-address_v6::bytes_type address_v6::to_bytes() const
+address_v6::bytes_type address_v6::to_bytes() const STDNET_NOEXCEPT
 {
   using namespace std; // For memcpy.
   bytes_type bytes;
@@ -156,7 +155,7 @@ address_v4 address_v6::to_v4() const
   return address_v4(v4_bytes);
 }
 
-bool address_v6::is_loopback() const
+bool address_v6::is_loopback() const STDNET_NOEXCEPT
 {
   return ((addr_.s6_addr[0] == 0) && (addr_.s6_addr[1] == 0)
       && (addr_.s6_addr[2] == 0) && (addr_.s6_addr[3] == 0)
@@ -168,7 +167,7 @@ bool address_v6::is_loopback() const
       && (addr_.s6_addr[14] == 0) && (addr_.s6_addr[15] == 1));
 }
 
-bool address_v6::is_unspecified() const
+bool address_v6::is_unspecified() const STDNET_NOEXCEPT
 {
   return ((addr_.s6_addr[0] == 0) && (addr_.s6_addr[1] == 0)
       && (addr_.s6_addr[2] == 0) && (addr_.s6_addr[3] == 0)
@@ -180,17 +179,17 @@ bool address_v6::is_unspecified() const
       && (addr_.s6_addr[14] == 0) && (addr_.s6_addr[15] == 0));
 }
 
-bool address_v6::is_link_local() const
+bool address_v6::is_link_local() const STDNET_NOEXCEPT
 {
   return ((addr_.s6_addr[0] == 0xfe) && ((addr_.s6_addr[1] & 0xc0) == 0x80));
 }
 
-bool address_v6::is_site_local() const
+bool address_v6::is_site_local() const STDNET_NOEXCEPT
 {
   return ((addr_.s6_addr[0] == 0xfe) && ((addr_.s6_addr[1] & 0xc0) == 0xc0));
 }
 
-bool address_v6::is_v4_mapped() const
+bool address_v6::is_v4_mapped() const STDNET_NOEXCEPT
 {
   return ((addr_.s6_addr[0] == 0) && (addr_.s6_addr[1] == 0)
       && (addr_.s6_addr[2] == 0) && (addr_.s6_addr[3] == 0)
@@ -200,7 +199,7 @@ bool address_v6::is_v4_mapped() const
       && (addr_.s6_addr[10] == 0xff) && (addr_.s6_addr[11] == 0xff));
 }
 
-bool address_v6::is_v4_compatible() const
+bool address_v6::is_v4_compatible() const STDNET_NOEXCEPT
 {
   return ((addr_.s6_addr[0] == 0) && (addr_.s6_addr[1] == 0)
       && (addr_.s6_addr[2] == 0) && (addr_.s6_addr[3] == 0)
@@ -214,37 +213,37 @@ bool address_v6::is_v4_compatible() const
         && ((addr_.s6_addr[15] == 0) || (addr_.s6_addr[15] == 1))));
 }
 
-bool address_v6::is_multicast() const
+bool address_v6::is_multicast() const STDNET_NOEXCEPT
 {
   return (addr_.s6_addr[0] == 0xff);
 }
 
-bool address_v6::is_multicast_global() const
+bool address_v6::is_multicast_global() const STDNET_NOEXCEPT
 {
   return ((addr_.s6_addr[0] == 0xff) && ((addr_.s6_addr[1] & 0x0f) == 0x0e));
 }
 
-bool address_v6::is_multicast_link_local() const
+bool address_v6::is_multicast_link_local() const STDNET_NOEXCEPT
 {
   return ((addr_.s6_addr[0] == 0xff) && ((addr_.s6_addr[1] & 0x0f) == 0x02));
 }
 
-bool address_v6::is_multicast_node_local() const
+bool address_v6::is_multicast_node_local() const STDNET_NOEXCEPT
 {
   return ((addr_.s6_addr[0] == 0xff) && ((addr_.s6_addr[1] & 0x0f) == 0x01));
 }
 
-bool address_v6::is_multicast_org_local() const
+bool address_v6::is_multicast_org_local() const STDNET_NOEXCEPT
 {
   return ((addr_.s6_addr[0] == 0xff) && ((addr_.s6_addr[1] & 0x0f) == 0x08));
 }
 
-bool address_v6::is_multicast_site_local() const
+bool address_v6::is_multicast_site_local() const STDNET_NOEXCEPT
 {
   return ((addr_.s6_addr[0] == 0xff) && ((addr_.s6_addr[1] & 0x0f) == 0x05));
 }
 
-bool operator==(const address_v6& a1, const address_v6& a2)
+bool operator==(const address_v6& a1, const address_v6& a2) STDNET_NOEXCEPT
 {
   using namespace std; // For memcmp.
   return memcmp(&a1.addr_, &a2.addr_,
@@ -252,7 +251,7 @@ bool operator==(const address_v6& a1, const address_v6& a2)
     && a1.scope_id_ == a2.scope_id_;
 }
 
-bool operator<(const address_v6& a1, const address_v6& a2)
+bool operator<(const address_v6& a1, const address_v6& a2) STDNET_NOEXCEPT
 {
   using namespace std; // For memcmp.
   int memcmp_result = memcmp(&a1.addr_, &a2.addr_,
@@ -264,14 +263,14 @@ bool operator<(const address_v6& a1, const address_v6& a2)
   return a1.scope_id_ < a2.scope_id_;
 }
 
-address_v6 address_v6::loopback()
+address_v6 address_v6::loopback() STDNET_NOEXCEPT
 {
   address_v6 tmp;
   tmp.addr_.s6_addr[15] = 1;
   return tmp;
 }
 
-address_v6 address_v6::v4_mapped(const address_v4& addr)
+address_v6 address_v6::v4_mapped(const address_v4& addr) STDNET_NOEXCEPT
 {
   address_v4::bytes_type v4_bytes = addr.to_bytes();
   bytes_type v6_bytes = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF,
@@ -279,7 +278,7 @@ address_v6 address_v6::v4_mapped(const address_v4& addr)
   return address_v6(v6_bytes);
 }
 
-address_v6 address_v6::v4_compatible(const address_v4& addr)
+address_v6 address_v6::v4_compatible(const address_v4& addr) STDNET_NOEXCEPT
 {
   address_v4::bytes_type v4_bytes = addr.to_bytes();
   bytes_type v6_bytes = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

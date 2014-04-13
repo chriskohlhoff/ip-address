@@ -11,42 +11,46 @@
           typedef array<unsigned char, 4> bytes_type;
 
           // constructors:
-          address_v4();
+          address_v4() noexcept;
+          address_v4(const address_v4& a) noexcept;
           explicit address_v4(const bytes_type& bytes);
           explicit address_v4(unsigned long val);
           explicit address_v4(const address& addr);
 
+          // assignment:
+          address_v4& operator=(const address_v4& a) noexcept;
+
           // members:
           operator address() const;
-          bool is_unspecified() const;
-          bool is_loopback() const;
-          bool is_class_a() const;
-          bool is_class_b() const;
-          bool is_class_c() const;
-          bool is_multicast() const;
-          bytes_type to_bytes() const;
-          unsigned long to_ulong() const;
+          bool is_unspecified() const noexcept;
+          bool is_loopback() const noexcept;
+          bool is_class_a() const noexcept;
+          bool is_class_b() const noexcept;
+          bool is_class_c() const noexcept;
+          bool is_multicast() const noexcept;
+          bytes_type to_bytes() const noexcept;
+          unsigned long to_ulong() const noexcept;
           string to_string() const;
           string to_string(error_code& ec) const;
 
           // static members:
           static address_v4 from_string(const string& str);
           static address_v4 from_string(const string& str, error_code& ec);
-          static address_v4 any();
-          static address_v4 loopback();
-          static address_v4 broadcast();
+          static address_v4 any() noexcept;
+          static address_v4 loopback() noexcept;
+          static address_v4 broadcast() noexcept;
           static address_v4 broadcast(const address_v4& addr,
-            const address_v4& mask);
-          static address_v4 netmask(const address_v4& addr);
+            const address_v4& mask) noexcept;
+          static address_v4 netmask(const address_v4& addr) noexcept;
         };
 
         // address_v4 comparisons:
-        bool operator==(const address_v4& a, const address_v4& b);
-        bool operator!=(const address_v4& a, const address_v4& b);
-        bool operator< (const address_v4& a, const address_v4& b);
-        bool operator> (const address_v4& a, const address_v4& b);
-        bool operator<=(const address_v4& a, const address_v4& b);
-        bool operator>=(const address_v4& a, const address_v4& b);
+        bool operator==(const address_v4& a, const address_v4& b) noexcept;
+        bool operator!=(const address_v4& a, const address_v4& b) noexcept;
+        bool operator< (const address_v4& a, const address_v4& b) noexcept;
+        bool operator> (const address_v4& a, const address_v4& b) noexcept;
+        bool operator<=(const address_v4& a, const address_v4& b) noexcept;
+        bool operator>=(const address_v4& a, const address_v4& b) noexcept;
 
         // address_v4 I/O:
         template<class CharT, class Traits>
@@ -59,7 +63,7 @@
 
 [section [^ip::address_v4] constructors]
 
-  address_v4();
+  address_v4() noexcept;
 
 [function_effects Constructs an object of class `address_v4`.]
 
@@ -71,6 +75,12 @@ the table below.]
   [[`to_bytes()`][`{0, 0, 0, 0}`]]
   [[`to_ulong()`][`0`]]
 ]
+
+  address_v4(const address_v4& a) noexcept;
+
+[function_effects Constructs an object of class `address_v4`.]
+
+[function_postconditions `*this == a`]
 
   address_v4(const bytes_type& bytes);
 
@@ -142,6 +152,16 @@ object `addr`.]
 
 [endsect]
 
+[section [^ip::address_v4] assignment]
+
+  address_v4& operator=(const address_v4& a) noexcept;
+
+[function_postconditions `*this == a`]
+
+[function_returns `*this`]
+
+[endsect]
+
 [section [^ip::address_v4] members]
 
   operator address() const;
@@ -150,36 +170,36 @@ object `addr`.]
 `a.is_v4()` returns true, `a.is_v6()` returns false, and
 `static_cast<a>(address_v4) == *this`.]
 
-  bool is_unspecified() const;
+  bool is_unspecified() const noexcept;
 
 [function_returns `to_ulong() == 0`.]
 
-  bool is_loopback() const;
+  bool is_loopback() const noexcept;
 
 [function_returns `(to_ulong() & 0xFF000000) == 0x7F`.]
 
-  bool is_class_a() const;
+  bool is_class_a() const noexcept;
 
 [function_returns `(to_ulong() & 0x80000000) == 0`.]
 
-  bool is_class_b() const;
+  bool is_class_b() const noexcept;
 
 [function_returns `(to_ulong() & 0xC0000000) == 0x80000000`.]
 
-  bool is_class_c() const;
+  bool is_class_c() const noexcept;
 
 [function_returns `(to_ulong() & 0xE0000000) == 0xC0000000`.]
 
-  bool is_multicast() const;
+  bool is_multicast() const noexcept;
 
 [function_returns `(to_ulong() & 0xF0000000) == 0xE0000000`.]
 
-  bytes_type to_bytes() const;
+  bytes_type to_bytes() const noexcept;
 
 [function_returns A representation of the address in [link
 definitions.network_byte_order network byte order].]
 
-  unsigned long to_ulong() const;
+  unsigned long to_ulong() const noexcept;
 
 [function_returns A representation of the address in [link
 definitions.host_byte_order host byte order].]
@@ -207,23 +227,23 @@ with address family `AF_INET`.]
 [function_returns If successful, an `address_v4` value corresponding to the
 string `str`. Otherwise `address_v4()`.]
 
-  static address_v4 any();
+  static address_v4 any() noexcept;
 
 [function_returns `address_v4()`.]
 
-  static address_v4 loopback();
+  static address_v4 loopback() noexcept;
 
 [function_returns `address_v4(0x7F000001)`.]
 
-  static address_v4 broadcast();
+  static address_v4 broadcast() noexcept;
 
 [function_returns `address_v4(0xFFFFFFFF)`.]
 
-  static address_v4 broadcast(const address_v4& addr, const address_v4& mask);
+  static address_v4 broadcast(const address_v4& addr, const address_v4& mask) noexcept;
 
 [function_returns `address_v4(addr.to_ulong() | ~mask.to_ulong())`.]
 
-  static address_v4 netmask(const address_v4& addr);
+  static address_v4 netmask(const address_v4& addr) noexcept;
 
 [function_block If `addr.is_class_a()` is true, returns
 `address_v4(0xFF000000)`. If `addr.is_class_b()` is true, returns
@@ -234,27 +254,27 @@ string `str`. Otherwise `address_v4()`.]
 
 [section [^ip::address_v4] comparisons]
 
-  bool operator==(const address_v4& a, const address_v4& b);
+  bool operator==(const address_v4& a, const address_v4& b) noexcept;
 
 [function_returns `a.to_ulong() == b.to_ulong()`.]
 
-  bool operator!=(const address_v4& a, const address_v4& b);
+  bool operator!=(const address_v4& a, const address_v4& b) noexcept;
 
 [function_returns `a.to_ulong() != b.to_ulong()`.]
 
-  bool operator< (const address_v4& a, const address_v4& b);
+  bool operator< (const address_v4& a, const address_v4& b) noexcept;
 
 [function_returns `a.to_ulong() < b.to_ulong()`.]
 
-  bool operator> (const address_v4& a, const address_v4& b);
+  bool operator> (const address_v4& a, const address_v4& b) noexcept;
 
 [function_returns `a.to_ulong() > b.to_ulong()`.]
 
-  bool operator<=(const address_v4& a, const address_v4& b);
+  bool operator<=(const address_v4& a, const address_v4& b) noexcept;
 
 [function_returns `a.to_ulong() <= b.to_ulong()`.]
 
-  bool operator>=(const address_v4& a, const address_v4& b);
+  bool operator>=(const address_v4& a, const address_v4& b) noexcept;
 
 [function_returns `a.to_ulong() >= b.to_ulong()`.]
 
