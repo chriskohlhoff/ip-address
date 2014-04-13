@@ -32,6 +32,8 @@ namespace std {
 namespace net {
 namespace ip {
 
+class address;
+
 /// Implements IP version 4 style addresses.
 /**
  * The ip::address_v4 class provides the ability to use and manipulate IP
@@ -58,6 +60,12 @@ public:
 
   /// Construct an address from a unsigned long in host byte order.
   STDNET_DECL explicit address_v4(unsigned long addr);
+
+  /// Explicitly convert from a version-independent address.
+  /**
+   * @throws bad_cast if addr is not an IPv4 address.
+   */
+  STDNET_DECL explicit address_v4(const address& addr);
 
   /// Copy constructor.
   address_v4(const address_v4& other)
@@ -88,6 +96,9 @@ public:
     return *this;
   }
 #endif // defined(STDNET_HAS_MOVE)
+
+  /// Implicitly convert to a version-independent address.
+  STDNET_DECL operator address() const;
 
   /// Get the address in bytes, in network byte order.
   STDNET_DECL bytes_type to_bytes() const;
@@ -231,5 +242,7 @@ std::basic_ostream<Elem, Traits>& operator<<(
 #if defined(STDNET_HEADER_ONLY)
 # include "std/net/ip/impl/address_v4.ipp"
 #endif // defined(STDNET_HEADER_ONLY)
+
+#include "std/net/ip/address.hpp"
 
 #endif // STDNET_IP_ADDRESS_V4_HPP

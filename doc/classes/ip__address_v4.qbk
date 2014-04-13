@@ -14,8 +14,10 @@
           address_v4();
           explicit address_v4(const bytes_type& bytes);
           explicit address_v4(unsigned long val);
+          explicit address_v4(const address& addr);
 
           // members:
+          operator address() const;
           bool is_unspecified() const;
           bool is_loopback() const;
           bool is_class_a() const;
@@ -130,9 +132,23 @@ the table below.]
   ]
 ]
 
+  address_v4(const address& addr);
+
+[function_effects Constructs an object of class `address_v4`, initializing it
+with the IP version 4 address specified in the version-independent address
+object `addr`.]
+
+[function_throws `bad_cast` if `addr.is_v4()` is false.]
+
 [endsect]
 
 [section [^ip::address_v4] members]
+
+  operator address() const;
+
+[function_returns A version-independent `address` object `a` such that
+`a.is_v4()` returns true, `a.is_v6()` returns false, and
+`static_cast<a>(address_v4) == *this`.]
 
   bool is_unspecified() const;
 

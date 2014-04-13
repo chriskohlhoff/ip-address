@@ -46,12 +46,6 @@ public:
   /// Default constructor.
   STDNET_DECL address();
 
-  /// Construct an address from an IPv4 address.
-  STDNET_DECL address(const address_v4& ipv4_address);
-
-  /// Construct an address from an IPv6 address.
-  STDNET_DECL address(const address_v6& ipv6_address);
-
   /// Copy constructor.
   STDNET_DECL address(const address& other);
 
@@ -68,14 +62,6 @@ public:
   STDNET_DECL address& operator=(address&& other);
 #endif // defined(STDNET_HAS_MOVE)
 
-  /// Assign from an IPv4 address.
-  STDNET_DECL address& operator=(
-      const address_v4& ipv4_address);
-
-  /// Assign from an IPv6 address.
-  STDNET_DECL address& operator=(
-      const address_v6& ipv6_address);
-
   /// Get whether the address is an IP version 4 address.
   bool is_v4() const
   {
@@ -87,12 +73,6 @@ public:
   {
     return type_ == ipv6;
   }
-
-  /// Get the address as an IP version 4 address.
-  STDNET_DECL address_v4 to_v4() const;
-
-  /// Get the address as an IP version 6 address.
-  STDNET_DECL address_v6 to_v6() const;
 
   /// Get the address as a string in dotted decimal format.
   STDNET_DECL std::string to_string() const;
@@ -158,6 +138,9 @@ public:
   }
 
 private:
+  friend class address_v4;
+  friend class address_v6;
+
   // The type of the address.
   enum { ipv4, ipv6 } type_;
 
@@ -197,6 +180,8 @@ std::basic_ostream<Elem, Traits>& operator<<(
 #include "std/net/ip/impl/address.hpp"
 #if defined(STDNET_HEADER_ONLY)
 # include "std/net/ip/impl/address.ipp"
+# include "std/net/ip/impl/address_v4_conversion.ipp"
+# include "std/net/ip/impl/address_v6_conversion.ipp"
 #endif // defined(STDNET_HEADER_ONLY)
 
 #endif // STDNET_IP_ADDRESS_HPP

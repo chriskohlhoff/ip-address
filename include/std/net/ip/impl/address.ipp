@@ -36,20 +36,6 @@ address::address()
 {
 }
 
-address::address(const address_v4& ipv4_address)
-  : type_(ipv4),
-    ipv4_address_(ipv4_address),
-    ipv6_address_()
-{
-}
-
-address::address(const address_v6& ipv6_address)
-  : type_(ipv6),
-    ipv4_address_(),
-    ipv6_address_(ipv6_address)
-{
-}
-
 address::address(const address& other)
   : type_(other.type_),
     ipv4_address_(other.ipv4_address_),
@@ -83,42 +69,6 @@ address& address::operator=(address&& other)
   return *this;
 }
 #endif // defined(STDNET_HAS_MOVE)
-
-address& address::operator=(const address_v4& ipv4_address)
-{
-  type_ = ipv4;
-  ipv4_address_ = ipv4_address;
-  ipv6_address_ = address_v6();
-  return *this;
-}
-
-address& address::operator=(const address_v6& ipv6_address)
-{
-  type_ = ipv6;
-  ipv4_address_ = address_v4();
-  ipv6_address_ = ipv6_address;
-  return *this;
-}
-
-address_v4 address::to_v4() const
-{
-  if (type_ != ipv4)
-  {
-    std::bad_cast ex;
-    std::net::detail::throw_exception(ex);
-  }
-  return ipv4_address_;
-}
-
-address_v6 address::to_v6() const
-{
-  if (type_ != ipv6)
-  {
-    std::bad_cast ex;
-    std::net::detail::throw_exception(ex);
-  }
-  return ipv6_address_;
-}
 
 std::string address::to_string() const
 {

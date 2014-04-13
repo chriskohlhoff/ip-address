@@ -9,12 +9,6 @@
         public:
           // constructors:
           address();
-          address(const address_v4& addr);
-          address(const address_v6& addr);
-
-          // assignment:
-          address& operator=(const address_v4& addr);
-          address& operator=(const address_v6& addr);
 
           // members:
           bool is_unspecified() const;
@@ -22,8 +16,6 @@
           bool is_multicast() const;
           bool is_v4() const;
           bool is_v6() const;
-          address_v4 to_v4() const;
-          address_v6 to_v6() const;
           string to_string() const;
           string to_string(error_code& ec) const;
 
@@ -69,112 +61,8 @@ the table below.]
     [`false`]
   ]
   [
-    [`to_v4()`]
-    [`address_v4()`]
-  ]
-]
-
-  address(const address_v4& addr);
-
-[function_effects Constructs an object of class `address`, initialising it with
-the specified IP version 4 address.]
-
-[function_postconditions The postconditions of this function are indicated in
-the table below.]
-
-[table address::address(const address_v4&) effects
-  [[expression][value]]
-  [
-    [`is_v4()`]
+    [`is_unspecified()`]
     [`true`]
-  ]
-  [
-    [`is_v6()`]
-    [`false`]
-  ]
-  [
-    [`to_v4()`]
-    [`addr`]
-  ]
-]
-
-  address(const address_v6& addr);
-
-[function_effects Constructs an object of class `address`, initialising it with
-the specified IP version 6 address.]
-
-[function_postconditions The postconditions of this function are indicated in
-the table below.]
-
-[table address::address(const address_v6&) effects
-  [[expression][value]]
-  [
-    [`is_v4()`]
-    [`false`]
-  ]
-  [
-    [`is_v6()`]
-    [`true`]
-  ]
-  [
-    [`to_v6()`]
-    [`addr`]
-  ]
-]
-
-[endsect]
-
-[section [^ip::address] assignment]
-
-  address& operator=(const address_v4& addr);
-
-[function_effects Assigns the specified IP version 4 address into an object of
-class `address`.]
-
-[function_returns `*this`.]
-
-[function_postconditions The postconditions of this function are indicated in
-the table below.]
-
-[table address& address::operator=(const address_v4&) effects
-  [[expression][value]]
-  [
-    [`is_v4()`]
-    [`true`]
-  ]
-  [
-    [`is_v6()`]
-    [`false`]
-  ]
-  [
-    [`to_v4()`]
-    [`addr`]
-  ]
-]
-
-  address& operator=(const address_v6& addr);
-
-[function_effects Assigns the specified IP version 6 address into an object of
-class `address`.]
-
-[function_returns `*this`.]
-
-[function_postconditions The postconditions of this function are indicated in
-the table below.]
-
-[table address& address::operator=(const address_v6&) effects
-  [[expression][value]]
-  [
-    [`is_v4()`]
-    [`false`]
-  ]
-  [
-    [`is_v6()`]
-    [`true`]
-  ]
-  [
-    [`to_v6()`]
-    [`addr`]
   ]
 ]
 
@@ -184,15 +72,15 @@ the table below.]
 
   bool is_unspecified() const;
 
-[function_returns `is_v4() ? to_v4().is_unspecified() : to_v6().is_unspecified()`.]
+[function_returns `is_v4() ? address_v4(*this).is_unspecified() : address_v6(*this).is_unspecified()`.]
 
   bool is_loopback() const;
 
-[function_returns `is_v4() ? to_v4().is_loopback() : to_v6().is_loopback()`.]
+[function_returns `is_v4() ? address_v4(*this).is_loopback() : address_v6(*this).is_loopback()`.]
 
   bool is_multicast() const;
 
-[function_returns `is_v4() ? to_v4().is_multicast() : to_v6().is_multicast()`.]
+[function_returns `is_v4() ? address_v4(*this).is_multicast() : address_v6(*this).is_multicast()`.]
 
   bool is_v4() const;
 
@@ -202,22 +90,10 @@ the table below.]
 
 [function_returns `true` if the object contains an IP version 6 address.]
 
-  address_v4 to_v4() const;
-
-[function_returns The IP version 4 address contained by the object.]
-
-[function_throws `bad_cast` if `is_v4()` is false.]
-
-  address_v6 to_v6() const;
-
-[function_returns The IP version 6 address contained by the object.]
-
-[function_throws `bad_cast` if `is_v6()` is false.]
-
   string to_string() const;
   string to_string(error_code& ec) const;
 
-[function_returns `is_v4() ? to_v4().to_string(ec) : to_v6().to_string(ec)`.]
+[function_returns `is_v4() ? address_v4(*this).to_string(ec) : address_v6(*this).to_string(ec)`.]
 
 [endsect]
 
@@ -249,8 +125,8 @@ of class `address`, as if by calling:
 
   bool operator==(const address& a, const address& b);
 
-[function_returns `(a.is_v4() && b.is_v4() && a.to_v4() == b.to_v4()) ||
-(a.is_v6() && b.is_v6() && a.to_v6() == b.to_v6())`.]
+[function_returns `(a.is_v4() && b.is_v4() && address_v4(a) == address_v4(b)) ||
+(a.is_v6() && b.is_v6() && address_v6(a) == address_v6(b))`.]
 
   bool operator!=(const address& a, const address& b);
 
@@ -258,8 +134,8 @@ of class `address`, as if by calling:
 
   bool operator< (const address& a, const address& b);
 
-[function_returns `(a.is_v4() && b.is_v4() && a.to_v4() < b.to_v4()) ||
-(a.is_v6() && b.is_v6() && a.to_v6() < b.to_v6()) ||
+[function_returns `(a.is_v4() && b.is_v4() && address_v4(a) < address_v4(b)) ||
+(a.is_v6() && b.is_v6() && address_v6(a) < address_v6(b)) ||
 (a.is_v4() && b.is_v6())`.]
 
   bool operator> (const address& a, const address& b);

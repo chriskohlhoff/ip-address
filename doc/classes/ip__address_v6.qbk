@@ -14,8 +14,10 @@
           address_v6();
           explicit address_v6(const bytes_type& bytes,
                               unsigned long scope_id = 0);
+          explicit address_v6(const address& addr);
 
           // members:
+          operator address() const;
           void scope_id(unsigned long id);
           unsigned long scope_id() const;
           bool is_unspecified() const;
@@ -96,9 +98,23 @@ the table below.]
   [[`scope_id()`][`scope_id`]]
 ]
 
+  address_v6(const address& addr);
+
+[function_effects Constructs an object of class `address_v6`, initializing it
+with the IP version 6 address specified in the version-independent address
+object `addr`.]
+
+[function_throws `bad_cast` if `addr.is_v6()` is false.]
+
 [endsect]
 
 [section [^ip::address_v6] members]
+
+  operator address() const;
+
+[function_returns A version-independent `address` object `a` such that
+`a.is_v4()` returns false, `a.is_v6()` returns true, and
+`static_cast<a>(address_v6) == *this`.]
 
   void scope_id(unsigned long id);
 

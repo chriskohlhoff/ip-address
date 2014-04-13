@@ -21,7 +21,6 @@
 #include <system_error>
 #include "std/net/detail/socket_types.hpp"
 #include "std/net/detail/winsock_init.hpp"
-#include "std/net/ip/address_v4.hpp"
 
 #if !defined(STDNET_NO_IOSTREAM)
 # include <iosfwd>
@@ -32,6 +31,9 @@
 namespace std {
 namespace net {
 namespace ip {
+
+class address;
+class address_v4;
 
 /// Implements IP version 6 style addresses.
 /**
@@ -55,6 +57,12 @@ public:
   STDNET_DECL explicit address_v6(const bytes_type& bytes,
       unsigned long scope_id = 0);
 
+  /// Explicitly convert from a version-independent address.
+  /**
+   * @throws bad_cast if addr is not an IPv6 address.
+   */
+  STDNET_DECL explicit address_v6(const address& addr);
+
   /// Copy constructor.
   STDNET_DECL address_v6(const address_v6& other);
 
@@ -70,6 +78,9 @@ public:
   /// Move-assign from another address.
   STDNET_DECL address_v6& operator=(address_v6&& other);
 #endif // defined(STDNET_HAS_MOVE)
+
+  /// Implicitly convert to a version-independent address.
+  STDNET_DECL operator address() const;
 
   /// The scope ID of the address.
   /**
@@ -236,5 +247,7 @@ std::basic_ostream<Elem, Traits>& operator<<(
 #if defined(STDNET_HEADER_ONLY)
 # include "std/net/ip/impl/address_v6.ipp"
 #endif // defined(STDNET_HEADER_ONLY)
+
+#include "std/net/ip/address.hpp"
 
 #endif // STDNET_IP_ADDRESS_V6_HPP

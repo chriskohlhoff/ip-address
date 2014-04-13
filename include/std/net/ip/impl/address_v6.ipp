@@ -23,6 +23,7 @@
 #include "std/net/detail/system_errors.hpp"
 #include "std/net/detail/throw_error.hpp"
 #include "std/net/detail/throw_exception.hpp"
+#include "std/net/ip/address_v4.hpp"
 #include "std/net/ip/address_v6.hpp"
 
 #include "std/net/detail/push_options.hpp"
