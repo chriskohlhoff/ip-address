@@ -10,6 +10,7 @@
           // constructors:
           address() noexcept;
           address(const address& a) noexcept;
+          template <class T> address(const T& t) noexcept(``['see below]``);
 
           // assignment:
           address& operator=(const address& a) noexcept;
@@ -75,6 +76,20 @@ the table below.]
 [function_effects Constructs an object of class `address`.]
 
 [function_postconditions `*this == a`]
+
+  template <class T> address(const T& t) noexcept(``['see below]``);
+
+[function_remarks This constructor shall not participate in overload resolution
+unless `is_same<T, address>::value` is `false`, and the expression
+`address_cast<address>(t)` is valid and yields an rvalue of type `address`. The
+expression inside `noexcept` shall be equivalent to
+`noexcept(address_cast<address>(t))`.]
+
+[function_effects Constructs an object of type `address` with the result of the
+expression `address_cast<address>(t)`.]
+
+[function_throws Nothing unless the expression `address_cast<address>(t)`
+throws an exception.]
 
 [endsect]
 

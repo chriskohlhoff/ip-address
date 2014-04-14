@@ -45,6 +45,10 @@
 [:['Complexity:] [text]]
 ]
 
+[template function_remarks[text]
+[:['Remarks:] [text]]
+]
+
 [template function_notes[text]
 [:['Notes:] [text]]
 ]
@@ -375,6 +379,8 @@ addresses.
 [include:classes classes/ip__address.qbk]
 [include:classes classes/ip__address_v4.qbk]
 [include:classes classes/ip__address_v6.qbk]
+[include:classes classes/ip__bad_address_cast.qbk]
+[include:classes functions/ip__address_cast.qbk]
 [include:classes classes/hash.qbk]
 
 [endsect]

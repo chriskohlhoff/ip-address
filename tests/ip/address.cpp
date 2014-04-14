@@ -56,10 +56,10 @@ void test()
     b = addr1.is_multicast();
     (void)b;
 
-    ip::address_v4 addr_v4_value = static_cast<ip::address_v4>(addr1);
+    ip::address_v4 addr_v4_value = ip::address_cast<ip::address_v4>(addr1);
     (void)addr_v4_value;
 
-    ip::address_v6 addr_v6_value = static_cast<ip::address_v6>(addr1);
+    ip::address_v6 addr_v6_value = ip::address_cast<ip::address_v6>(addr1);
     (void)addr_v6_value;
 
     std::string string_value = addr1.to_string();

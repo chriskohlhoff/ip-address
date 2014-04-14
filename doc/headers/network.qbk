@@ -52,6 +52,13 @@
           basic_ostream<CharT, Traits>& operator<<(
             basic_ostream<CharT, Traits>&, const address_v6&);
 
+        class ``[link classes.ip__bad_address_cast bad_address_cast]``;
+
+        // ``[link classes.ip__address_cast address conversions]``:
+        template <class T> T address_cast(const address&) noexcept(``['see below]``);
+        template <class T> T address_cast(const address_v4&) noexcept(``['see below]``);
+        template <class T> T address_cast(const address_v6&) noexcept(``['see below]``);
+
       } // namespace ip
     } // namespace net
 

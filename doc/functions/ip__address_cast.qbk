@@ -1,0 +1,94 @@
+[section:ip__address_cast Function [^ip::address_cast]]
+
+  template <class T> T address_cast(const address& a) noexcept(``['see below]``);
+
+[:This function template shall participate in overload resolution only for the
+ types `T` listed in the table below.]
+
+[table template <class T> T address_cast(const address&) effects
+  [[T][noexcept][effects]]
+  [
+    [`address`]
+    [`true`]
+    [Returns `a`.]
+  ]
+  [
+    [`address_v4`]
+    [`false`]
+    [If `a.is_v4()` is `true`, returns the IP version 4 address specified in the
+     version-independent address object `a`. Otherwise, throws `bad_address_cast`.]
+  ]
+  [
+    [`address_v6`]
+    [`false`]
+    [If `a.is_v6()` is `true`, returns the IP version 6 address specified in the
+     version-independent address object `a`. Otherwise, throws `bad_address_cast`.]
+  ]
+]
+
+  template <class T> T address_cast(const address_v4& a) noexcept(``['see below]``);
+
+[:This function template shall participate in overload resolution only for the
+ types `T` listed in the table below.]
+
+[table template <class T> T address_cast(const address_v4&) effects
+  [[T][noexcept][effects]]
+  [
+    [`address`]
+    [`true`]
+    [Returns a version-independent `address` object `b` such that `b.is_v4()`
+     is `true`, `b.is_v6()` is `false`, and `address_cast<address_v4>(b) == a`.]
+  ]
+  [
+    [`address_v4`]
+    [`true`]
+    [Returns `a`.]
+  ]
+  [
+    [`address_v6`]
+    [`true`]
+    [Returns an `address_v6` object containing the IPv4-mapped IPv6 address
+     corresponding to the specified IPv4 address, as if computed by the
+     following method:
+    ``
+      address_v4::bytes_type v4b = a.to_bytes();
+      bytes_type v6b = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                         0xFF, 0xFF, v4b[0], v4b[1], v4b[2], v4b[3] };
+      return address_v6(v6b);
+    ``]
+  ]
+]
+
+  template <class T> T address_cast(const address_v6& a) noexcept(``['see below]``);
+
+[:This function template shall participate in overload resolution only for the
+ types `T` listed in the table below.]
+
+[table template <class T> T address_cast(const address_v6&) effects
+  [[T][noexcept][effects]]
+  [
+    [`address`]
+    [`true`]
+    [Returns a version-independent `address` object `b` such that `b.is_v4()`
+     is `false`, `b.is_v6()` is `true`, and `address_cast<address_v6>(b) == a`.]
+  ]
+  [
+    [`address_v4`]
+    [`false`]
+    [If `a.is_v4_mapped()` is `true`, returns an `address_v4` object corresponding
+     to the IPv4-mapped IPv6 address, as if computed by the following method:
+     ``
+       bytes_type v6b = a.to_bytes();
+       address_v4::bytes_type v4b = { v6b[12], v6b[13], v6b[14], v6b[15] };
+       return address_v4(v4b);
+     ``
+     Otherwise, throws `bad_address_cast`.]
+  ]
+  [
+    [`address_v6`]
+    [`true`]
+    [Returns `a`.]
+  ]
+]
+
+[endsect]

@@ -57,12 +57,6 @@ public:
   STDNET_DECL explicit address_v6(const bytes_type& bytes,
       unsigned long scope_id = 0);
 
-  /// Explicitly convert from a version-independent address.
-  /**
-   * @throws bad_cast if addr is not an IPv6 address.
-   */
-  STDNET_DECL explicit address_v6(const address& addr);
-
   /// Copy constructor.
   STDNET_DECL address_v6(const address_v6& other) STDNET_NOEXCEPT;
 
@@ -78,9 +72,6 @@ public:
   /// Move-assign from another address.
   STDNET_DECL address_v6& operator=(address_v6&& other) STDNET_NOEXCEPT;
 #endif // defined(STDNET_HAS_MOVE)
-
-  /// Implicitly convert to a version-independent address.
-  STDNET_DECL operator address() const;
 
   /// The scope ID of the address.
   /**

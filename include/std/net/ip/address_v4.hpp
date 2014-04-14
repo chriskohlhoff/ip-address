@@ -61,12 +61,6 @@ public:
   /// Construct an address from a unsigned long in host byte order.
   STDNET_DECL explicit address_v4(unsigned long addr);
 
-  /// Explicitly convert from a version-independent address.
-  /**
-   * @throws bad_cast if addr is not an IPv4 address.
-   */
-  STDNET_DECL explicit address_v4(const address& addr);
-
   /// Copy constructor.
   address_v4(const address_v4& other) STDNET_NOEXCEPT
     : addr_(other.addr_)
@@ -96,9 +90,6 @@ public:
     return *this;
   }
 #endif // defined(STDNET_HAS_MOVE)
-
-  /// Implicitly convert to a version-independent address.
-  STDNET_DECL operator address() const;
 
   /// Get the address in bytes, in network byte order.
   STDNET_DECL bytes_type to_bytes() const STDNET_NOEXCEPT;

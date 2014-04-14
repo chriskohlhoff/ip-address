@@ -15,8 +15,10 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
+#include "std/net/ip/fwd.hpp"
+#include "std/net/ip/address.hpp"
 #include "std/net/ip/address_v4.hpp"
 #include "std/net/ip/address_v6.hpp"
-#include "std/net/ip/address.hpp"
+#include "std/net/ip/address_cast.hpp"
 
 #endif // STDNET_NETWORK_HEADER_FILE

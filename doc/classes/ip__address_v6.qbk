@@ -15,13 +15,11 @@
           address_v6(const address_v6& a) noexcept;
           explicit address_v6(const bytes_type& bytes,
                               unsigned long scope_id = 0);
-          explicit address_v6(const address& addr);
 
           // assignment:
           address_v4& operator=(const address_v4& a) noexcept;
 
           // members:
-          operator address() const;
           void scope_id(unsigned long id) noexcept;
           unsigned long scope_id() const noexcept;
           bool is_unspecified() const noexcept;
@@ -30,7 +28,6 @@
           bool is_link_local() const noexcept;
           bool is_site_local() const noexcept;
           bool is_v4_mapped() const noexcept;
-          bool is_v4_compatible() const noexcept;
           bool is_multicast_node_local() const noexcept;
           bool is_multicast_link_local() const noexcept;
           bool is_multicast_site_local() const noexcept;
@@ -46,8 +43,6 @@
           static address_v6 from_string(const string& str, error_code& ec);
           static address_v6 any() noexcept;
           static address_v6 loopback() noexcept;
-          static address_v6 v4_mapped(const address_v4& addr) noexcept;
-          static address_v6 v4_compatible(const address_v4& addr) noexcept;
         };
 
         // address_v6 comparisons:
@@ -102,23 +97,9 @@ the table below.]
   [[`scope_id()`][`scope_id`]]
 ]
 
-  address_v6(const address& addr);
-
-[function_effects Constructs an object of class `address_v6`, initializing it
-with the IP version 6 address specified in the version-independent address
-object `addr`.]
-
-[function_throws `bad_cast` if `addr.is_v6()` is false.]
-
 [endsect]
 
 [section [^ip::address_v6] members]
-
-  operator address() const;
-
-[function_returns A version-independent `address` object `a` such that
-`a.is_v4()` returns false, `a.is_v6()` returns true, and
-`static_cast<a>(address_v6) == *this`.]
 
   void scope_id(unsigned long id) noexcept;
 
@@ -192,19 +173,6 @@ represents an IPv4-mapped IPv6 address, as if computed by the following method:
       && b[ 8] == 0 && b[ 9] == 0 && b[10] == 0xFF && b[11] == 0xFF;
 ``]
 
-  bool is_v4_compatible() const noexcept;
-
-[function_returns A boolean indicating whether the `address_v6` object
-represents an IPv4-compatible IPv6 address, as if computed by the following
-method:
-``
-  bytes_type b = to_bytes();
-  return b[ 0] == 0 && b[ 1] == 0 && b[ 2] == 0 && b[ 3] == 0
-      && b[ 4] == 0 && b[ 5] == 0 && b[ 6] == 0 && b[ 7] == 0
-      && b[ 8] == 0 && b[ 9] == 0 && b[10] == 0 && b[11] == 0
-      && !is_unspecified() && !is_loopback();
-``]
-
   bool is_multicast_node_local() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
@@ -273,21 +241,6 @@ implementation-defined string representation of the scope identifier.]
 [function_returns If successful, the string representation of the address.
 Otherwise `string()`.]
 
-  address_v4 to_v4() const;
-
-[function_requires `is_v4_mapped() || is_v4_compatible()`.]
-
-[function_returns An `address_v4` object corresponding to the IPv4-mapped or
-IPv4 compatible IPv6 address, as if computed by the following method:
-``
-  bytes_type v6b = to_bytes();
-  address_v4::bytes_type v4b = { v6b[12], v6b[13], v6b[14], v6b[15] };
-  return address_v4(v4b);
-``]
-
-[function_throws `bad_cast` if `is_v4_mapped()` is `false` and
-`is_v4_compatible()` is `false`.]
-
 [endsect]
 
 [section [^ip::address_v6] static members]
@@ -317,31 +270,6 @@ string `str`. Otherwise returns `address_v6()`.]
 
 [function_returns An address `a` such that the condition `a.is_loopback()`
 holds.]
-
-  static address_v6 v4_mapped(const address_v4& addr) noexcept;
-
-[function_returns An `address_v6` object containing the IPv4-mapped IPv6
-address corresponding to the specified IPv4 address, as if computed by the
-following method:
-``
-  address_v4::bytes_type v4b = addr.to_bytes();
-  bytes_type v6b = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                     0xFF, 0xFF, v4b[0], v4b[1], v4b[2], v4b[3] };
-  return address_v6(v6b);
-``]
-
-  static address_v6 v4_compatible(const address_v4& addr) noexcept;
-
-[function_returns An `address_v6` object containing the IPv4-compatible IPv6
-address corresponding to the specified IPv4 address, as if computed by the
-following method:
-``
-  address_v4::bytes_type v4b = addr.to_bytes();
-  bytes_type v6b = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                     v4b[0], v4b[1], v4b[2], v4b[3] };
-  return address_v6(v6b);
-``]
-
 [endsect]
 
 [section [^ip::address_v6] comparisons]

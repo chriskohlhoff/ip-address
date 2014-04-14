@@ -18,6 +18,8 @@
 #include "std/net/detail/config.hpp"
 #include <string>
 #include <system_error>
+#include <type_traits>
+#include "std/net/ip/fwd.hpp"
 #include "std/net/ip/address_v4.hpp"
 #include "std/net/ip/address_v6.hpp"
 
@@ -30,6 +32,25 @@
 namespace std {
 namespace net {
 namespace ip {
+namespace detail {
+
+template <class T, class = void>
+struct is_convertible_to_address_1 : false_type {};
+
+template <class T>
+struct is_convertible_to_address_1<T,
+  typename enable_if<is_same<address,
+    decltype(address_cast<address>(declval<T>()))>::value>::type> : true_type {};
+
+template <class T>
+struct is_convertible_to_address : is_convertible_to_address_1<T> {};
+
+template <>
+struct is_convertible_to_address<address> : false_type {};
+
+} // namespace detail
+
+//template <> struct is_convertible_to_address<address> : false_type {};
 
 /// Implements version-independent IP addresses.
 /**
@@ -45,6 +66,15 @@ class address
 public:
   /// Default constructor.
   STDNET_DECL address() STDNET_NOEXCEPT;
+
+  /// Construct from another address type.
+  template <typename T,
+    typename = typename enable_if<
+      detail::is_convertible_to_address<T>::value>::type>
+  address(const T& t) STDNET_NOEXCEPT
+    : address(address_cast<address>(t))
+  {
+  }
 
   /// Copy constructor.
   STDNET_DECL address(const address& other) STDNET_NOEXCEPT;
@@ -151,6 +181,15 @@ private:
 
   // The underlying IPv6 address.
   address_v6 ipv6_address_;
+
+  template <class T> friend T address_cast(const address&,
+    typename enable_if<is_same<T, address_v4>::value>::type*);
+  template <class T> friend T address_cast(const address&,
+    typename enable_if<is_same<T, address_v6>::value>::type*);
+  template <class T> friend T address_cast(const address_v4&,
+    typename enable_if<is_same<T, address>::value>::type*) STDNET_NOEXCEPT;
+  template <class T> friend T address_cast(const address_v6&,
+    typename enable_if<is_same<T, address>::value>::type*) STDNET_NOEXCEPT;
 };
 
 #if !defined(STDNET_NO_IOSTREAM)
@@ -182,8 +221,8 @@ std::basic_ostream<Elem, Traits>& operator<<(
 #include "std/net/ip/impl/address.hpp"
 #if defined(STDNET_HEADER_ONLY)
 # include "std/net/ip/impl/address.ipp"
-# include "std/net/ip/impl/address_v4_conversion.ipp"
-# include "std/net/ip/impl/address_v6_conversion.ipp"
 #endif // defined(STDNET_HEADER_ONLY)
+
+#include "std/net/ip/address_cast.hpp"
 
 #endif // STDNET_IP_ADDRESS_HPP
