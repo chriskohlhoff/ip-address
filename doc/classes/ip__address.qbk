@@ -9,12 +9,10 @@
         public:
           // constructors:
           address() noexcept;
-          address(const address& a);
-          address(address&& a) noexcept;
+          address(const address& a) noexcept;
 
           // assignment:
-          address& operator=(const address& a);
-          address& operator=(address&& a) noexcept;
+          address& operator=(const address& a) noexcept;
 
           // members:
           bool is_unspecified() const noexcept;
@@ -78,11 +76,6 @@ the table below.]
 
 [function_postconditions `*this == a`]
 
-  address(address&& a) noexcept;
-
-[function_effects Constructs an object of class `address` using the value in
-`a`. The object `a` is left in a valid state with an unspecified value.]
-
 [endsect]
 
 [section [^ip::address] assignment]
@@ -90,13 +83,6 @@ the table below.]
   address& operator=(const address& a);
 
 [function_postconditions `*this == a`]
-
-[function_returns `*this`]
-
-  address& operator=(address&& a) noexcept;
-
-[function_effects Modifies `*this` using the value in `a`. The object `a` is
-left in a valid state with an unspecified value.]
 
 [function_returns `*this`]
 

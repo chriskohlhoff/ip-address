@@ -36,7 +36,7 @@ address::address() STDNET_NOEXCEPT
 {
 }
 
-address::address(const address& other)
+address::address(const address& other) STDNET_NOEXCEPT
   : type_(other.type_),
     ipv4_address_(other.ipv4_address_),
     ipv6_address_(other.ipv6_address_)
@@ -52,7 +52,7 @@ address::address(address&& other) STDNET_NOEXCEPT
 }
 #endif // defined(STDNET_HAS_MOVE)
 
-address& address::operator=(const address& other)
+address& address::operator=(const address& other) STDNET_NOEXCEPT
 {
   type_ = other.type_;
   ipv4_address_ = other.ipv4_address_;

@@ -47,7 +47,7 @@ public:
   STDNET_DECL address() STDNET_NOEXCEPT;
 
   /// Copy constructor.
-  STDNET_DECL address(const address& other);
+  STDNET_DECL address(const address& other) STDNET_NOEXCEPT;
 
 #if defined(STDNET_HAS_MOVE)
   /// Move constructor.
@@ -55,7 +55,7 @@ public:
 #endif // defined(STDNET_HAS_MOVE)
 
   /// Assign from another address.
-  STDNET_DECL address& operator=(const address& other);
+  STDNET_DECL address& operator=(const address& other) STDNET_NOEXCEPT;
 
 #if defined(STDNET_HAS_MOVE)
   /// Move-assign from another address.
