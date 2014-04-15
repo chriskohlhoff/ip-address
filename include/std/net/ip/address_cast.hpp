@@ -43,7 +43,7 @@ public:
 /// Cast a version-independent address to itself.
 template <class T>
 inline T address_cast(const address& addr,
-    typename enable_if<is_same<T, address>::value>::type* = 0) STDNET_NOEXCEPT
+    typename enable_if<is_same<T, address>::value>::type*) STDNET_NOEXCEPT
 {
   return addr;
 }
@@ -84,7 +84,7 @@ inline T address_cast(const address& addr,
 
 template <class T>
 inline T address_cast(const address_v4& addr,
-    typename enable_if<is_same<T, address>::value>::type* = 0) STDNET_NOEXCEPT
+    typename enable_if<is_same<T, address>::value>::type*) STDNET_NOEXCEPT
 {
   address new_addr;
   new_addr.type_ = address::ipv4;
@@ -94,14 +94,14 @@ inline T address_cast(const address_v4& addr,
 
 template <class T>
 inline T address_cast(const address_v4& addr,
-    typename enable_if<is_same<T, address_v4>::value>::type* = 0) STDNET_NOEXCEPT
+    typename enable_if<is_same<T, address_v4>::value>::type*) STDNET_NOEXCEPT
 {
   return addr;
 }
 
 template <class T>
 T address_cast(const address_v4& addr,
-    typename enable_if<is_same<T, address_v6>::value>::type* = 0) STDNET_NOEXCEPT
+    typename enable_if<is_same<T, address_v6>::value>::type*) STDNET_NOEXCEPT
 {
   address_v4::bytes_type v4_bytes = addr.to_bytes();
   address_v6::bytes_type v6_bytes = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -111,7 +111,7 @@ T address_cast(const address_v4& addr,
 
 template <class T>
 inline T address_cast(const address_v6& addr,
-    typename enable_if<is_same<T, address>::value>::type* = 0) STDNET_NOEXCEPT
+    typename enable_if<is_same<T, address>::value>::type*) STDNET_NOEXCEPT
 {
   address new_addr;
   new_addr.type_ = address::ipv6;
@@ -121,7 +121,7 @@ inline T address_cast(const address_v6& addr,
 
 template <class T>
 T address_cast(const address_v6& addr,
-    typename enable_if<is_same<T, address_v4>::value>::type* = 0)
+    typename enable_if<is_same<T, address_v4>::value>::type*)
 {
   if (!addr.is_v4_mapped())
   {
@@ -137,7 +137,7 @@ T address_cast(const address_v6& addr,
 
 template <class T>
 inline T address_cast(const address_v6& addr,
-    typename enable_if<is_same<T, address_v6>::value>::type* = 0) STDNET_NOEXCEPT
+    typename enable_if<is_same<T, address_v6>::value>::type*) STDNET_NOEXCEPT
 {
   return addr;
 }
