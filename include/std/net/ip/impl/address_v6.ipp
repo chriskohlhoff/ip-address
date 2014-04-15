@@ -38,24 +38,6 @@ address_v6::address_v6() STDNET_NOEXCEPT
 {
 }
 
-address_v6::address_v6(const address_v6::bytes_type& bytes, unsigned long scope)
-  : scope_id_(scope)
-{
-#if UCHAR_MAX > 0xFF
-  for (std::size_t i = 0; i < bytes.size(); ++i)
-  {
-    if (bytes[i] > 0xFF)
-    {
-      std::out_of_range ex("address_v6 from bytes_type");
-      std::net::detail::throw_exception(ex);
-    }
-  }
-#endif // UCHAR_MAX > 0xFF
-
-  using namespace std; // For memcpy.
-  memcpy(addr_.s6_addr, bytes.data(), 16);
-}
-
 address_v6::address_v6(const address_v6& other) STDNET_NOEXCEPT
   : addr_(other.addr_),
     scope_id_(other.scope_id_)
@@ -111,35 +93,6 @@ std::string address_v6::to_string(std::error_code& ec) const
   if (addr == 0)
     return std::string();
   return addr;
-}
-
-address_v6 address_v6::from_string(const char* str)
-{
-  std::error_code ec;
-  address_v6 addr = from_string(str, ec);
-  std::net::detail::throw_error(ec);
-  return addr;
-}
-
-address_v6 address_v6::from_string(
-    const char* str, std::error_code& ec)
-{
-  address_v6 tmp;
-  if (std::net::detail::socket_ops::inet_pton(
-        AF_INET6, str, &tmp.addr_, &tmp.scope_id_, ec) <= 0)
-    return address_v6();
-  return tmp;
-}
-
-address_v6 address_v6::from_string(const std::string& str)
-{
-  return from_string(str.c_str());
-}
-
-address_v6 address_v6::from_string(
-    const std::string& str, std::error_code& ec)
-{
-  return from_string(str.c_str(), ec);
 }
 
 address_v4 address_v6::to_v4() const
@@ -275,7 +228,7 @@ address_v6 address_v6::v4_mapped(const address_v4& addr) STDNET_NOEXCEPT
   address_v4::bytes_type v4_bytes = addr.to_bytes();
   bytes_type v6_bytes = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF,
     v4_bytes[0], v4_bytes[1], v4_bytes[2], v4_bytes[3] } };
-  return address_v6(v6_bytes);
+  return make_address_v6(v6_bytes);
 }
 
 address_v6 address_v6::v4_compatible(const address_v4& addr) STDNET_NOEXCEPT
@@ -283,7 +236,58 @@ address_v6 address_v6::v4_compatible(const address_v4& addr) STDNET_NOEXCEPT
   address_v4::bytes_type v4_bytes = addr.to_bytes();
   bytes_type v6_bytes = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     v4_bytes[0], v4_bytes[1], v4_bytes[2], v4_bytes[3] } };
-  return address_v6(v6_bytes);
+  return make_address_v6(v6_bytes);
+}
+
+address_v6 make_address_v6(const std::array<unsigned char, 16>& bytes,
+    unsigned long scope)
+{
+#if UCHAR_MAX > 0xFF
+  for (std::size_t i = 0; i < bytes.size(); ++i)
+  {
+    if (bytes[i] > 0xFF)
+    {
+      std::out_of_range ex("address_v6 from bytes_type");
+      std::net::detail::throw_exception(ex);
+    }
+  }
+#endif // UCHAR_MAX > 0xFF
+
+  address_v6 tmp;
+  using namespace std; // For memcpy.
+  memcpy(tmp.addr_.s6_addr, bytes.data(), 16);
+  tmp.scope_id_ = scope;
+  return tmp;
+}
+
+address_v6 make_address_v6(const char* str)
+{
+  std::error_code ec;
+  address_v6 addr = make_address_v6(str, ec);
+  std::net::detail::throw_error(ec);
+  return addr;
+}
+
+address_v6 make_address_v6(const char* str,
+    std::error_code& ec) STDNET_NOEXCEPT
+{
+  address_v6::bytes_type bytes;
+  unsigned long scope_id = 0;
+  if (std::net::detail::socket_ops::inet_pton(
+        AF_INET6, str, bytes.data(), &scope_id, ec) <= 0)
+    return address_v6();
+  return make_address_v6(bytes, scope_id);
+}
+
+address_v6 make_address_v6(const std::string& str)
+{
+  return make_address_v6(str.c_str());
+}
+
+address_v6 make_address_v6(const std::string& str,
+    std::error_code& ec) STDNET_NOEXCEPT
+{
+  return make_address_v6(str.c_str(), ec);
 }
 
 } // namespace ip

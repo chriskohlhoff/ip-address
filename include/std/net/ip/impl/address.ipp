@@ -84,48 +84,6 @@ std::string address::to_string(std::error_code& ec) const
   return ipv4_address_.to_string(ec);
 }
 
-address address::from_string(const char* str)
-{
-  std::error_code ec;
-  address addr = from_string(str, ec);
-  std::net::detail::throw_error(ec);
-  return addr;
-}
-
-address address::from_string(const char* str, std::error_code& ec)
-{
-  address_v6 ipv6_address = address_v6::from_string(str, ec);
-  if (!ec)
-  {
-    address tmp;
-    tmp.type_ = ipv6;
-    tmp.ipv6_address_ = ipv6_address;
-    return tmp;
-  }
-
-  address_v4 ipv4_address = address_v4::from_string(str, ec);
-  if (!ec)
-  {
-    address tmp;
-    tmp.type_ = ipv4;
-    tmp.ipv4_address_ = ipv4_address;
-    return tmp;
-  }
-
-  return address();
-}
-
-address address::from_string(const std::string& str)
-{
-  return from_string(str.c_str());
-}
-
-address address::from_string(const std::string& str,
-    std::error_code& ec)
-{
-  return from_string(str.c_str(), ec);
-}
-
 bool address::is_loopback() const STDNET_NOEXCEPT
 {
   return (type_ == ipv4)
@@ -165,6 +123,39 @@ bool operator<(const address& a1, const address& a2) STDNET_NOEXCEPT
   if (a1.type_ == address::ipv6)
     return a1.ipv6_address_ < a2.ipv6_address_;
   return a1.ipv4_address_ < a2.ipv4_address_;
+}
+
+address make_address(const char* str)
+{
+  std::error_code ec;
+  address addr = make_address(str, ec);
+  std::net::detail::throw_error(ec);
+  return addr;
+}
+
+address make_address(const char* str,
+    std::error_code& ec) STDNET_NOEXCEPT
+{
+  address_v6 ipv6_address = make_address_v6(str, ec);
+  if (!ec)
+    return ipv6_address;
+
+  address_v4 ipv4_address = make_address_v4(str, ec);
+  if (!ec)
+    return ipv4_address;
+
+  return address();
+}
+
+address make_address(const std::string& str)
+{
+  return make_address(str.c_str());
+}
+
+address make_address(const std::string& str,
+    std::error_code& ec) STDNET_NOEXCEPT
+{
+  return make_address(str.c_str(), ec);
 }
 
 } // namespace ip

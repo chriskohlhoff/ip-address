@@ -30,6 +30,7 @@ void test()
   try
   {
     std::error_code ec;
+    std::string string_value;
 
     // address_v4 constructors.
 
@@ -38,6 +39,10 @@ void test()
     ip::address_v4 addr2(const_bytes_value);
     const unsigned long const_ulong_value = 0x7F000001;
     ip::address_v4 addr3(const_ulong_value);
+    ip::address_v4 addr4("127.0.0.1");
+    ip::address_v4 addr5("127.0.0.1", ec);
+    ip::address_v4 addr6(string_value);
+    ip::address_v4 addr7(string_value, ec);
 
     // address_v4 functions.
 
@@ -65,15 +70,10 @@ void test()
     unsigned long ulong_value = addr1.to_ulong();
     (void)ulong_value;
 
-    std::string string_value = addr1.to_string();
+    string_value = addr1.to_string();
     string_value = addr1.to_string(ec);
 
     // address_v4 static functions.
-
-    addr1 = ip::address_v4::from_string("127.0.0.1");
-    addr1 = ip::address_v4::from_string("127.0.0.1", ec);
-    addr1 = ip::address_v4::from_string(string_value);
-    addr1 = ip::address_v4::from_string(string_value, ec);
 
     addr1 = ip::address_v4::any();
 
@@ -104,6 +104,15 @@ void test()
 
     b = (addr1 >= addr2);
     (void)b;
+
+    // address_v4 creation.
+
+    addr1 = ip::make_address_v4(const_bytes_value);
+    addr1 = ip::make_address_v4(const_ulong_value);
+    addr1 = ip::make_address_v4("127.0.0.1");
+    addr1 = ip::make_address_v4("127.0.0.1", ec);
+    addr1 = ip::make_address_v4(string_value);
+    addr1 = ip::make_address_v4(string_value, ec);
 
     // address_v4 I/O.
 

@@ -30,12 +30,18 @@ void test()
   try
   {
     std::error_code ec;
+    std::string string_value;
 
     // address_v6 constructors.
 
     ip::address_v6 addr1;
     const ip::address_v6::bytes_type const_bytes_value = { { 0 } };
     ip::address_v6 addr2(const_bytes_value);
+    ip::address_v6 addr3(const_bytes_value, 0);
+    ip::address_v6 addr4("0::0");
+    ip::address_v6 addr5("0::0", ec);
+    ip::address_v6 addr6(string_value);
+    ip::address_v6 addr7(string_value, ec);
 
     // address_v6 functions.
 
@@ -81,25 +87,20 @@ void test()
     ip::address_v6::bytes_type bytes_value = addr1.to_bytes();
     (void)bytes_value;
 
-    std::string string_value = addr1.to_string();
+    string_value = addr1.to_string();
     string_value = addr1.to_string(ec);
 
-    ip::address_v4 addr3 = addr1.to_v4();
+    ip::address_v4 addr8 = addr1.to_v4();
 
     // address_v6 static functions.
-
-    addr1 = ip::address_v6::from_string("0::0");
-    addr1 = ip::address_v6::from_string("0::0", ec);
-    addr1 = ip::address_v6::from_string(string_value);
-    addr1 = ip::address_v6::from_string(string_value, ec);
 
     addr1 = ip::address_v6::any();
 
     addr1 = ip::address_v6::loopback();
 
-    addr1 = ip::address_v6::v4_mapped(addr3);
+    addr1 = ip::address_v6::v4_mapped(addr8);
 
-    addr1 = ip::address_v6::v4_compatible(addr3);
+    addr1 = ip::address_v6::v4_compatible(addr8);
 
     // address_v6 comparisons.
 
@@ -120,6 +121,15 @@ void test()
 
     b = (addr1 >= addr2);
     (void)b;
+
+    // address_v6 creation:
+
+    addr1 = ip::make_address_v6(const_bytes_value);
+    addr1 = ip::make_address_v6(const_bytes_value, 0);
+    addr1 = ip::make_address_v6("0::0");
+    addr1 = ip::make_address_v6("0::0", ec);
+    addr1 = ip::make_address_v6(string_value);
+    addr1 = ip::make_address_v6(string_value, ec);
 
     // address_v6 I/O.
 

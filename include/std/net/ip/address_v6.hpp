@@ -19,6 +19,7 @@
 #include <array>
 #include <string>
 #include <system_error>
+#include "std/net/ip/fwd.hpp"
 #include "std/net/detail/socket_types.hpp"
 #include "std/net/detail/winsock_init.hpp"
 
@@ -53,9 +54,41 @@ public:
   /// Default constructor.
   STDNET_DECL address_v6() STDNET_NOEXCEPT;
 
-  /// Construct an address from raw bytes and scope ID.
-  STDNET_DECL explicit address_v6(const bytes_type& bytes,
-      unsigned long scope_id = 0);
+#if defined(STDNET_HAS_VARIADIC_TEMPLATES)
+  /// Explicitly construct from a list of arguments.
+  template <typename... T,
+    typename = typename enable_if<is_same<address_v6,
+      decltype(make_address_v6(declval<T>()...))>::value>::type>
+  explicit address_v6(T&&... t)
+    : address(make_address_v6(forward<T>(t)...))
+  {
+  }
+#else // defined(STDNET_HAS_VARIADIC_TEMPLATES)
+  template <typename T1>
+  explicit address_v6(T1& t1, typename enable_if<is_same<address_v6,
+    decltype(make_address_v6(declval<T1&>()))>::value>::type* = 0)
+      { *this = make_address_v6(t1); }
+  template <typename T1>
+  explicit address_v6(const T1& t1, typename enable_if<is_same<address_v6,
+    decltype(make_address_v6(declval<T1>()))>::value>::type* = 0)
+      { *this = make_address_v6(t1); }
+  template <typename T1, typename T2>
+  address_v6(T1& t1, T2& t2, typename enable_if<is_same<address_v6,
+    decltype(make_address_v6(declval<T1&>(), declval<T2&>()))>::value>::type* = 0)
+      { *this = make_address_v6(t1, t2); }
+  template <typename T1, typename T2>
+  address_v6(T1& t1, const T2& t2, typename enable_if<is_same<address_v6,
+    decltype(make_address_v6(declval<T1&>(), declval<T2>()))>::value>::type* = 0)
+      { *this = make_address_v6(t1, t2); }
+  template <typename T1, typename T2>
+  address_v6(const T1& t1, T2& t2, typename enable_if<is_same<address_v6,
+    decltype(make_address_v6(declval<T1>(), declval<T2&>()))>::value>::type* = 0)
+      { *this = make_address_v6(t1, t2); }
+  template <typename T1, typename T2>
+  address_v6(const T1& t1, const T2& t2, typename enable_if<is_same<address_v6,
+    decltype(make_address_v6(declval<T1>(), declval<T2>()))>::value>::type* = 0)
+      { *this = make_address_v6(t1, t2); }
+#endif // defined(STDNET_HAS_VARIADIC_TEMPLATES)
 
   /// Copy constructor.
   STDNET_DECL address_v6(const address_v6& other) STDNET_NOEXCEPT;
@@ -99,20 +132,6 @@ public:
 
   /// Get the address as a string.
   STDNET_DECL std::string to_string(std::error_code& ec) const;
-
-  /// Create an address from an IP address string.
-  STDNET_DECL static address_v6 from_string(const char* str);
-
-  /// Create an address from an IP address string.
-  STDNET_DECL static address_v6 from_string(
-      const char* str, std::error_code& ec);
-
-  /// Create an address from an IP address string.
-  STDNET_DECL static address_v6 from_string(const std::string& str);
-
-  /// Create an address from an IP address string.
-  STDNET_DECL static address_v6 from_string(
-      const std::string& str, std::error_code& ec);
 
   /// Converts an IPv4-mapped or IPv4-compatible address to an IPv4 address.
   STDNET_DECL address_v4 to_v4() const;
@@ -212,7 +231,27 @@ private:
 
   // The scope ID associated with the address.
   unsigned long scope_id_;
+
+  friend address_v6 make_address_v6(const bytes_type&, unsigned long);
 };
+
+/// Construct an address_v6 from raw bytes.
+STDNET_DECL address_v6 make_address_v6(
+    const std::array<unsigned char, 16>& bytes, unsigned long scope_id);
+
+/// Create an address_v6 from an IPv6 address string.
+STDNET_DECL address_v6 make_address_v6(const char* str);
+
+/// Create an address_v6 from an IPv6 address string.
+STDNET_DECL address_v6 make_address_v6(const char* str,
+    std::error_code& ec) STDNET_NOEXCEPT;
+
+/// Create an address_v6 from an IPv6 address string.
+STDNET_DECL address_v6 make_address_v6(const std::string& str);
+
+/// Create an address_v6 from an IPv6 address string.
+STDNET_DECL address_v6 make_address_v6(const std::string& str,
+    std::error_code& ec) STDNET_NOEXCEPT;
 
 #if !defined(STDNET_NO_IOSTREAM)
 

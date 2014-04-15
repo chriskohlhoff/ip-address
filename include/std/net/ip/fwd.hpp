@@ -16,6 +16,9 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "std/net/detail/config.hpp"
+#include <array>
+#include <string>
+#include <system_error>
 #include <type_traits>
 
 #if !defined(STDNET_NO_IOSTREAM)
@@ -38,6 +41,12 @@ bool operator> (const address&, const address&) STDNET_NOEXCEPT;
 bool operator<=(const address&, const address&) STDNET_NOEXCEPT;
 bool operator>=(const address&, const address&) STDNET_NOEXCEPT;
 
+// address creation:
+address make_address(const char*);
+address make_address(const char*, std::error_code&) STDNET_NOEXCEPT;
+address make_address(const std::string&);
+address make_address(const std::string&, std::error_code&) STDNET_NOEXCEPT;
+
 #if !defined(STDNET_NO_IOSTREAM)
 
 // address I/O:
@@ -57,6 +66,14 @@ bool operator> (const address_v4&, const address_v4&) STDNET_NOEXCEPT;
 bool operator<=(const address_v4&, const address_v4&) STDNET_NOEXCEPT;
 bool operator>=(const address_v4&, const address_v4&) STDNET_NOEXCEPT;
 
+// address_v4 creation:
+address_v4 make_address_v4(unsigned long);
+address_v4 make_address_v4(const std::array<unsigned char, 4>&);
+address_v4 make_address_v4(const char*);
+address_v4 make_address_v4(const char*, error_code&) STDNET_NOEXCEPT;
+address_v4 make_address_v4(const std::string&);
+address_v4 make_address_v4(const std::string&, std::error_code&) STDNET_NOEXCEPT;
+
 #if !defined(STDNET_NO_IOSTREAM)
 
 // address_v4 I/O:
@@ -75,6 +92,13 @@ bool operator< (const address_v6&, const address_v6&) STDNET_NOEXCEPT;
 bool operator> (const address_v6&, const address_v6&) STDNET_NOEXCEPT;
 bool operator<=(const address_v6&, const address_v6&) STDNET_NOEXCEPT;
 bool operator>=(const address_v6&, const address_v6&) STDNET_NOEXCEPT;
+
+// address_v6 creation:
+address_v6 make_address_v6(const std::array<unsigned char, 16>&, unsigned long = 0);
+address_v6 make_address_v6(const char*);
+address_v6 make_address_v6(const char*, error_code&) STDNET_NOEXCEPT;
+address_v6 make_address_v6(const std::string&);
+address_v6 make_address_v6(const std::string&, error_code&) STDNET_NOEXCEPT;
 
 #if !defined(STDNET_NO_IOSTREAM)
 

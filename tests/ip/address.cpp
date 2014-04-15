@@ -30,6 +30,7 @@ void test()
   try
   {
     std::error_code ec;
+    std::string string_value;
 
     // address constructors.
 
@@ -38,6 +39,10 @@ void test()
     ip::address addr2(const_addr_v4);
     const ip::address_v6 const_addr_v6;
     ip::address addr3(const_addr_v6);
+    ip::address addr4("127.0.0.1");
+    ip::address addr5("127.0.0.1", ec);
+    ip::address addr6(string_value);
+    ip::address addr7(string_value, ec);
 
     // address functions.
 
@@ -62,15 +67,8 @@ void test()
     ip::address_v6 addr_v6_value = ip::address_cast<ip::address_v6>(addr1);
     (void)addr_v6_value;
 
-    std::string string_value = addr1.to_string();
+    string_value = addr1.to_string();
     string_value = addr1.to_string(ec);
-
-    // address static functions.
-
-    addr1 = ip::address::from_string("127.0.0.1");
-    addr1 = ip::address::from_string("127.0.0.1", ec);
-    addr1 = ip::address::from_string(string_value);
-    addr1 = ip::address::from_string(string_value, ec);
 
     // address comparisons.
 
@@ -91,6 +89,13 @@ void test()
 
     b = (addr1 >= addr2);
     (void)b;
+
+    // address creation functions.
+
+    addr1 = ip::make_address("127.0.0.1");
+    addr1 = ip::make_address("127.0.0.1", ec);
+    addr1 = ip::make_address(string_value);
+    addr1 = ip::make_address(string_value, ec);
 
     // address I/O.
 

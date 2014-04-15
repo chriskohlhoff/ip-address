@@ -13,8 +13,7 @@
           // constructors:
           address_v6() noexcept;
           address_v6(const address_v6& a) noexcept;
-          explicit address_v6(const bytes_type& bytes,
-                              unsigned long scope_id = 0);
+          template <class... T> explicit address(T&&... t);
 
           // assignment:
           address_v4& operator=(const address_v4& a) noexcept;
@@ -39,8 +38,6 @@
           address_v4 to_v4() const;
 
           // static members:
-          static address_v6 from_string(const string& str);
-          static address_v6 from_string(const string& str, error_code& ec);
           static address_v6 any() noexcept;
           static address_v6 loopback() noexcept;
         };
@@ -53,6 +50,13 @@
         bool operator<=(const address_v6& a, const address_v6& b) noexcept;
         bool operator>=(const address_v6& a, const address_v6& b) noexcept;
 
+        // address_v6 creation:
+        address_v6 make_address_v6(const array<unsigned char, 16>&, unsigned long = 0);
+        address_v6 make_address_v6(const char*);
+        address_v6 make_address_v6(const char*, error_code&) noexcept;
+        address_v6 make_address_v6(const string&);
+        address_v6 make_address_v6(const string&, error_code&) noexcept;
+
         // address_v6 I/O:
         template<class CharT, class Traits>
           basic_ostream<CharT, Traits>& operator<<(
@@ -64,9 +68,8 @@
 
 [std_note The implementations of the functions `is_unspecified`, `is_loopback`,
 `is_multicast`, `is_link_local`, `is_site_local`, `is_v4_mapped`,
-`is_v4_compatible`, `is_multicast_node_local`, `is_multicast_link_local`,
-`is_multicast_site_local`, `is_multicast_org_local` and `is_multicast_global`
-are determined by [RFC4291].]
+`is_multicast_node_local`, `is_multicast_link_local`, `is_multicast_site_local`,
+`is_multicast_org_local` and `is_multicast_global` are determined by [RFC4291].]
 
 [section [^ip::address_v6] constructors]
 
@@ -83,19 +86,14 @@ the table below.]
   [[`scope_id()`][`0`]]
 ]
 
-  explicit address_v6(const bytes_type& bytes,
-                      unsigned long scope_id = 0);
+  template <class... T> explicit address_v6(T&&... t);
 
-[function_effects Constructs an object of class `address_v6`.]
+[function_remarks This constructor shall not participate in overload resolution
+unless the expression `make_address_v6(forward<T>(t)...)` is valid and yields an
+rvalue of type `address_v6`.]
 
-[function_postconditions The postconditions of this function are indicated in
-the table below.]
-
-[table address_v6::address_v6() effects
-  [[expression][value]]
-  [[`to_bytes()`][`bytes`]]
-  [[`scope_id()`][`scope_id`]]
-]
+[function_effects Constructs an object of type `address_v6` with the result of
+the expression `make_address_v6(forward<T>(t)...)`.]
 
 [endsect]
 
@@ -245,23 +243,6 @@ Otherwise `string()`.]
 
 [section [^ip::address_v6] static members]
 
-  static address_v6 from_string(const string& str);
-  static address_v6 from_string(const string& str, error_code& ec);
-
-[function_effects Converts a string representation of an address into a
-corresponding `address_v6` value. The format is either ['`address`] or
-['`address`]`%`['`scope-id`], where ['`address`] is in the format specified by
-__POSIX__ __inet_pton__ when invoked with address family `AF_INET6`, and
-['`scope-id`] is an optional string specifying the scope identifier. All
-implementations shall accept as ['`scope-id`] a string representation of an
-unsigned decimal integer. It is implementation-defined whether alternative
-scope identifier representations are permitted. If ['`scope-id`] is not
-supplied, an `address_v6` object shall be returned such that `scope_id() ==
-0`.]
-
-[function_returns If successful, an `address_v6` value corresponding to the
-string `str`. Otherwise returns `address_v6()`.]
-
   static address_v6 any() noexcept;
 
 [function_returns `address_v6()`.]
@@ -299,6 +280,42 @@ a.to_bytes()) && a.scope_id() < b.scope_id())`.]
   bool operator>=(const address_v6& a, const address_v6& b) noexcept;
 
 [function_returns `!(a < b)`.]
+
+[endsect]
+
+[section [^ip::address_v6] creation]
+
+  address_v6 make_address_v6(const array<unsigned char, 16>& bytes,
+                             unsigned long scope_id);
+
+[function_requires Each element of the array `bytes` is in the range
+`[0, 0xFF]`.]
+
+[function_throws `out_of_range` if any element of the array `bytes` is not in
+the range `[0, 0xFF]`. [inline_note For implementations where `UCHAR_MAX ==
+0xFF`, no out-of-range detection is needed.]]
+
+[function_returns An object `a` of type `address_v6` where `a.to_bytes() ==
+bytes` and `a.scope_id() == scope_id`.]
+
+  address_v6 make_address_v6(const char* str);
+  address_v6 make_address_v6(const char* str, error_code& ec) noexcept;
+  address_v6 make_address_v6(const string& str);
+  address_v6 make_address_v6(const string& str, error_code& ec) noexcept;
+
+[function_effects Converts a string representation of an address into a
+corresponding `address_v6` value. The format is either ['`address`] or
+['`address`]`%`['`scope-id`], where ['`address`] is in the format specified by
+__POSIX__ __inet_pton__ when invoked with address family `AF_INET6`, and
+['`scope-id`] is an optional string specifying the scope identifier. All
+implementations shall accept as ['`scope-id`] a string representation of an
+unsigned decimal integer. It is implementation-defined whether alternative
+scope identifier representations are permitted. If ['`scope-id`] is not
+supplied, an `address_v6` object shall be returned such that `scope_id() ==
+0`.]
+
+[function_returns If successful, an `address_v6` value corresponding to the
+string `str`. Otherwise returns `address_v6()`.]
 
 [endsect]
 

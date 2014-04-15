@@ -19,6 +19,7 @@
 #include <array>
 #include <string>
 #include <system_error>
+#include "std/net/ip/fwd.hpp"
 #include "std/net/detail/socket_types.hpp"
 #include "std/net/detail/winsock_init.hpp"
 
@@ -55,11 +56,41 @@ public:
     addr_.s_addr = 0;
   }
 
-  /// Construct an address from raw bytes.
-  STDNET_DECL explicit address_v4(const bytes_type& bytes);
-
-  /// Construct an address from a unsigned long in host byte order.
-  STDNET_DECL explicit address_v4(unsigned long addr);
+#if defined(STDNET_HAS_VARIADIC_TEMPLATES)
+  /// Explicitly construct from a list of arguments.
+  template <typename... T,
+    typename = typename enable_if<is_same<address_v4,
+      decltype(make_address_v4(declval<T>()...))>::value>::type>
+  explicit address_v4(T&&... t)
+    : address_v4(make_address_v4(forward<T>(t)...))
+  {
+  }
+#else // defined(STDNET_HAS_VARIADIC_TEMPLATES)
+  template <typename T1>
+  explicit address_v4(T1& t1, typename enable_if<is_same<address_v4,
+    decltype(make_address_v4(declval<T1&>()))>::value>::type* = 0)
+      { *this = make_address_v4(t1); }
+  template <typename T1>
+  explicit address_v4(const T1& t1, typename enable_if<is_same<address_v4,
+    decltype(make_address_v4(declval<T1>()))>::value>::type* = 0)
+      { *this = make_address_v4(t1); }
+  template <typename T1, typename T2>
+  address_v4(T1& t1, T2& t2, typename enable_if<is_same<address_v4,
+    decltype(make_address_v4(declval<T1&>(), declval<T2&>()))>::value>::type* = 0)
+      { *this = make_address_v4(t1, t2); }
+  template <typename T1, typename T2>
+  address_v4(T1& t1, const T2& t2, typename enable_if<is_same<address_v4,
+    decltype(make_address_v4(declval<T1&>(), declval<T2>()))>::value>::type* = 0)
+      { *this = make_address_v4(t1, t2); }
+  template <typename T1, typename T2>
+  address_v4(const T1& t1, T2& t2, typename enable_if<is_same<address_v4,
+    decltype(make_address_v4(declval<T1>(), declval<T2&>()))>::value>::type* = 0)
+      { *this = make_address_v4(t1, t2); }
+  template <typename T1, typename T2>
+  address_v4(const T1& t1, const T2& t2, typename enable_if<is_same<address_v4,
+    decltype(make_address_v4(declval<T1>(), declval<T2>()))>::value>::type* = 0)
+      { *this = make_address_v4(t1, t2); }
+#endif // defined(STDNET_HAS_VARIADIC_TEMPLATES)
 
   /// Copy constructor.
   address_v4(const address_v4& other) STDNET_NOEXCEPT
@@ -102,20 +133,6 @@ public:
 
   /// Get the address as a string in dotted decimal format.
   STDNET_DECL std::string to_string(std::error_code& ec) const;
-
-  /// Create an address from an IP address string in dotted decimal form.
-  STDNET_DECL static address_v4 from_string(const char* str);
-
-  /// Create an address from an IP address string in dotted decimal form.
-  STDNET_DECL static address_v4 from_string(
-      const char* str, std::error_code& ec);
-
-  /// Create an address from an IP address string in dotted decimal form.
-  STDNET_DECL static address_v4 from_string(const std::string& str);
-
-  /// Create an address from an IP address string in dotted decimal form.
-  STDNET_DECL static address_v4 from_string(
-      const std::string& str, std::error_code& ec);
 
   /// Determine whether the address is a loopback address.
   STDNET_DECL bool is_loopback() const STDNET_NOEXCEPT;
@@ -208,7 +225,31 @@ public:
 private:
   // The underlying IPv4 address.
   std::net::detail::in4_addr_type addr_;
+
+  friend address_v4 make_address_v4(const bytes_type&);
+  friend address_v4 make_address_v4(unsigned long);
 };
+
+/// Construct an address_v4 from raw bytes.
+STDNET_DECL address_v4 make_address_v4(
+    const std::array<unsigned char, 4>& bytes);
+
+/// Construct an address_v4 from a unsigned long in host byte order.
+STDNET_DECL address_v4 make_address_v4(unsigned long addr);
+
+/// Create an address_v4 from an IPv4 address string in dotted decimal form.
+STDNET_DECL address_v4 make_address_v4(const char* str);
+
+/// Create an address_v4 from an IPv4 address string in dotted decimal form.
+STDNET_DECL address_v4 make_address_v4(const char* str,
+    std::error_code& ec) STDNET_NOEXCEPT;
+
+/// Create an address_v4 from an IPv4 address string in dotted decimal form.
+STDNET_DECL address_v4 make_address_v4(const std::string& str);
+
+/// Create an address_v4 from an IPv4 address string in dotted decimal form.
+STDNET_DECL address_v4 make_address_v4(const std::string& str,
+    std::error_code& ec) STDNET_NOEXCEPT;
 
 #if !defined(STDNET_NO_IOSTREAM)
 

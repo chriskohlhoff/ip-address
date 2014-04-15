@@ -11,6 +11,7 @@
           address() noexcept;
           address(const address& a) noexcept;
           template <class T> address(const T& t) noexcept(``['see below]``);
+          template <class... T> explicit address(T&&... t);
 
           // assignment:
           address& operator=(const address& a) noexcept;
@@ -23,10 +24,6 @@
           bool is_v6() const noexcept;
           string to_string() const;
           string to_string(error_code& ec) const;
-
-          // static members:
-          static address from_string(const string& str);
-          static address from_string(const string& str, error_code& ec);
         };
 
         // address comparisons:
@@ -36,6 +33,12 @@
         bool operator> (const address& a, const address& b) noexcept;
         bool operator<=(const address& a, const address& b) noexcept;
         bool operator>=(const address& a, const address& b) noexcept;
+
+        // address creation:
+        address make_address(const char*);
+        address make_address(const char*, error_code&) noexcept;
+        address make_address(const string&);
+        address make_address(const string&, error_code&) noexcept;
 
         // address I/O:
         template<class CharT, class Traits>
@@ -91,6 +94,15 @@ expression `address_cast<address>(t)`.]
 [function_throws Nothing unless the expression `address_cast<address>(t)`
 throws an exception.]
 
+  template <class... T> explicit address(T&&... t);
+
+[function_remarks This constructor shall not participate in overload resolution
+unless the expression `make_address(forward<T>(t)...)` is valid and yields an
+rvalue of type `address`.]
+
+[function_effects Constructs an object of type `address` with the result of the
+expression `make_address(forward<T>(t)...)`.]
+
 [endsect]
 
 [section [^ip::address] assignment]
@@ -132,30 +144,6 @@ throws an exception.]
 
 [endsect]
 
-[section [^ip::address] static members]
-
-  static address from_string(const string& str);
-  static address from_string(const string& str, error_code& ec);
-
-[function_effects Converts a string representation of an address into an object
-of class `address`, as if by calling:
-``
-  address a;
-  address_v6 v6a = address_v6::from_string(str, ec);
-  if (!ec)
-    a = v6a;
-  else
-  {
-    address_v4 v4a = address_v4::from_string(str, ec);
-    if (!ec)
-      a = v4a;
-  }
-``]
-
-[function_returns `a`.]
-
-[endsect]
-
 [section [^ip::address] comparisons]
 
   bool operator==(const address& a, const address& b) noexcept;
@@ -184,6 +172,32 @@ of class `address`, as if by calling:
   bool operator>=(const address& a, const address& b) noexcept;
 
 [function_returns `!(a < b)`.]
+
+[endsect]
+
+[section [^ip::address] creation]
+
+  address make_address(const char* str);
+  address make_address(const char* str, error_code& ec) noexcept;
+  address make_address(const string& str);
+  address make_address(const string& str, error_code& ec) noexcept;
+
+[function_effects Converts a string representation of an address into an object
+of class `address`, as if by calling:
+``
+  address a;
+  address_v6 v6a = make_address_v6(str, ec);
+  if (!ec)
+    a = v6a;
+  else
+  {
+    address_v4 v4a = make_address_v4(str, ec);
+    if (!ec)
+      a = v4a;
+  }
+``]
+
+[function_returns `a`.]
 
 [endsect]
 

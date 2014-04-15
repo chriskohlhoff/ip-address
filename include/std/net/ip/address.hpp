@@ -76,6 +76,42 @@ public:
   {
   }
 
+#if defined(STDNET_HAS_VARIADIC_TEMPLATES)
+  /// Explicitly construct from a list of arguments.
+  template <typename... T,
+    typename = typename enable_if<is_same<address,
+      decltype(make_address(declval<T>()...))>::value>::type>
+  explicit address(T&&... t)
+    : address(make_address(forward<T>(t)...))
+  {
+  }
+#else // defined(STDNET_HAS_VARIADIC_TEMPLATES)
+  template <typename T1>
+  explicit address(T1& t1, typename enable_if<is_same<address,
+    decltype(make_address(declval<T1&>()))>::value>::type* = 0)
+      { *this = make_address(t1); }
+  template <typename T1>
+  explicit address(const T1& t1, typename enable_if<is_same<address,
+    decltype(make_address(declval<T1>()))>::value>::type* = 0)
+      { *this = make_address(t1); }
+  template <typename T1, typename T2>
+  address(T1& t1, T2& t2, typename enable_if<is_same<address,
+    decltype(make_address(declval<T1&>(), declval<T2&>()))>::value>::type* = 0)
+      { *this = make_address(t1, t2); }
+  template <typename T1, typename T2>
+  address(T1& t1, const T2& t2, typename enable_if<is_same<address,
+    decltype(make_address(declval<T1&>(), declval<T2>()))>::value>::type* = 0)
+      { *this = make_address(t1, t2); }
+  template <typename T1, typename T2>
+  address(const T1& t1, T2& t2, typename enable_if<is_same<address,
+    decltype(make_address(declval<T1>(), declval<T2&>()))>::value>::type* = 0)
+      { *this = make_address(t1, t2); }
+  template <typename T1, typename T2>
+  address(const T1& t1, const T2& t2, typename enable_if<is_same<address,
+    decltype(make_address(declval<T1>(), declval<T2>()))>::value>::type* = 0)
+      { *this = make_address(t1, t2); }
+#endif // defined(STDNET_HAS_VARIADIC_TEMPLATES)
+
   /// Copy constructor.
   STDNET_DECL address(const address& other) STDNET_NOEXCEPT;
 
@@ -109,24 +145,6 @@ public:
 
   /// Get the address as a string in dotted decimal format.
   STDNET_DECL std::string to_string(std::error_code& ec) const;
-
-  /// Create an address from an IPv4 address string in dotted decimal form,
-  /// or from an IPv6 address in hexadecimal notation.
-  STDNET_DECL static address from_string(const char* str);
-
-  /// Create an address from an IPv4 address string in dotted decimal form,
-  /// or from an IPv6 address in hexadecimal notation.
-  STDNET_DECL static address from_string(
-      const char* str, std::error_code& ec);
-
-  /// Create an address from an IPv4 address string in dotted decimal form,
-  /// or from an IPv6 address in hexadecimal notation.
-  STDNET_DECL static address from_string(const std::string& str);
-
-  /// Create an address from an IPv4 address string in dotted decimal form,
-  /// or from an IPv6 address in hexadecimal notation.
-  STDNET_DECL static address from_string(
-      const std::string& str, std::error_code& ec);
 
   /// Determine whether the address is a loopback address.
   STDNET_DECL bool is_loopback() const STDNET_NOEXCEPT;
@@ -191,6 +209,24 @@ private:
   template <class T> friend T address_cast(const address_v6&,
     typename enable_if<is_same<T, address>::value>::type*) STDNET_NOEXCEPT;
 };
+
+/// Create an address from an IPv4 address string in dotted decimal form,
+/// or from an IPv6 address in hexadecimal notation.
+STDNET_DECL address make_address(const char* str);
+
+/// Create an address from an IPv4 address string in dotted decimal form,
+/// or from an IPv6 address in hexadecimal notation.
+STDNET_DECL address make_address(const char* str,
+    std::error_code& ec) STDNET_NOEXCEPT;
+
+/// Create an address from an IPv4 address string in dotted decimal form,
+/// or from an IPv6 address in hexadecimal notation.
+STDNET_DECL address make_address(const std::string& str);
+
+/// Create an address from an IPv4 address string in dotted decimal form,
+/// or from an IPv6 address in hexadecimal notation.
+STDNET_DECL address make_address(const std::string& str,
+    std::error_code& ec) STDNET_NOEXCEPT;
 
 #if !defined(STDNET_NO_IOSTREAM)
 
