@@ -36,7 +36,6 @@
             bytes_type to_bytes() const noexcept;
             string to_string() const;
             string to_string(error_code& ec) const;
-            address_v4 to_v4() const;
 
             // static members:
             static address_v6 any() noexcept;
