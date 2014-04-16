@@ -1,0 +1,37 @@
+[section Error reporting]
+
+Network library functions often provide two overloads, one that throws an
+exception to report system errors, and another that sets an `error_code`.
+
+[std_note This supports two common use cases:[br][br]
+
+[mdash] Uses where system errors are truly exceptional and indicate a serious
+failure. Throwing an exception is the most appropriate response. This is the
+preferred default for most everyday programming.[br][br]
+
+[mdash] Uses where system errors are routine and do not necessarily represent
+failure. Returning an error code is the most appropriate response. This allows
+application specific error handling, including simply ignoring the
+error.[br][br]]
+
+Functions [*not] having an argument of type `error_code&` report errors as
+follows, unless otherwise specified:
+
+[mdash] When a call by the implementation to an operating system or other
+underlying API results in an error that prevents the function from meeting its
+specifications, an exception of type `system_error` shall be thrown.
+
+[mdash] Failure to allocate storage is reported by throwing an exception as
+described in the C++ standard (C++14 \[res.on.exception.handling\]).
+
+[mdash] Destructors throw nothing.
+
+Functions having an argument of type `error_code&` report errors as follows,
+unless otherwise specified:
+
+[mdash] If a call by the implementation to an operating system or other
+underlying API results in an error that prevents the function from meeting its
+specifications, the `error_code&` argument is set as appropriate for the
+specific error. Otherwise, `clear()` is called on the `error_code&` argument.
+
+[endsect]

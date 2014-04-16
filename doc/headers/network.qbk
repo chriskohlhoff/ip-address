@@ -75,7 +75,7 @@
 
         class ``[link classes.ip__bad_address_cast bad_address_cast]``;
 
-        // ``[link classes.ip__address_cast address conversions]``:
+        // ``[link functions.ip__address_cast address conversions]``:
         template <class T> T address_cast(const address&) noexcept(``['see below]``);
         template <class T> T address_cast(const address_v4&) noexcept(``['see below]``);
         template <class T> T address_cast(const address_v6&) noexcept(``['see below]``);
@@ -89,6 +89,16 @@
     template <> struct hash<net::ip::address_v4>;
     template <> struct hash<net::ip::address_v6>;
 
+    inline namespace literals {
+      inline namespace net_literals {
+
+        // ``[link functions.literals suffixes for address literals]``
+        net::ip::address operator "" ip(const char*, size_t);
+        net::ip::address_v4 operator "" ipv4(const char*, size_t);
+        net::ip::address_v6 operator "" ipv6(const char*, size_t);
+
+      } // namespace net_literals
+    } // namespace literals
   } // namespace std
 
 [endsect]

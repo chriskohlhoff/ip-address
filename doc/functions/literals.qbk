@@ -1,0 +1,28 @@
+[section:literals Suffixes for address literals]
+
+This section describes literal suffixes for constructing address literals. The
+suffixes `ip`, `ipv4` and `ipv6` denote address values of the corresponding
+types `ip::address`, `ip::address_v4` and `ip::address_v6` respectively if they
+are applied to string literals.
+
+[std_example The following code shows some address literals. ..
+```
+  using namespace std::net_literals;
+  auto addr = "127.0.0.1"ip;
+  auto v4_addr = "255.255.255.255"ipv4;
+  auto v6_addr = "::1"ipv6;
+```]
+
+  net::ip::address operator "" ip(const char* str, size_t);
+
+[function_returns `net::ip::make_address(str)`.]
+
+  net::ip::address_v4 operator "" ipv4(const char* str, size_t);
+
+[function_returns `net::ip::make_address_v4(str)`.]
+
+  net::ip::address_v6 operator "" ipv6(const char* str, size_t);
+
+[function_returns `net::ip::make_address_v6(str)`.]
+
+[endsect]
