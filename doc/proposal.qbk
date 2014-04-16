@@ -114,9 +114,13 @@ internet protocols such as TCP and UDP.
 [section Reference Implementation]
 
 This proposal is based on the IP address classes in the __Asio__ library. The
-proposed text is from __N2175__ with small modifications to reflect
-enhancements made to __Asio__ since 2007. At present, the proposed text does
-not differ significantly from the corresponding classes in __Asio__.
+proposed text was originally from __N2175__ with small modifications to reflect
+enhancements made to __Asio__ since 2007. In this revision, the proposed text
+has been updated to reflect feedback and discussion from the Bristol 2013
+meeting of SG4.
+
+A reference implementation of the proposal is available from
+[@https://github.com/chriskohlhoff/ip-address GitHub].
 
 [endsect]
 
@@ -137,227 +141,162 @@ functions that lie outside the C++11 standard.
 
 [/-----------------------------------------------------------------------------]
 
-[section Design Decisions]
+[section Changes]
 
-[section A Version-Independent Vocabulary Type]
-
-Ideally, most network applications should be written so that they are
-independent of the IP version in use. For this reason, this proposal provides
-the `ip::address` class as a vocabulary type.
-
-The characteristics of the `ip::address` class are as follows:
-
-* Uses type erasure. It may hold either an IPv4 or IPv6 address, but it
-preserves original type.
-
-* May be used with `AF_INET` or `AF_INET6` sockets.
-
-* May be converted to or from either an IPv4 address string or an IPv6 address
-string. Automatically determines the correct underlying type.
-
-* May be converted to or from an IPv4 or IPv6 address object of the
-corresponding version-specific class. ("To" assuming the version-independent
-source holds the correct underlying type.)
-
-* Provides various operations, for testing and manipulating addresses, that
-apply to both IPv4 and IPv6.
-
-* When default-constructed, initialises the `ip::address` object so that it
-corresponds to a default-constructed IPv4 address. (This particular value was
-chosen in __Asio__ as IPv6 networking support is not universal, and the value
-is also the smallest in terms of `ip::address::operator<`.)
-
-In general, the `ip::address` interface is designed to provide just enough
-support to use IP addresses in version-independent networking contexts. When a
-program requires a facility that applies to only IPv4 or IPv6 addresses, the
-developer is expected to use one of the version-specific types described below.
-
-[section Why Type Erasure?]
-
-The question of whether to use a type-erased vocabulary type was discussed
-during the 2005 Boost review of __Asio__. What was originally proposed was to
-distinguish IPv4 and IPv6 using separate types and to use template-based
-genericity to be version independent. This approach was rejected by the
-participants in the review.
-
-The point is that most applications do indeed need to be version independent at
-runtime. For example:
-
-[teletype]
-
-  Usage: my_tcp_server <bind_to_address>
-
-  ./my_tcp_server 0.0.0.0    # Binds to IPv4 wildcard address
-  ./my_tcp_server 127.0.0.1  # Binds to specific IPv4 address
-  ./my_tcp_server ::0        # Binds to IPv6 wildcard address
-  ./my_tcp_server ::1        # Binds to specific IPv6 address
-
-[c++]
-
-The implementation of [^my_tcp_server] only deals in one type of address class.
-No templates are required.
-
-Forcing all applications to create their own runtime switching was deemed
-infeasible. Dual-stack support is not universal and cannot be relied on for
-portable applications. Hence the current form in __Asio__ exists as a tradeoff
-between supporting the easy development of version-independent applications and
-the low level access for those who need it.
-
-[endsect]
-
-[endsect]
-
-[section Version-Specific Types]
-
-The version-specific address classes, `ip::address_v4` and `ip::address_v6`,
-are provided for use cases where finer grained control is required, such as:
-
-* Reduced memory consumption. An application may need to store many addresses.
-* Speed. A complex algorithm may deal with only a single type of address, and
-the cost of repeatedly extracting the underlying value from a type-erased type
-is prohibitive.
-* Compile-time type safety. A programmer may wish to provide an interface that
-deals in only one particular IP version. Another may wish to provide different
-overloads of a function that are distinguished by IP version.
-
-The characteristics of the `ip::address_v4` class are as follows:
-
-* Specifically an IPv4 address.
-
-* For use with `AF_INET` sockets.
-
-* May be converted to or from an IPv4-form address string (`a.b.c.d`). Rejects
-other string forms.
-
-* May be converted to or from a 32 bit integer in host byte order. (Some
-applications use this for low level bit manipulation.)
-
-* May be converted to or from a 32 bit integer / 4 byte array in network byte
-order. (E.g. if used for transmission when embedded within a network protocol.)
-
-* Provides static member functions for creating well-known IPv4 addresses.
-
-* Provides various other operations for testing and manipulating IPv4 addresses.
-
-The characteristics of the `ip::address_v6` class are as follows:
-
-* Specifically an IPv6 address.
-
-* For use with `AF_INET6` sockets.
-
-* May be converted to or from an IPv6-form address string (`abcd:efgh:...`,
-etc). Rejects other string forms.
-
-* May be converted to or from a 128 bit integer / 16 byte array in network byte
-order. (E.g. again, if used for transmission.)
-
-* May be explicitly created from an `ip::address_v4`, with the creation function
-determining which conversion is used (to v4-mapped or v4-compatible).
-
-* May be explicitly converted to an `ip::address_v4`, if the address is one of
-the above v4 forms.
-
-* Provides static member functions for creating well-known IPv6 addresses.
-
-* Provides various other operations for testing and manipulating IPv6
-addresses.
-
-[endsect]
-
-[section Two Classes is Too Few]
-
-An alternative IP address design has been proposed that revolves around two
-classes. Using the naming conventions of this proposal, these classes would be:
-
-* A vocabulary type, `ip::address`, for use in IP version independent code.
-Unlike the three-class design, this class is also intended to represent IPv6
-addresses.
-
-* A version-specific type, `ip::address_v4`.
-
-This design appears to be driven by a desire to push people toward the
-version-independent type, but to still meet the space constraints of
-applications that must deal with large numbers of IPv4 addresses. The design is
-based on the notion that IPv4 addresses are a subset of IPv6 addresses, and
-that IPv4 addresses can be mapped, and stored, into IPv6.
-
-The author rejects this design for a number of reasons.
-
-* It lacks symmetry and is potentially surprising to users.
-
-Superficially, the two-class design gives a special place to IPv4 addresses ("I
-can see the IPv4 class... but where's IPv6?").
-
-What is more important, however, is that the design prevents a programmer from
-utilising the C++ type system to create efficient function overloads based on
-the IP version. A programmer can provide a function overload specifically for
-IPv4 addresses:
-
-  void some_function(const ip::address_v4& a)
-  {
-    ...
-  }
-
-but when it comes to supporting IPv6 addresses the programmer has no choice but
-to resort to runtime dispatching:
-
-  void some_function(const ip::address& a)
-  {
-    if (a.is_v6())
-    {
-      ...
-    }
-    else
-    {
-      ...
-    }
-  }
-
-There is no way for an programmer to express an interface that wants to deal
-only in IPv6 addresses.
-
-* It unnecessarily discards information.
-
-A pure IPv4 address is subtly different from one mapped into an IPv6 address.
-This ties into the question of the larger networking ecosystem, in particular
-how one might use the address classes in conjunction with sockets. For example:
-
-* `"1.2.3.4" ->` `AF_INET` socket
-* `"::ffff:1.2.3.4" ->` `AF_INET6` with dual stack socket
-* `"fe80::...:12:34" ->` `AF_INET6` with or without dual stack
-
-Things like dual stack support are far from universal and some IPv6
-transition/portability guides recommend explicitly disabling dual stack
-support. The author does not think that standardized address classes should
-push people in one or other direction with respect to dual stack usage. Thus,
-it is important to preserve the original type of the IP address.
-
-* It treats IPv6 operations as a superset of IPv4 operations.
-
-As there is no separate type for IPv6, the vocabulary type `ip::address` must
-support all IPv6-related operations. Some of these operations may lack a
-meaningful implementation for IPv4 addresses, and so behave in quite different
-ways (e.g. fail). Note that some of these operations are outside the scope of
-standardization, i.e. they may be part of an application.
-
-[endsect]
+For more information on the motivating design decisions for the three-class
+design, please consult N3603. In this revision of the proposal, we describes
+only the changes made based on feedback and discussion from the 2013 meeting of
+SG4 at Bristol, where N3603 was discussed.
 
 [section Namespace]
 
-This proposal follows __Asio__ in the use of the namespace `ip::`, rather than
-the prefix `ip_`, for the address classes. This namespace is part of a wider
-taxonomy and encompasses other IP-related facilities, including:
+This revision moves the proposed types and functions from the `std::` namespace
+to `std::experimental::`.
 
-* Protocol classes (`tcp`, `udp` and `icmp`).
-* Socket option classes related to unicast and multicast.
-* Classes and functions related to IP name resolution.
+[endsect]
 
-The author notes that the abbreviation [@http://en.wikipedia.org/wiki/IP IP] is
-an overloaded term, even within computing. If backward compatibility was not a
-concern, he would instead prefer the namespace `inet::`. This is consistent with
-__POSIX__ naming, as in `AF_INET`, `inet_ntop()`, etc. It is also unambiguously
-network related and so might be placed directly under the `std` namespace, i.e.
-`std::inet`.
+[section A Version-Independent Vocabulary Type]
+
+The `ip::address` class has been modified so that the version-specific types do
+not appear in its interface. An approach based on the `any` class has been
+adopted (see Library Fundamentals working draft), and address types may be
+explicitly converted using the `address_cast<>` function. The version-specific
+types are implicitly convertible to `ip::address` via a template constructor.
+
+For example:
+
+  address_v4 a;
+  address b = a; // ok, implicit conversion
+  address c = address_cast<address>(a); // ok, explicit conversion
+  address_v4 d = address_cast<address_v4>(a); // ok, explicit conversion
+  address_v6 e = address_cast<address_v6>(a); // invalid, throws bad_address_cast
+
+[endsect]
+
+[section Use of noexcept]
+
+Many functions have now been marked `noexcept`.
+
+[endsect]
+
+[section Explicit Creation from Strings]
+
+This replaces the `from_string()` static member functions with new free
+functions `make_address()`, `make_address_v4()` and `make_address_v6(). These
+functions allow explicit creation of the address types from strings, (as well
+as other types, such as an array of bytes or an integer in host byte
+order). For example:
+
+  address_v4 a = make_address_v4("127.0.0.1");
+
+which throws an exception on failure, and the alternate non-throwing overload:
+
+  error_code ec;
+  address_v4 b = make_address_v4("127.0.0.1", ec);
+
+An explicit template constructor has been added to also support this style of
+use:
+
+  address c("127.0.0.1");
+
+This constructor simply forwards the arguments to the appropriate
+`make_address()` overload.
+
+[endsect]
+
+[section String literals]
+
+Support for IP address literals has been included. For example:
+
+  using namespace std::experimental::net_literals;
+  auto addr = "127.0.0.1"ip;
+  auto v4_addr = "255.255.255.255"ipv4;
+  auto v6_addr = "::1"ipv6;
+
+[endsect]
+
+[endsect]
+
+[/-----------------------------------------------------------------------------]
+
+[section Further Work]
+
+[section Address Iteration]
+
+It has been suggested in the SG4 discussion forum that the address classes
+include the ability to determine the predecessor or successor of an address. By
+this we mean that given an address 1.2.3.4, tthe predecessor address is 1.2.3.3
+and the successor is 1.2.3.5.
+
+The author feels that this feature is not a core responsibility of the address
+classes, but if it is desired it can instead be supported by a richer
+range-based interface. The following is a sketch of this approach:
+
+  class address_iterator_v4
+  {
+  public:
+    typedef std::ptrdiff_t difference_type;
+    typedef address_v4 value_type;
+    typedef const address_v4* pointer;
+    typedef const address_v4& reference;
+    typedef std::bidirectional_iterator_tag iterator_category;
+
+    explicit address_iterator_v4(const address_v4& addr);
+
+    const address_v4& operator*() const;
+    const address_v4* operator->() const;
+
+    address_iterator_v4& operator++();
+    address_iterator_v4 operator++(int);
+
+    address_iterator_v4& operator--();
+    address_iterator_v4 operator--(int);
+
+    friend bool operator==(const address_iterator_v4& a, const address_iterator_v4& b);
+    friend bool operator!=(const address_iterator_v4& a, const address_iterator_v4& b);
+
+  private:
+    // ...
+  };
+
+  class address_range_v4
+  {
+  public:
+    address_range_v4();
+    explicit address_range_v4(const address_v4& addr);
+    explicit address_range_v4(const address_v4& addr, const address_v4& mask);
+
+    address_v4 network() const;
+    address_v4 netmask() const;
+    address_v4 broadcast() const;
+
+    typedef address_iterator_v4 iterator;
+    iterator begin() const;
+    iterator end() const;
+    iterator find(const address_v4& addr) const;
+
+  private:
+    // ...
+  };
+
+This may be used as in the following example:
+
+  address_range_v4 range(
+      make_address_v4("192.168.1.0"),
+      make_address_v4("255.255.255.0"));
+
+  for (auto a: range)
+    std::cout << a << std::endl;
+
+  std::cout << "---" << std::endl;
+
+  std::for_each(
+      range.find(make_address_v4("192.168.1.250")),
+      range.end(),
+      [](address_v4 a) { std::cout << a << std::endl; });
+
+If SG4 determines that this feature is desirable, it may be added to this
+proposal or developed as a separate proposal. The author favours the latter.
 
 [endsect]
 
