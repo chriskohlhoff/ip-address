@@ -1,69 +1,71 @@
 [section:ip__address_v6 Class [^ip::address_v6]]
 
   namespace std {
-    namespace net {
-      namespace ip {
+    namespace experimental {
+      namespace net {
+        namespace ip {
 
-        class address_v6
-        {
-        public:
-          // types:
-          typedef array<unsigned char, 16> bytes_type;
+          class address_v6
+          {
+          public:
+            // types:
+            typedef array<unsigned char, 16> bytes_type;
 
-          // constructors:
-          address_v6() noexcept;
-          address_v6(const address_v6& a) noexcept;
-          template <class... T> explicit address(T&&... t);
+            // constructors:
+            address_v6() noexcept;
+            address_v6(const address_v6& a) noexcept;
+            template <class... T> explicit address(T&&... t);
 
-          // assignment:
-          address_v4& operator=(const address_v4& a) noexcept;
+            // assignment:
+            address_v4& operator=(const address_v4& a) noexcept;
 
-          // members:
-          void scope_id(unsigned long id) noexcept;
-          unsigned long scope_id() const noexcept;
-          bool is_unspecified() const noexcept;
-          bool is_loopback() const noexcept;
-          bool is_multicast() const noexcept;
-          bool is_link_local() const noexcept;
-          bool is_site_local() const noexcept;
-          bool is_v4_mapped() const noexcept;
-          bool is_multicast_node_local() const noexcept;
-          bool is_multicast_link_local() const noexcept;
-          bool is_multicast_site_local() const noexcept;
-          bool is_multicast_org_local() const noexcept;
-          bool is_multicast_global() const noexcept;
-          bytes_type to_bytes() const noexcept;
-          string to_string() const;
-          string to_string(error_code& ec) const;
-          address_v4 to_v4() const;
+            // members:
+            void scope_id(unsigned long id) noexcept;
+            unsigned long scope_id() const noexcept;
+            bool is_unspecified() const noexcept;
+            bool is_loopback() const noexcept;
+            bool is_multicast() const noexcept;
+            bool is_link_local() const noexcept;
+            bool is_site_local() const noexcept;
+            bool is_v4_mapped() const noexcept;
+            bool is_multicast_node_local() const noexcept;
+            bool is_multicast_link_local() const noexcept;
+            bool is_multicast_site_local() const noexcept;
+            bool is_multicast_org_local() const noexcept;
+            bool is_multicast_global() const noexcept;
+            bytes_type to_bytes() const noexcept;
+            string to_string() const;
+            string to_string(error_code& ec) const;
+            address_v4 to_v4() const;
 
-          // static members:
-          static address_v6 any() noexcept;
-          static address_v6 loopback() noexcept;
-        };
+            // static members:
+            static address_v6 any() noexcept;
+            static address_v6 loopback() noexcept;
+          };
 
-        // address_v6 comparisons:
-        bool operator==(const address_v6& a, const address_v6& b) noexcept;
-        bool operator!=(const address_v6& a, const address_v6& b) noexcept;
-        bool operator< (const address_v6& a, const address_v6& b) noexcept;
-        bool operator> (const address_v6& a, const address_v6& b) noexcept;
-        bool operator<=(const address_v6& a, const address_v6& b) noexcept;
-        bool operator>=(const address_v6& a, const address_v6& b) noexcept;
+          // address_v6 comparisons:
+          bool operator==(const address_v6& a, const address_v6& b) noexcept;
+          bool operator!=(const address_v6& a, const address_v6& b) noexcept;
+          bool operator< (const address_v6& a, const address_v6& b) noexcept;
+          bool operator> (const address_v6& a, const address_v6& b) noexcept;
+          bool operator<=(const address_v6& a, const address_v6& b) noexcept;
+          bool operator>=(const address_v6& a, const address_v6& b) noexcept;
 
-        // address_v6 creation:
-        address_v6 make_address_v6(const array<unsigned char, 16>&, unsigned long = 0);
-        address_v6 make_address_v6(const char*);
-        address_v6 make_address_v6(const char*, error_code&) noexcept;
-        address_v6 make_address_v6(const string&);
-        address_v6 make_address_v6(const string&, error_code&) noexcept;
+          // address_v6 creation:
+          address_v6 make_address_v6(const array<unsigned char, 16>&, unsigned long = 0);
+          address_v6 make_address_v6(const char*);
+          address_v6 make_address_v6(const char*, error_code&) noexcept;
+          address_v6 make_address_v6(const string&);
+          address_v6 make_address_v6(const string&, error_code&) noexcept;
 
-        // address_v6 I/O:
-        template<class CharT, class Traits>
-          basic_ostream<CharT, Traits>& operator<<(
-            basic_ostream<CharT, Traits>& os, const address_v6& addr);
+          // address_v6 I/O:
+          template<class CharT, class Traits>
+            basic_ostream<CharT, Traits>& operator<<(
+              basic_ostream<CharT, Traits>& os, const address_v6& addr);
 
-      } // namespace ip
-    } // namespace net
+        } // namespace ip
+      } // namespace net
+    } // namespace experimental
   } // namespace std
 
 [std_note The implementations of the functions `is_unspecified`, `is_loopback`,

@@ -25,7 +25,7 @@ namespace ip_address_v6_compile {
 
 void test()
 {
-  namespace ip = std::net::ip;
+  namespace ip = std::experimental::net::ip;
 
   try
   {
@@ -148,7 +148,7 @@ namespace ip_address_v6_runtime {
 
 void test()
 {
-  using std::net::ip::address_v6;
+  using std::experimental::net::ip::address_v6;
 
   address_v6 a1;
   STDNET_CHECK(a1.is_unspecified());

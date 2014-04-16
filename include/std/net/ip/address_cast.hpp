@@ -26,6 +26,7 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace ip {
 
@@ -59,7 +60,7 @@ inline T address_cast(const address& addr,
   if (addr.type_ != address::ipv4)
   {
     bad_address_cast ex;
-    std::net::detail::throw_exception(ex);
+    std::experimental::net::detail::throw_exception(ex);
   }
 
   return addr.ipv4_address_;
@@ -76,7 +77,7 @@ inline T address_cast(const address& addr,
   if (addr.type_ != address::ipv6)
   {
     bad_address_cast ex;
-    std::net::detail::throw_exception(ex);
+    std::experimental::net::detail::throw_exception(ex);
   }
 
   return addr.ipv6_address_;
@@ -126,7 +127,7 @@ T address_cast(const address_v6& addr,
   if (!addr.is_v4_mapped())
   {
     bad_address_cast ex;
-    std::net::detail::throw_exception(ex);
+    std::experimental::net::detail::throw_exception(ex);
   }
 
   address_v6::bytes_type v6_bytes = addr.to_bytes();
@@ -144,6 +145,7 @@ inline T address_cast(const address_v6& addr,
 
 } // namespace ip
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

@@ -30,6 +30,7 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace ip {
 namespace detail {
@@ -240,7 +241,7 @@ STDNET_DECL address make_address(const std::string& str,
  *
  * @return The output stream.
  *
- * @relates std::net::ip::address
+ * @relates std::experimental::net::ip::address
  */
 template <typename Elem, typename Traits>
 std::basic_ostream<Elem, Traits>& operator<<(
@@ -250,6 +251,7 @@ std::basic_ostream<Elem, Traits>& operator<<(
 
 } // namespace ip
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

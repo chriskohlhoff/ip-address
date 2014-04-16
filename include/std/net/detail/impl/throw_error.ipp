@@ -23,23 +23,25 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace detail {
 
 void do_throw_error(const std::error_code& err)
 {
   std::system_error e(err);
-  std::net::detail::throw_exception(e);
+  std::experimental::net::detail::throw_exception(e);
 }
 
 void do_throw_error(const std::error_code& err, const char* location)
 {
   std::system_error e(err, location);
-  std::net::detail::throw_exception(e);
+  std::experimental::net::detail::throw_exception(e);
 }
 
 } // namespace detail
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

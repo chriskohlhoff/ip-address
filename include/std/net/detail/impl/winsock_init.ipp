@@ -27,6 +27,7 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace detail {
 
@@ -55,13 +56,14 @@ void winsock_init_base::throw_on_error(data& d)
   if (result != 0)
   {
     std::error_code ec(result,
-        std::net::detail::system_category());
-    std::net::detail::throw_error(ec, "winsock");
+        std::experimental::net::detail::system_category());
+    std::experimental::net::detail::throw_error(ec, "winsock");
   }
 }
 
 } // namespace detail
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

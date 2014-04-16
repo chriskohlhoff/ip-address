@@ -22,6 +22,7 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace detail {
 namespace syserrc {
@@ -85,6 +86,7 @@ const std::error_category& system_category()
 
 } // namespace detail
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

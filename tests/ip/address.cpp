@@ -25,7 +25,7 @@ namespace ip_address_compile {
 
 void test()
 {
-  namespace ip = std::net::ip;
+  namespace ip = std::experimental::net::ip;
 
   try
   {

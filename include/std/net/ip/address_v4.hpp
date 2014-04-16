@@ -30,6 +30,7 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace ip {
 
@@ -224,7 +225,7 @@ public:
 
 private:
   // The underlying IPv4 address.
-  std::net::detail::in4_addr_type addr_;
+  std::experimental::net::detail::in4_addr_type addr_;
 
   friend address_v4 make_address_v4(const bytes_type&);
   friend address_v4 make_address_v4(unsigned long);
@@ -263,7 +264,7 @@ STDNET_DECL address_v4 make_address_v4(const std::string& str,
  *
  * @return The output stream.
  *
- * @relates std::net::ip::address_v4
+ * @relates std::experimental::net::ip::address_v4
  */
 template <typename Elem, typename Traits>
 std::basic_ostream<Elem, Traits>& operator<<(
@@ -273,6 +274,7 @@ std::basic_ostream<Elem, Traits>& operator<<(
 
 } // namespace ip
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

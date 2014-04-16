@@ -18,6 +18,7 @@
 #include "std/net/detail/config.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace detail {
 
@@ -38,6 +39,7 @@ void throw_exception(const Exception& e)
 
 } // namespace detail
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #endif // STDNET_DETAIL_THROW_EXCEPTION_HPP

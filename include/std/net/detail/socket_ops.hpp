@@ -23,6 +23,7 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace detail {
 namespace socket_ops {
@@ -44,6 +45,7 @@ STDNET_DECL u_short_type host_to_network_short(u_short_type value);
 } // namespace socket_ops
 } // namespace detail
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

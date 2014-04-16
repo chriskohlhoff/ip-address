@@ -30,6 +30,7 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace ip {
 
@@ -213,7 +214,7 @@ public:
 
 private:
   // The underlying IPv6 address.
-  std::net::detail::in6_addr_type addr_;
+  std::experimental::net::detail::in6_addr_type addr_;
 
   // The scope ID associated with the address.
   unsigned long scope_id_;
@@ -251,7 +252,7 @@ STDNET_DECL address_v6 make_address_v6(const std::string& str,
  *
  * @return The output stream.
  *
- * @relates std::net::ip::address_v6
+ * @relates std::experimental::net::ip::address_v6
  */
 template <typename Elem, typename Traits>
 std::basic_ostream<Elem, Traits>& operator<<(
@@ -261,6 +262,7 @@ std::basic_ostream<Elem, Traits>& operator<<(
 
 } // namespace ip
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

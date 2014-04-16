@@ -26,6 +26,7 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace ip {
 
@@ -129,7 +130,7 @@ address make_address(const char* str)
 {
   std::error_code ec;
   address addr = make_address(str, ec);
-  std::net::detail::throw_error(ec);
+  std::experimental::net::detail::throw_error(ec);
   return addr;
 }
 
@@ -160,6 +161,7 @@ address make_address(const std::string& str,
 
 } // namespace ip
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

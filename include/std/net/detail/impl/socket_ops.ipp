@@ -28,6 +28,7 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace detail {
 namespace socket_ops {
@@ -54,10 +55,10 @@ inline ReturnType error_wrapper(ReturnType return_value,
 {
 #if defined(STDNET_WINDOWS) || defined(__CYGWIN__)
   ec = std::error_code(WSAGetLastError(),
-      std::net::detail::syserrc::system_category());
+      std::experimental::net::detail::syserrc::system_category());
 #else
   ec = std::error_code(errno,
-      std::net::detail::syserrc::system_category());
+      std::experimental::net::detail::syserrc::system_category());
 #endif
   return return_value;
 }
@@ -71,7 +72,7 @@ const char* inet_ntop(int af, const void* src, char* dest, size_t length,
 
   if (af != AF_INET && af != AF_INET6)
   {
-    ec = std::net::detail::syserrc::address_family_not_supported;
+    ec = std::experimental::net::detail::syserrc::address_family_not_supported;
     return 0;
   }
 
@@ -117,14 +118,14 @@ const char* inet_ntop(int af, const void* src, char* dest, size_t length,
 
   // Windows may not set an error code on failure.
   else if (result == socket_error_retval && !ec)
-    ec = std::net::detail::syserrc::invalid_argument;
+    ec = std::experimental::net::detail::syserrc::invalid_argument;
 
   return result == socket_error_retval ? 0 : dest;
 #else // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
   const char* result = error_wrapper(::inet_ntop(
         af, src, dest, static_cast<int>(length)), ec);
   if (result == 0 && !ec)
-    ec = std::net::detail::syserrc::invalid_argument;
+    ec = std::experimental::net::detail::syserrc::invalid_argument;
   if (result != 0 && af == AF_INET6 && scope_id != 0)
   {
     using namespace std; // For strcat and sprintf.
@@ -150,7 +151,7 @@ int inet_pton(int af, const char* src, void* dest,
 
   if (af != AF_INET && af != AF_INET6)
   {
-    ec = std::net::detail::syserrc::address_family_not_supported;
+    ec = std::experimental::net::detail::syserrc::address_family_not_supported;
     return -1;
   }
 
@@ -199,7 +200,7 @@ int inet_pton(int af, const char* src, void* dest,
 
   // Windows may not set an error code on failure.
   if (result == socket_error_retval && !ec)
-    ec = std::net::detail::syserrc::invalid_argument;
+    ec = std::experimental::net::detail::syserrc::invalid_argument;
 
   if (result != socket_error_retval)
     ec = std::error_code();
@@ -208,7 +209,7 @@ int inet_pton(int af, const char* src, void* dest,
 #else // defined(STDNET_WINDOWS) || defined(__CYGWIN__)
   int result = error_wrapper(::inet_pton(af, src, dest), ec);
   if (result <= 0 && !ec)
-    ec = std::net::detail::syserrc::invalid_argument;
+    ec = std::experimental::net::detail::syserrc::invalid_argument;
   if (result > 0 && af == AF_INET6 && scope_id)
   {
     using namespace std; // For strchr and atoi.
@@ -251,6 +252,7 @@ u_short_type host_to_network_short(u_short_type value)
 } // namespace socket_ops
 } // namespace detail
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

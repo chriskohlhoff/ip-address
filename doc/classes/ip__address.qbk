@@ -1,52 +1,54 @@
 [section:ip__address Class [^ip::address]]
 
   namespace std {
-    namespace net {
-      namespace ip {
+    namespace experimental {
+      namespace net {
+        namespace ip {
 
-        class address
-        {
-        public:
-          // constructors:
-          address() noexcept;
-          address(const address& a) noexcept;
-          template <class T> address(const T& t) noexcept(``['see below]``);
-          template <class... T> explicit address(T&&... t);
+          class address
+          {
+          public:
+            // constructors:
+            address() noexcept;
+            address(const address& a) noexcept;
+            template <class T> address(const T& t) noexcept(``['see below]``);
+            template <class... T> explicit address(T&&... t);
 
-          // assignment:
-          address& operator=(const address& a) noexcept;
+            // assignment:
+            address& operator=(const address& a) noexcept;
 
-          // members:
-          bool is_unspecified() const noexcept;
-          bool is_loopback() const noexcept;
-          bool is_multicast() const noexcept;
-          bool is_v4() const noexcept;
-          bool is_v6() const noexcept;
-          string to_string() const;
-          string to_string(error_code& ec) const;
-        };
+            // members:
+            bool is_unspecified() const noexcept;
+            bool is_loopback() const noexcept;
+            bool is_multicast() const noexcept;
+            bool is_v4() const noexcept;
+            bool is_v6() const noexcept;
+            string to_string() const;
+            string to_string(error_code& ec) const;
+          };
 
-        // address comparisons:
-        bool operator==(const address& a, const address& b) noexcept;
-        bool operator!=(const address& a, const address& b) noexcept;
-        bool operator< (const address& a, const address& b) noexcept;
-        bool operator> (const address& a, const address& b) noexcept;
-        bool operator<=(const address& a, const address& b) noexcept;
-        bool operator>=(const address& a, const address& b) noexcept;
+          // address comparisons:
+          bool operator==(const address& a, const address& b) noexcept;
+          bool operator!=(const address& a, const address& b) noexcept;
+          bool operator< (const address& a, const address& b) noexcept;
+          bool operator> (const address& a, const address& b) noexcept;
+          bool operator<=(const address& a, const address& b) noexcept;
+          bool operator>=(const address& a, const address& b) noexcept;
 
-        // address creation:
-        address make_address(const char*);
-        address make_address(const char*, error_code&) noexcept;
-        address make_address(const string&);
-        address make_address(const string&, error_code&) noexcept;
+          // address creation:
+          address make_address(const char*);
+          address make_address(const char*, error_code&) noexcept;
+          address make_address(const string&);
+          address make_address(const string&, error_code&) noexcept;
 
-        // address I/O:
-        template<class CharT, class Traits>
-          basic_ostream<CharT, Traits>& operator<<(
-            basic_ostream<CharT, Traits>& os, const address& addr);
+          // address I/O:
+          template<class CharT, class Traits>
+            basic_ostream<CharT, Traits>& operator<<(
+              basic_ostream<CharT, Traits>& os, const address& addr);
 
-      } // namespace ip
-    } // namespace net
+        } // namespace ip
+      } // namespace net
+    } // namespace experimental
   } // namespace std
 
 [section [^ip::address] constructors]

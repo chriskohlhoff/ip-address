@@ -27,6 +27,7 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace ip {
 
@@ -40,23 +41,23 @@ address_v4::bytes_type address_v4::to_bytes() const STDNET_NOEXCEPT
 
 unsigned long address_v4::to_ulong() const STDNET_NOEXCEPT
 {
-  return std::net::detail::socket_ops::network_to_host_long(addr_.s_addr);
+  return std::experimental::net::detail::socket_ops::network_to_host_long(addr_.s_addr);
 }
 
 std::string address_v4::to_string() const
 {
   std::error_code ec;
   std::string addr = to_string(ec);
-  std::net::detail::throw_error(ec);
+  std::experimental::net::detail::throw_error(ec);
   return addr;
 }
 
 std::string address_v4::to_string(std::error_code& ec) const
 {
-  char addr_str[std::net::detail::max_addr_v4_str_len];
+  char addr_str[std::experimental::net::detail::max_addr_v4_str_len];
   const char* addr =
-    std::net::detail::socket_ops::inet_ntop(AF_INET, &addr_, addr_str,
-        std::net::detail::max_addr_v4_str_len, 0, ec);
+    std::experimental::net::detail::socket_ops::inet_ntop(AF_INET, &addr_, addr_str,
+        std::experimental::net::detail::max_addr_v4_str_len, 0, ec);
   if (addr == 0)
     return std::string();
   return addr;
@@ -116,7 +117,7 @@ address_v4 make_address_v4(const std::array<unsigned char, 4>& bytes)
       || bytes[2] > 0xFF || bytes[3] > 0xFF)
   {
     std::out_of_range ex("address_v4 from bytes_type");
-    std::net::detail::throw_exception(ex);
+    std::experimental::net::detail::throw_exception(ex);
   }
 #endif // UCHAR_MAX > 0xFF
 
@@ -132,13 +133,14 @@ address_v4 make_address_v4(unsigned long addr)
   if (addr > 0xFFFFFFFF)
   {
     std::out_of_range ex("address_v4 from unsigned long");
-    std::net::detail::throw_exception(ex);
+    std::experimental::net::detail::throw_exception(ex);
   }
 #endif // ULONG_MAX > 0xFFFFFFFF
 
   address_v4 tmp;
-  tmp.addr_.s_addr = std::net::detail::socket_ops::host_to_network_long(
-      static_cast<std::net::detail::u_long_type>(addr));
+  tmp.addr_.s_addr =
+    std::experimental::net::detail::socket_ops::host_to_network_long(
+      static_cast<std::experimental::net::detail::u_long_type>(addr));
   return tmp;
 }
 
@@ -146,7 +148,7 @@ address_v4 make_address_v4(const char* str)
 {
   std::error_code ec;
   address_v4 addr = make_address_v4(str, ec);
-  std::net::detail::throw_error(ec);
+  std::experimental::net::detail::throw_error(ec);
   return addr;
 }
 
@@ -154,7 +156,7 @@ address_v4 make_address_v4(const char* str,
     std::error_code& ec) STDNET_NOEXCEPT
 {
   address_v4::bytes_type bytes;
-  if (std::net::detail::socket_ops::inet_pton(
+  if (std::experimental::net::detail::socket_ops::inet_pton(
         AF_INET, str, bytes.data(), 0, ec) <= 0)
     return address_v4();
   return make_address_v4(bytes);
@@ -173,6 +175,7 @@ address_v4 make_address_v4(const std::string& str,
 
 } // namespace ip
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

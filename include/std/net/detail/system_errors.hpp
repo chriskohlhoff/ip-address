@@ -51,6 +51,7 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace detail {
 namespace syserrc {
@@ -174,11 +175,13 @@ extern STDNET_DECL const std::error_category& system_category();
 
 } // namespace detail
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 namespace std {
 
-template<> struct is_error_code_enum<std::net::detail::syserrc::system_errors>
+template<> struct is_error_code_enum<
+  std::experimental::net::detail::syserrc::system_errors>
 {
   static const bool value = true;
 };
@@ -186,19 +189,21 @@ template<> struct is_error_code_enum<std::net::detail::syserrc::system_errors>
 } // namespace std
 
 namespace std {
+namespace experimental {
 namespace net {
 namespace detail {
 namespace syserrc {
 
 inline std::error_code make_error_code(system_errors e)
 {
-  return std::error_code(
-      static_cast<int>(e), std::net::detail::system_category());
+  return std::error_code(static_cast<int>(e),
+      std::experimental::net::detail::system_category());
 }
 
 } // namespace syserrc
 } // namespace detail
 } // namespace net
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

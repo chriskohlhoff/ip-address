@@ -22,26 +22,28 @@
 #include "std/net/detail/push_options.hpp"
 
 namespace std {
+namespace experimental {
 inline namespace literals {
 inline namespace net_literals {
 
-inline std::net::ip::address operator"" _ip(const char* str, std::size_t)
+inline net::ip::address operator"" _ip(const char* str, std::size_t)
 {
   return net::ip::make_address(str);
 }
 
-inline std::net::ip::address_v4 operator"" _ipv4(const char* str, std::size_t)
+inline net::ip::address_v4 operator"" _ipv4(const char* str, std::size_t)
 {
   return net::ip::make_address_v4(str);
 }
 
-inline std::net::ip::address_v6 operator"" _ipv6(const char* str, std::size_t)
+inline net::ip::address_v6 operator"" _ipv6(const char* str, std::size_t)
 {
   return net::ip::make_address_v6(str);
 }
 
 } // inline namespace net_literals
 } // inline namespace literals
+} // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"

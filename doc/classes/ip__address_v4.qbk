@@ -1,67 +1,69 @@
 [section:ip__address_v4 Class [^ip::address_v4]]
 
   namespace std {
-    namespace net {
-      namespace ip {
+    namespace experimental {
+      namespace net {
+        namespace ip {
 
-        class address_v4
-        {
-        public:
-          // types:
-          typedef array<unsigned char, 4> bytes_type;
+          class address_v4
+          {
+          public:
+            // types:
+            typedef array<unsigned char, 4> bytes_type;
 
-          // constructors:
-          address_v4() noexcept;
-          address_v4(const address_v4& a) noexcept;
-          template <class... T> explicit address(T&&... t);
+            // constructors:
+            address_v4() noexcept;
+            address_v4(const address_v4& a) noexcept;
+            template <class... T> explicit address(T&&... t);
 
-          // assignment:
-          address_v4& operator=(const address_v4& a) noexcept;
+            // assignment:
+            address_v4& operator=(const address_v4& a) noexcept;
 
-          // members:
-          bool is_unspecified() const noexcept;
-          bool is_loopback() const noexcept;
-          bool is_class_a() const noexcept;
-          bool is_class_b() const noexcept;
-          bool is_class_c() const noexcept;
-          bool is_multicast() const noexcept;
-          bytes_type to_bytes() const noexcept;
-          unsigned long to_ulong() const noexcept;
-          string to_string() const;
-          string to_string(error_code& ec) const;
+            // members:
+            bool is_unspecified() const noexcept;
+            bool is_loopback() const noexcept;
+            bool is_class_a() const noexcept;
+            bool is_class_b() const noexcept;
+            bool is_class_c() const noexcept;
+            bool is_multicast() const noexcept;
+            bytes_type to_bytes() const noexcept;
+            unsigned long to_ulong() const noexcept;
+            string to_string() const;
+            string to_string(error_code& ec) const;
 
-          // static members:
-          static address_v4 any() noexcept;
-          static address_v4 loopback() noexcept;
-          static address_v4 broadcast() noexcept;
-          static address_v4 broadcast(const address_v4& addr,
-            const address_v4& mask) noexcept;
-          static address_v4 netmask(const address_v4& addr) noexcept;
-        };
+            // static members:
+            static address_v4 any() noexcept;
+            static address_v4 loopback() noexcept;
+            static address_v4 broadcast() noexcept;
+            static address_v4 broadcast(const address_v4& addr,
+              const address_v4& mask) noexcept;
+            static address_v4 netmask(const address_v4& addr) noexcept;
+          };
 
-        // address_v4 comparisons:
-        bool operator==(const address_v4& a, const address_v4& b) noexcept;
-        bool operator!=(const address_v4& a, const address_v4& b) noexcept;
-        bool operator< (const address_v4& a, const address_v4& b) noexcept;
-        bool operator> (const address_v4& a, const address_v4& b) noexcept;
-        bool operator<=(const address_v4& a, const address_v4& b) noexcept;
-        bool operator>=(const address_v4& a, const address_v4& b) noexcept;
+          // address_v4 comparisons:
+          bool operator==(const address_v4& a, const address_v4& b) noexcept;
+          bool operator!=(const address_v4& a, const address_v4& b) noexcept;
+          bool operator< (const address_v4& a, const address_v4& b) noexcept;
+          bool operator> (const address_v4& a, const address_v4& b) noexcept;
+          bool operator<=(const address_v4& a, const address_v4& b) noexcept;
+          bool operator>=(const address_v4& a, const address_v4& b) noexcept;
 
-        // address_v4 creation:
-        address_v4 make_address_v4(const array<unsigned char, 4>&);
-        address_v4 make_address_v4(unsigned long);
-        address_v4 make_address_v4(const char*);
-        address_v4 make_address_v4(const char*, error_code&) noexcept;
-        address_v4 make_address_v4(const string&);
-        address_v4 make_address_v4(const string&, error_code&) noexcept;
+          // address_v4 creation:
+          address_v4 make_address_v4(const array<unsigned char, 4>&);
+          address_v4 make_address_v4(unsigned long);
+          address_v4 make_address_v4(const char*);
+          address_v4 make_address_v4(const char*, error_code&) noexcept;
+          address_v4 make_address_v4(const string&);
+          address_v4 make_address_v4(const string&, error_code&) noexcept;
 
-        // address_v4 I/O:
-        template<class CharT, class Traits>
-          basic_ostream<CharT, Traits>& operator<<(
-            basic_ostream<CharT, Traits>& os, const address_v4& addr);
+          // address_v4 I/O:
+          template<class CharT, class Traits>
+            basic_ostream<CharT, Traits>& operator<<(
+              basic_ostream<CharT, Traits>& os, const address_v4& addr);
 
-      } // namespace ip
-    } // namespace net
+        } // namespace ip
+      } // namespace net
+    } // namespace experimental
   } // namespace std
 
 [section [^ip::address_v4] constructors]
