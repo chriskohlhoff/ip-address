@@ -89,11 +89,11 @@ the table below.]
   template <class... T> explicit address_v6(T&&... t);
 
 [function_remarks This constructor shall not participate in overload resolution
-unless the expression `make_address_v6(forward<T>(t)...)` is valid and yields an
+unless the expression `make_address_v6(forward<T>(t).``.``.)` is valid and yields an
 rvalue of type `address_v6`.]
 
 [function_effects Constructs an object of type `address_v6` with the result of
-the expression `make_address_v6(forward<T>(t)...)`.]
+the expression `make_address_v6(forward<T>(t).``.``.)`.]
 
 [endsect]
 

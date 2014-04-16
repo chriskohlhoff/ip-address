@@ -97,11 +97,11 @@ throws an exception.]
   template <class... T> explicit address(T&&... t);
 
 [function_remarks This constructor shall not participate in overload resolution
-unless the expression `make_address(forward<T>(t)...)` is valid and yields an
+unless the expression `make_address(forward<T>(t).``.``.)` is valid and yields an
 rvalue of type `address`.]
 
 [function_effects Constructs an object of type `address` with the result of the
-expression `make_address(forward<T>(t)...)`.]
+expression `make_address(forward<T>(t).``.``.)`.]
 
 [endsect]
 
