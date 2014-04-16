@@ -116,7 +116,7 @@ the expression `make_address_v4(forward<T>(t).``.``.)`.]
 
   bool is_loopback() const noexcept;
 
-[function_returns `(to_ulong() & 0xFF000000) == 0x7F`.]
+[function_returns `(to_ulong() & 0xFF000000) == 0x7F000000`.]
 
   bool is_class_a() const noexcept;
 
