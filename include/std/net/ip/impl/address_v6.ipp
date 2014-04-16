@@ -95,19 +95,6 @@ std::string address_v6::to_string(std::error_code& ec) const
   return addr;
 }
 
-address_v4 address_v6::to_v4() const
-{
-  if (!is_v4_mapped() && !is_v4_compatible())
-  {
-    std::bad_cast ex;
-    std::net::detail::throw_exception(ex);
-  }
-
-  address_v4::bytes_type v4_bytes = { { addr_.s6_addr[12],
-    addr_.s6_addr[13], addr_.s6_addr[14], addr_.s6_addr[15] } };
-  return address_v4(v4_bytes);
-}
-
 bool address_v6::is_loopback() const STDNET_NOEXCEPT
 {
   return ((addr_.s6_addr[0] == 0) && (addr_.s6_addr[1] == 0)
@@ -150,20 +137,6 @@ bool address_v6::is_v4_mapped() const STDNET_NOEXCEPT
       && (addr_.s6_addr[6] == 0) && (addr_.s6_addr[7] == 0)
       && (addr_.s6_addr[8] == 0) && (addr_.s6_addr[9] == 0)
       && (addr_.s6_addr[10] == 0xff) && (addr_.s6_addr[11] == 0xff));
-}
-
-bool address_v6::is_v4_compatible() const STDNET_NOEXCEPT
-{
-  return ((addr_.s6_addr[0] == 0) && (addr_.s6_addr[1] == 0)
-      && (addr_.s6_addr[2] == 0) && (addr_.s6_addr[3] == 0)
-      && (addr_.s6_addr[4] == 0) && (addr_.s6_addr[5] == 0)
-      && (addr_.s6_addr[6] == 0) && (addr_.s6_addr[7] == 0)
-      && (addr_.s6_addr[8] == 0) && (addr_.s6_addr[9] == 0)
-      && (addr_.s6_addr[10] == 0) && (addr_.s6_addr[11] == 0)
-      && !((addr_.s6_addr[12] == 0)
-        && (addr_.s6_addr[13] == 0)
-        && (addr_.s6_addr[14] == 0)
-        && ((addr_.s6_addr[15] == 0) || (addr_.s6_addr[15] == 1))));
 }
 
 bool address_v6::is_multicast() const STDNET_NOEXCEPT
@@ -221,22 +194,6 @@ address_v6 address_v6::loopback() STDNET_NOEXCEPT
   address_v6 tmp;
   tmp.addr_.s6_addr[15] = 1;
   return tmp;
-}
-
-address_v6 address_v6::v4_mapped(const address_v4& addr) STDNET_NOEXCEPT
-{
-  address_v4::bytes_type v4_bytes = addr.to_bytes();
-  bytes_type v6_bytes = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF,
-    v4_bytes[0], v4_bytes[1], v4_bytes[2], v4_bytes[3] } };
-  return make_address_v6(v6_bytes);
-}
-
-address_v6 address_v6::v4_compatible(const address_v4& addr) STDNET_NOEXCEPT
-{
-  address_v4::bytes_type v4_bytes = addr.to_bytes();
-  bytes_type v6_bytes = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    v4_bytes[0], v4_bytes[1], v4_bytes[2], v4_bytes[3] } };
-  return make_address_v6(v6_bytes);
 }
 
 address_v6 make_address_v6(const std::array<unsigned char, 16>& bytes,

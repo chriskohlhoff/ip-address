@@ -66,9 +66,6 @@ void test()
     b = addr1.is_v4_mapped();
     (void)b;
 
-    b = addr1.is_v4_compatible();
-    (void)b;
-
     b = addr1.is_multicast_node_local();
     (void)b;
 
@@ -90,17 +87,11 @@ void test()
     string_value = addr1.to_string();
     string_value = addr1.to_string(ec);
 
-    ip::address_v4 addr8 = addr1.to_v4();
-
     // address_v6 static functions.
 
     addr1 = ip::address_v6::any();
 
     addr1 = ip::address_v6::loopback();
-
-    addr1 = ip::address_v6::v4_mapped(addr8);
-
-    addr1 = ip::address_v6::v4_compatible(addr8);
 
     // address_v6 comparisons.
 
@@ -275,18 +266,6 @@ void test()
   STDNET_CHECK(!mcast_node_local_address.is_v4_mapped());
   STDNET_CHECK(!mcast_org_local_address.is_v4_mapped());
   STDNET_CHECK(!mcast_site_local_address.is_v4_mapped());
-
-  STDNET_CHECK(!unspecified_address.is_v4_compatible());
-  STDNET_CHECK(!loopback_address.is_v4_compatible());
-  STDNET_CHECK(!link_local_address.is_v4_compatible());
-  STDNET_CHECK(!site_local_address.is_v4_compatible());
-  STDNET_CHECK(!v4_mapped_address.is_v4_compatible());
-  STDNET_CHECK(v4_compat_address.is_v4_compatible());
-  STDNET_CHECK(!mcast_global_address.is_v4_compatible());
-  STDNET_CHECK(!mcast_link_local_address.is_v4_compatible());
-  STDNET_CHECK(!mcast_node_local_address.is_v4_compatible());
-  STDNET_CHECK(!mcast_org_local_address.is_v4_compatible());
-  STDNET_CHECK(!mcast_site_local_address.is_v4_compatible());
 
   STDNET_CHECK(!unspecified_address.is_multicast());
   STDNET_CHECK(!loopback_address.is_multicast());

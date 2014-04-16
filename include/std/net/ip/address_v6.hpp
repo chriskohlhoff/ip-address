@@ -133,9 +133,6 @@ public:
   /// Get the address as a string.
   STDNET_DECL std::string to_string(std::error_code& ec) const;
 
-  /// Converts an IPv4-mapped or IPv4-compatible address to an IPv4 address.
-  STDNET_DECL address_v4 to_v4() const;
-
   /// Determine whether the address is a loopback address.
   STDNET_DECL bool is_loopback() const STDNET_NOEXCEPT;
 
@@ -150,9 +147,6 @@ public:
 
   /// Determine whether the address is a mapped IPv4 address.
   STDNET_DECL bool is_v4_mapped() const STDNET_NOEXCEPT;
-
-  /// Determine whether the address is an IPv4-compatible address.
-  STDNET_DECL bool is_v4_compatible() const STDNET_NOEXCEPT;
 
   /// Determine whether the address is a multicast address.
   STDNET_DECL bool is_multicast() const STDNET_NOEXCEPT;
@@ -216,14 +210,6 @@ public:
 
   /// Obtain an address object that represents the loopback address.
   STDNET_DECL static address_v6 loopback() STDNET_NOEXCEPT;
-
-  /// Create an IPv4-mapped IPv6 address.
-  STDNET_DECL static address_v6 v4_mapped(
-      const address_v4& addr) STDNET_NOEXCEPT;
-
-  /// Create an IPv4-compatible IPv6 address.
-  STDNET_DECL static address_v6 v4_compatible(
-      const address_v4& addr) STDNET_NOEXCEPT;
 
 private:
   // The underlying IPv6 address.
