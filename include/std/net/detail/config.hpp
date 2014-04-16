@@ -128,6 +128,25 @@
 # endif // !defined(STDNET_NOEXCEPT)
 #endif // !defined(STDNET_NOEXCEPT)
 
+// Support deleted functions on compilers known to allow it.
+#if !defined(STDNET_DELETED)
+# if defined(__GNUC__)
+#  if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4)
+#   if defined(__GXX_EXPERIMENTAL_CXX0X__)
+#    define STDNET_DELETED = delete
+#   endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
+#  endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4)
+# endif // defined(__GNUC__)
+# if defined(__clang__)
+#  if __has_feature(cxx_deleted_functions)
+#   define STDNET_DELETED = delete
+#  endif // __has_feature(cxx_noexcept)
+# endif // defined(__clang__)
+# if !defined(STDNET_DELETED)
+#  define STDNET_DELETED
+# endif // !defined(STDNET_DELETED)
+#endif // !defined(STDNET_DELETED)
+
 // Standard library support for system errors.
 #if !defined(STDNET_HAS_STD_SYSTEM_ERROR)
 # if !defined(STDNET_DISABLE_STD_SYSTEM_ERROR)

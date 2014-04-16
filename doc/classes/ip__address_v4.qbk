@@ -51,6 +51,7 @@
           // address_v4 creation:
           address_v4 make_address_v4(const array<unsigned char, 4>&);
           address_v4 make_address_v4(unsigned long);
+          address_v4 make_address_v4(v4_mapped_t, const address_v6&);
           address_v4 make_address_v4(const char*);
           address_v4 make_address_v4(const char*, error_code&) noexcept;
           address_v4 make_address_v4(const string&);
@@ -182,7 +183,7 @@ Otherwise `string()`.]
 
 [endsect]
 
-[section [^ip::address_v4] comparisons]
+[section:ip__address_v4__comparisons [^ip::address_v4] comparisons]
 
   bool operator==(const address_v4& a, const address_v4& b) noexcept;
 
@@ -210,7 +211,7 @@ Otherwise `string()`.]
 
 [endsect]
 
-[section [^ip::address_v4] creation]
+[section:ip__address_v4__creation [^ip::address_v4] creation]
 
   address_v4 make_address_v4(const array<unsigned char, 4>& bytes);
 
@@ -237,6 +238,20 @@ out-of-range detection is needed.]]
 val` and `a.to_bytes()` is `{ (val >> 24) & 0xFF, (val >> 16) & 0xFF,
 (val >> 8) & 0xFF, val & 0xFF }`.]
 
+  address_v4 make_address_v4(v4_mapped_t, const address_v6& a);
+
+[function_requires `a.is_v4_mapped()`.]
+
+[function_returns An `address_v4` object corresponding to the IPv4-mapped IPv6
+address, as if computed by the following method:
+``
+  bytes_type v6b = a.to_bytes();
+  address_v4::bytes_type v4b = { v6b[12], v6b[13], v6b[14], v6b[15] };
+  return address_v4(v4b);
+``]
+
+[function_throws `bad_address_cast` if `a.is_v4_mapped()` is false.]
+
   address_v4 make_address_v4(const char* str);
   address_v4 make_address_v4(const char* str, error_code& ec) noexcept;
   address_v4 make_address_v4(const string& str);
@@ -251,7 +266,7 @@ string `str`. Otherwise `address_v4()`.]
 
 [endsect]
 
-[section [^ip::address_v4] I/O]
+[section:ip__address_v4__io [^ip::address_v4] I/O]
 
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(

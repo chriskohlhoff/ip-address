@@ -52,6 +52,7 @@
 
           // address_v6 creation:
           address_v6 make_address_v6(const array<unsigned char, 16>&, unsigned long = 0);
+          address_v6 make_address_v6(v4_mapped_t, const address_v4&) noexcept;
           address_v6 make_address_v6(const char*);
           address_v6 make_address_v6(const char*, error_code&) noexcept;
           address_v6 make_address_v6(const string&);
@@ -254,7 +255,7 @@ Otherwise `string()`.]
 holds.]
 [endsect]
 
-[section [^ip::address_v6] comparisons]
+[section:ip__address_v6__comparisons [^ip::address_v6] comparisons]
 
   bool operator==(const address_v6& a, const address_v6& b) noexcept;
 
@@ -284,7 +285,7 @@ a.to_bytes()) && a.scope_id() < b.scope_id())`.]
 
 [endsect]
 
-[section [^ip::address_v6] creation]
+[section:ip__address_v6__creation [^ip::address_v6] creation]
 
   address_v6 make_address_v6(const array<unsigned char, 16>& bytes,
                              unsigned long scope_id);
@@ -298,6 +299,18 @@ the range `[0, 0xFF]`. [inline_note For implementations where `UCHAR_MAX ==
 
 [function_returns An object `a` of type `address_v6` where `a.to_bytes() ==
 bytes` and `a.scope_id() == scope_id`.]
+
+  address_v6 make_address_v6(v4_mapped_t, const address_v4& a) noexcept;
+
+[function_returns An `address_v6` object containing the IPv4-mapped IPv6 address
+corresponding to the specified IPv4 address, as if computed by the following
+method:
+``
+  address_v4::bytes_type v4b = a.to_bytes();
+  bytes_type v6b = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                     0xFF, 0xFF, v4b[0], v4b[1], v4b[2], v4b[3] };
+  return address_v6(v6b);
+``]
 
   address_v6 make_address_v6(const char* str);
   address_v6 make_address_v6(const char* str, error_code& ec) noexcept;
@@ -320,7 +333,7 @@ string `str`. Otherwise returns `address_v6()`.]
 
 [endsect]
 
-[section [^ip::address_v6] I/O]
+[section:ip__address_v6__io [^ip::address_v6] I/O]
 
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(

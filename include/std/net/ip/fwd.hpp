@@ -32,7 +32,16 @@ namespace experimental {
 namespace net {
 namespace ip {
 
+#if defined(STDNET_HAS_CONSTEXPR)
+struct v4_mapped_t {};
+STDNET_CONSTEXPR v4_mapped_t v4_mapped;
+#else // !defined(STDNET_HAS_CONSTEXPR)
+enum v4_mapped_t { v4_mapped };
+#endif // !defined(STDNET_HAS_CONSTEXPR)
+
 class address;
+class address_v4;
+class address_v6;
 
 // address comparisons:
 bool operator==(const address&, const address&) STDNET_NOEXCEPT;
@@ -57,8 +66,6 @@ template<class CharT, class Traits>
 
 #endif // !defined(STDNET_NO_IOSTREAM)
 
-class address_v4;
-
 // address_v4 comparisons:
 bool operator==(const address_v4&, const address_v4&) STDNET_NOEXCEPT;
 bool operator!=(const address_v4&, const address_v4&) STDNET_NOEXCEPT;
@@ -70,6 +77,7 @@ bool operator>=(const address_v4&, const address_v4&) STDNET_NOEXCEPT;
 // address_v4 creation:
 address_v4 make_address_v4(unsigned long);
 address_v4 make_address_v4(const std::array<unsigned char, 4>&);
+address_v4 make_address_v4(v4_mapped_t, const address_v6&);
 address_v4 make_address_v4(const char*);
 address_v4 make_address_v4(const char*, error_code&) STDNET_NOEXCEPT;
 address_v4 make_address_v4(const std::string&);
@@ -84,8 +92,6 @@ template<class CharT, class Traits>
 
 #endif // !defined(STDNET_NO_IOSTREAM)
 
-class address_v6;
-
 // address_v6 comparisons:
 bool operator==(const address_v6&, const address_v6&) STDNET_NOEXCEPT;
 bool operator!=(const address_v6&, const address_v6&) STDNET_NOEXCEPT;
@@ -96,6 +102,7 @@ bool operator>=(const address_v6&, const address_v6&) STDNET_NOEXCEPT;
 
 // address_v6 creation:
 address_v6 make_address_v6(const std::array<unsigned char, 16>&, unsigned long = 0);
+address_v6 make_address_v6(v4_mapped_t, const address_v4&) STDNET_NOEXCEPT;
 address_v6 make_address_v6(const char*);
 address_v6 make_address_v6(const char*, error_code&) STDNET_NOEXCEPT;
 address_v6 make_address_v6(const std::string&);
@@ -124,11 +131,11 @@ template <class T> T address_cast(const address_v4&,
 template <class T> T address_cast(const address_v4&,
   typename enable_if<is_same<T, address_v4>::value>::type* = 0) STDNET_NOEXCEPT;
 template <class T> T address_cast(const address_v4&,
-  typename enable_if<is_same<T, address_v6>::value>::type* = 0) STDNET_NOEXCEPT;
+  typename enable_if<is_same<T, address_v6>::value>::type* = 0) STDNET_DELETED;
 template <class T> T address_cast(const address_v6&,
   typename enable_if<is_same<T, address>::value>::type* = 0) STDNET_NOEXCEPT;
 template <class T> T address_cast(const address_v6&,
-  typename enable_if<is_same<T, address_v4>::value>::type* = 0);
+  typename enable_if<is_same<T, address_v4>::value>::type* = 0) STDNET_DELETED;
 template <class T> T address_cast(const address_v6&,
   typename enable_if<is_same<T, address_v6>::value>::type* = 0) STDNET_NOEXCEPT;
 

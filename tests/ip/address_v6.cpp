@@ -117,6 +117,7 @@ void test()
 
     addr1 = ip::make_address_v6(const_bytes_value);
     addr1 = ip::make_address_v6(const_bytes_value, 0);
+    addr1 = ip::make_address_v6(ip::v4_mapped, ip::address_v4());
     addr1 = ip::make_address_v6("0::0");
     addr1 = ip::make_address_v6("0::0", ec);
     addr1 = ip::make_address_v6(string_value);

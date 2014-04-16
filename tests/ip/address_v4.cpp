@@ -13,6 +13,7 @@
 
 #include "../unit_test.hpp"
 #include <sstream>
+#include "std/net/ip/address_v6.hpp"
 
 //------------------------------------------------------------------------------
 
@@ -109,6 +110,7 @@ void test()
 
     addr1 = ip::make_address_v4(const_bytes_value);
     addr1 = ip::make_address_v4(const_ulong_value);
+    addr1 = ip::make_address_v4(ip::v4_mapped, ip::address_v6());
     addr1 = ip::make_address_v4("127.0.0.1");
     addr1 = ip::make_address_v4("127.0.0.1", ec);
     addr1 = ip::make_address_v4(string_value);

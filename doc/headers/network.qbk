@@ -8,9 +8,16 @@
 
         namespace ip {
 
-          class ``[link classes.ip__address address]``;
+          struct v4_mapped_t {};
+          constexpr v4_mapped_t v4_mapped;
 
-          // address comparisons:
+          class ``[link classes.ip__address address]``;
+          class ``[link classes.ip__address_v4 address_v4]``;
+          class ``[link classes.ip__address_v6 address_v6]``;
+
+          class ``[link classes.ip__bad_address_cast bad_address_cast]``;
+
+          // ``[link classes.ip__address__comparisons address comparisons]``:
           bool operator==(const address&, const address&) noexcept;
           bool operator!=(const address&, const address&) noexcept;
           bool operator< (const address&, const address&) noexcept;
@@ -18,20 +25,7 @@
           bool operator<=(const address&, const address&) noexcept;
           bool operator>=(const address&, const address&) noexcept;
 
-          // address creation:
-          address make_address(const char*);
-          address make_address(const char*, error_code&) noexcept;
-          address make_address(const string&);
-          address make_address(const string&, error_code&) noexcept;
-
-          // address I/O:
-          template<class CharT, class Traits>
-            basic_ostream<CharT, Traits>& operator<<(
-              basic_ostream<CharT, Traits>&, const address&);
-
-          class ``[link classes.ip__address_v4 address_v4]``;
-
-          // address_v4 comparisons:
+          // ``[link classes.ip__address_v4__comparisons address_v4 comparisons]``:
           bool operator==(const address_v4&, const address_v4&) noexcept;
           bool operator!=(const address_v4&, const address_v4&) noexcept;
           bool operator< (const address_v4&, const address_v4&) noexcept;
@@ -39,22 +33,7 @@
           bool operator<=(const address_v4&, const address_v4&) noexcept;
           bool operator>=(const address_v4&, const address_v4&) noexcept;
 
-          // address_v4 creation:
-          address_v4 make_address_v4(const array<unsigned char, 4>&);
-          address_v4 make_address_v4(unsigned long);
-          address_v4 make_address_v4(const char*);
-          address_v4 make_address_v4(const char*, error_code&) noexcept;
-          address_v4 make_address_v4(const string&);
-          address_v4 make_address_v4(const string&, error_code&) noexcept;
-
-          // address_v4 I/O:
-          template<class CharT, class Traits>
-            basic_ostream<CharT, Traits>& operator<<(
-              basic_ostream<CharT, Traits>&, const address_v4&);
-
-          class ``[link classes.ip__address_v6 address_v6]``;
-
-          // address_v6 comparisons:
+          // ``[link classes.ip__address_v6__comparisons address_v6 comparisons]``:
           bool operator==(const address_v6&, const address_v6&) noexcept;
           bool operator!=(const address_v6&, const address_v6&) noexcept;
           bool operator< (const address_v6&, const address_v6&) noexcept;
@@ -62,19 +41,43 @@
           bool operator<=(const address_v6&, const address_v6&) noexcept;
           bool operator>=(const address_v6&, const address_v6&) noexcept;
 
-          // address_v6 creation:
+          // ``[link classes.ip__address__creation address creation]``:
+          address make_address(const char*);
+          address make_address(const char*, error_code&) noexcept;
+          address make_address(const string&);
+          address make_address(const string&, error_code&) noexcept;
+
+          // ``[link classes.ip__address_v4__creation address_v4 creation]``:
+          address_v4 make_address_v4(const array<unsigned char, 4>&);
+          address_v4 make_address_v4(unsigned long);
+          address_v4 make_address_v4(v4_mapped_t, const address_v6&);
+          address_v4 make_address_v4(const char*);
+          address_v4 make_address_v4(const char*, error_code&) noexcept;
+          address_v4 make_address_v4(const string&);
+          address_v4 make_address_v4(const string&, error_code&) noexcept;
+
+          // ``[link classes.ip__address_v6__creation address_v6 creation]``:
           address_v6 make_address_v6(const array<unsigned char, 16>&, unsigned long = 0);
+          address_v6 make_address_v6(v4_mapped_t, const address_v4&) noexcept;
           address_v6 make_address_v6(const char*);
           address_v6 make_address_v6(const char*, error_code&) noexcept;
           address_v6 make_address_v6(const string&);
           address_v6 make_address_v6(const string&, error_code&) noexcept;
 
-          // address_v6 I/O:
+          // ``[link classes.ip__address__io address I/O]``:
+          template<class CharT, class Traits>
+            basic_ostream<CharT, Traits>& operator<<(
+              basic_ostream<CharT, Traits>&, const address&);
+
+          // ``[link classes.ip__address_v4__io address_v4 I/O]``:
+          template<class CharT, class Traits>
+            basic_ostream<CharT, Traits>& operator<<(
+              basic_ostream<CharT, Traits>&, const address_v4&);
+
+          // ``[link classes.ip__address_v6__io address_v6 I/O]``:
           template<class CharT, class Traits>
             basic_ostream<CharT, Traits>& operator<<(
               basic_ostream<CharT, Traits>&, const address_v6&);
-
-          class ``[link classes.ip__bad_address_cast bad_address_cast]``;
 
           // ``[link functions.ip__address_cast address conversions]``:
           template <class T> T address_cast(const address&) noexcept(``['see below]``);

@@ -25,6 +25,7 @@
 #include "std/net/detail/throw_exception.hpp"
 #include "std/net/ip/address_v4.hpp"
 #include "std/net/ip/address_v6.hpp"
+#include "std/net/ip/bad_address_cast.hpp"
 
 #include "std/net/detail/push_options.hpp"
 
@@ -247,6 +248,28 @@ address_v6 make_address_v6(const std::string& str,
     std::error_code& ec) STDNET_NOEXCEPT
 {
   return make_address_v6(str.c_str(), ec);
+}
+
+address_v6 make_address_v6(v4_mapped_t, const address_v4& addr) STDNET_NOEXCEPT
+{
+  address_v4::bytes_type v4_bytes = addr.to_bytes();
+  address_v6::bytes_type v6_bytes = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0xFF, 0xFF, v4_bytes[0], v4_bytes[1], v4_bytes[2], v4_bytes[3] } };
+  return address_v6(v6_bytes);
+}
+
+address_v4 make_address_v4(v4_mapped_t, const address_v6& addr)
+{
+  if (!addr.is_v4_mapped())
+  {
+    bad_address_cast ex;
+    std::experimental::net::detail::throw_exception(ex);
+  }
+
+  address_v6::bytes_type v6_bytes = addr.to_bytes();
+  address_v4::bytes_type v4_bytes = { {
+    v6_bytes[12], v6_bytes[13], v6_bytes[14], v6_bytes[15] } };
+  return address_v4(v4_bytes);
 }
 
 } // namespace ip

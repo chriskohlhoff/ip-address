@@ -146,7 +146,7 @@ expression `make_address(forward<T>(t).``.``.)`.]
 
 [endsect]
 
-[section [^ip::address] comparisons]
+[section:ip__address__comparisons [^ip::address] comparisons]
 
   bool operator==(const address& a, const address& b) noexcept;
 
@@ -177,7 +177,7 @@ expression `make_address(forward<T>(t).``.``.)`.]
 
 [endsect]
 
-[section [^ip::address] creation]
+[section:ip__address__creation [^ip::address] creation]
 
   address make_address(const char* str);
   address make_address(const char* str, error_code& ec) noexcept;
@@ -203,7 +203,7 @@ of class `address`, as if by calling:
 
 [endsect]
 
-[section [^ip::address] I/O]
+[section:ip__address__io [^ip::address] I/O]
 
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
