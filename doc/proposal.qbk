@@ -221,6 +221,13 @@ Support for IP address literals has been included. For example:
 
 [section Further Work]
 
+[section Use of constexpr]
+
+Further work is required to determine which function, if any, should be marked
+`constexpr`.
+
+[endsect]
+
 [section Address Iteration]
 
 It has been suggested in the SG4 discussion forum that the address classes
