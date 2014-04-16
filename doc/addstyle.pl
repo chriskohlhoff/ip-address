@@ -17,10 +17,14 @@ my $style =
 "table { margin: auto; }" .
 "</style>";
 
+my $rev = `git rev-parse HEAD`;
+chomp($rev);
+my $draft_info = " (as of commit $rev)";
+
 my $docno =
 "<pre>" .
-"Doc. no:  N3603\n" .
-"Date:     2013-03-17\n" .
+"Doc. no:  D????" . $draft_info . "\n" .
+"Date:     2014-04-16\n" .
 "Reply-To: Christopher Kohlhoff &lt;chris\@kohlhoff.com&gt;\n" .
 "</pre>\n";
 
