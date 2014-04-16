@@ -1,4 +1,4 @@
-[library A Three-Class IP Address Proposal
+[library A Three-Class IP Address Proposal, Revision 1
     [quickbook 1.1]
     [id ipaddress]
 ]
@@ -168,8 +168,8 @@ For example:
   address_v4 a;
   address b = a; // ok, implicit conversion
   address c = address_cast<address>(a); // ok, explicit conversion
-  address_v4 d = address_cast<address_v4>(a); // ok, explicit conversion
-  address_v6 e = address_cast<address_v6>(a); // invalid, throws bad_address_cast
+  address_v4 d = address_cast<address_v4>(b); // ok, explicit conversion
+  address_v6 e = address_cast<address_v6>(b); // invalid, throws bad_address_cast
 
 [endsect]
 
@@ -182,10 +182,9 @@ Many functions have now been marked `noexcept`.
 [section Explicit Creation from Strings]
 
 This replaces the `from_string()` static member functions with new free
-functions `make_address()`, `make_address_v4()` and `make_address_v6(). These
-functions allow explicit creation of the address types from strings, (as well
-as other types, such as an array of bytes or an integer in host byte
-order). For example:
+functions `make_address()`, `make_address_v4()` and `make_address_v6()`. These
+functions allow explicit creation of the address types from strings and other
+types, such as an array of bytes or an integer in host byte order. For example:
 
   address_v4 a = make_address_v4("127.0.0.1");
 
