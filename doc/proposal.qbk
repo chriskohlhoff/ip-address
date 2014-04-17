@@ -184,14 +184,17 @@ Many functions have now been marked `noexcept`.
 This replaces the `from_string()` static member functions with new free
 functions `make_address()`, `make_address_v4()` and `make_address_v6()`. These
 functions allow explicit creation of the address types from strings and other
-types, such as an array of bytes or an integer in host byte order. For example:
+types, such as an array of bytes or an integer in host byte order. For example,
+one overload throws an exception on failure:
 
-  address_v4 a = make_address_v4("127.0.0.1");
+  address_v4 a = make_address_v4("127.0.0.1"); // succeeds
+  address_v4 b = make_address_v4("::1"); // throws
 
-which throws an exception on failure, and the alternate non-throwing overload:
+and another overload provides a non-throwing alternative:
 
   error_code ec;
-  address_v4 b = make_address_v4("127.0.0.1", ec);
+  address_v4 b = make_address_v4("127.0.0.1", ec); // succeeds, clears ec
+  address_v4 b = make_address_v4("::1", ec); // sets ec
 
 An explicit template constructor has been added to also support this style of
 use:
