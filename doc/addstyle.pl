@@ -25,6 +25,7 @@ my $docno =
 "<pre>" .
 "Doc. no:  D????" . $draft_info . "\n" .
 "Date:     2014-04-16\n" .
+"Revises:  N3603\n" .
 "Reply-To: Christopher Kohlhoff &lt;chris\@kohlhoff.com&gt;\n" .
 "</pre>\n";
 
