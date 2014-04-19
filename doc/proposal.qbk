@@ -115,12 +115,12 @@ internet protocols such as TCP and UDP.
 
 This proposal is based on the IP address classes in the __Asio__ library. The
 proposed text was originally from __N2175__ with small modifications to reflect
-enhancements made to __Asio__ since 2007. In this revision, the proposed text
-has been updated to reflect feedback and discussion from the Bristol 2013
-meeting of SG4.
+enhancements made to __Asio__ since 2007.
 
-A reference implementation of the proposal is available from
-[@https://github.com/chriskohlhoff/ip-address GitHub].
+In this revision, the proposed text has been updated to reflect feedback and
+discussion from the Bristol 2013 meeting of SG4. A reference implementation of
+the proposal is available from [@https://github.com/chriskohlhoff/ip-address
+GitHub].
 
 [endsect]
 
@@ -141,81 +141,11 @@ functions that lie outside the C++11 standard.
 
 [/-----------------------------------------------------------------------------]
 
-[section Changes]
+[section Design Decisions]
 
 For more information on the motivating design decisions for the three-class
-design, please consult N3603. In this revision of the proposal, we describes
-only the changes made based on feedback and discussion from the 2013 meeting of
-SG4 at Bristol, where N3603 was discussed.
-
-[section Namespace]
-
-This revision moves the proposed types and functions from the `std::` namespace
-to `std::experimental::`.
-
-[endsect]
-
-[section A Version-Independent Vocabulary Type]
-
-The `ip::address` class has been modified so that the version-specific types do
-not appear in its interface. An approach based on the `any` class has been
-adopted (see Library Fundamentals working draft), and address types may be
-explicitly converted using the `address_cast<>` function. The version-specific
-types are implicitly convertible to `ip::address` via a template constructor.
-
-For example:
-
-  address_v4 a;
-  address b = a; // ok, implicit conversion
-  address c = address_cast<address>(a); // ok, explicit conversion
-  address_v4 d = address_cast<address_v4>(b); // ok, explicit conversion
-  address_v6 e = address_cast<address_v6>(b); // invalid, throws bad_address_cast
-
-[endsect]
-
-[section Use of noexcept]
-
-Many functions have now been marked `noexcept`.
-
-[endsect]
-
-[section Explicit Creation from Strings]
-
-This replaces the `from_string()` static member functions with new free
-functions `make_address()`, `make_address_v4()` and `make_address_v6()`. These
-functions allow explicit creation of the address types from strings and other
-types, such as an array of bytes or an integer in host byte order. For example,
-one overload throws an exception on failure:
-
-  address_v4 a = make_address_v4("127.0.0.1"); // succeeds
-  address_v4 b = make_address_v4("::1"); // throws
-
-and another overload provides a non-throwing alternative:
-
-  error_code ec;
-  address_v4 b = make_address_v4("127.0.0.1", ec); // succeeds, clears ec
-  address_v4 b = make_address_v4("::1", ec); // sets ec
-
-An explicit template constructor has been added to also support this style of
-use:
-
-  address c("127.0.0.1");
-
-This constructor simply forwards the arguments to the appropriate
-`make_address()` overload.
-
-[endsect]
-
-[section String literals]
-
-Support for IP address literals has been included. For example:
-
-  using namespace std::experimental::net_literals;
-  auto addr = "127.0.0.1"ip;
-  auto v4_addr = "255.255.255.255"ipv4;
-  auto v6_addr = "::1"ipv6;
-
-[endsect]
+design, please consult
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3603.html N3603].
 
 [endsect]
 
@@ -234,7 +164,7 @@ Further work is required to determine which function, if any, should be marked
 
 It has been suggested in the SG4 discussion forum that the address classes
 include the ability to determine the predecessor or successor of an address. By
-this we mean that given an address 1.2.3.4, tthe predecessor address is 1.2.3.3
+this we mean that given an address 1.2.3.4, the predecessor address is 1.2.3.3
 and the successor is 1.2.3.5.
 
 The author feels that this feature is not a core responsibility of the address
@@ -332,6 +262,84 @@ addresses.
 [include:functions functions/ip__address_cast.qbk]
 [include:classes classes/hash.qbk]
 [include:functions functions/literals.qbk]
+
+[endsect]
+
+[endsect]
+
+[/-----------------------------------------------------------------------------]
+
+[section Changes in This Revision]
+
+In this revision of the proposal, we include changes made based on feedback and
+discussion from the 2013 meeting of SG4 at Bristol, where N3603 was discussed.
+
+[section Namespace]
+
+This revision moves the proposed types and functions from the `std::` namespace
+to `std::experimental::`.
+
+[endsect]
+
+[section A Version-Independent Vocabulary Type]
+
+The `ip::address` class has been modified so that the version-specific types do
+not appear in its interface. An approach based on the `any` class has been
+adopted (see Library Fundamentals working draft), and address types may be
+explicitly converted using the `address_cast<>` function. The version-specific
+types are implicitly convertible to `ip::address` via a template constructor.
+
+For example:
+
+  address_v4 a;
+  address b = a; // ok, implicit conversion
+  address c = address_cast<address>(a); // ok, explicit conversion
+  address_v4 d = address_cast<address_v4>(b); // ok, explicit conversion
+  address_v6 e = address_cast<address_v6>(b); // invalid, throws bad_address_cast
+
+[endsect]
+
+[section Use of noexcept]
+
+Many functions have now been marked `noexcept`.
+
+[endsect]
+
+[section Explicit Creation from Strings]
+
+This replaces the `from_string()` static member functions with new free
+functions `make_address()`, `make_address_v4()` and `make_address_v6()`. These
+functions allow explicit creation of the address types from strings and other
+types, such as an array of bytes or an integer in host byte order. For example,
+one overload throws an exception on failure:
+
+  address_v4 a = make_address_v4("127.0.0.1"); // succeeds
+  address_v4 b = make_address_v4("::1"); // throws
+
+and another overload provides a non-throwing alternative:
+
+  error_code ec;
+  address_v4 b = make_address_v4("127.0.0.1", ec); // succeeds, clears ec
+  address_v4 b = make_address_v4("::1", ec); // sets ec
+
+An explicit template constructor has been added to also support this style of
+use:
+
+  address c("127.0.0.1");
+
+This constructor simply forwards the arguments to the appropriate
+`make_address()` overload.
+
+[endsect]
+
+[section String Literals]
+
+Support for IP address literals has been included. For example:
+
+  using namespace std::experimental::net_literals;
+  auto addr = "127.0.0.1"ip;
+  auto v4_addr = "255.255.255.255"ipv4;
+  auto v6_addr = "::1"ipv6;
 
 [endsect]
 
