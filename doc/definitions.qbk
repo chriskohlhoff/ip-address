@@ -1,15 +1,15 @@
 [section Definitions]
 
 [section:host_byte_order host byte order]
-See
-[@http://www.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap04.html#tag_04_08
-Host and Network Byte Orders].
+See section 1.4 of
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3783.pdf N3783
+Network Byte Order Conversion].
 [endsect]
 
 [section:network_byte_order network byte order]
-See
-[@http://www.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap04.html#tag_04_08
-Host and Network Byte Orders].
+See section 1.4 of
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3783.pdf N3783
+Network Byte Order Conversion].
 [endsect]
 
 [endsect]
