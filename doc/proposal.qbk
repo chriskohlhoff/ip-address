@@ -343,14 +343,47 @@ Support for IP address literals has been included. For example:
 
 [endsect]
 
+[section Strongly-Typed Byte Representations]
+
+The nested typedefs `bytes_type` have been changed to be unique standard-layout
+types. Objects of type `bytes_type` are implicitly convertible to the
+corresponding address class. This is intended to support the following use
+case, where the byte representations of addresses are included as part of a
+larger standard-layout structure, such as a packet definition:
+
+  struct header
+  {
+    address_v4::bytes_type from;
+    address_v4::bytes_type to;
+    // ...
+  };
+
+  struct message
+  {
+    header hdr;
+    // ...
+  };
+
+  // ...
+
+  address_v4 old_address = "1.2.3.4"ipv4;
+  address_v4 new_address = "4.3.2.1"ipv4;
+
+  message m;
+  receive_message(m); // e.g. reads bytes from a socket
+  if (m.hdr.to == old_address)
+    m.hdr.to = new_address.to_bytes();
+
+[endsect]
+
 [endsect]
 
 [/-----------------------------------------------------------------------------]
 
 [section Acknowledgements]
 
-The author would like to thank Arash Partow, Jamie Allsop and James Anderson
-for their feedback and suggestions.
+The author would like to thank Arash Partow, Jamie Allsop, James Anderson and
+Kyle Kloepper for their feedback and suggestions.
 
 [endsect]
 

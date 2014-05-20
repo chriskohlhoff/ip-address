@@ -9,11 +9,12 @@
           {
           public:
             // types:
-            typedef array<unsigned char, 16> bytes_type;
+            struct bytes_type;
 
             // constructors:
             address_v6() noexcept;
             address_v6(const address_v6& a) noexcept;
+            address_v6(const bytes_type& bytes, unsigned long scope);
             template <class... T> explicit address(T&&... t);
 
             // assignment:
@@ -51,7 +52,7 @@
           bool operator>=(const address_v6& a, const address_v6& b) noexcept;
 
           // address_v6 creation:
-          address_v6 make_address_v6(const array<unsigned char, 16>&, unsigned long = 0);
+          address_v6 make_address_v6(const address_v6::bytes_type&, unsigned long = 0);
           address_v6 make_address_v6(v4_mapped_t, const address_v4&) noexcept;
           address_v6 make_address_v6(const char*);
           address_v6 make_address_v6(const char*, error_code&) noexcept;
@@ -73,6 +74,29 @@
 `is_multicast_node_local`, `is_multicast_link_local`, `is_multicast_site_local`,
 `is_multicast_org_local` and `is_multicast_global` are determined by [RFC4291].]
 
+[section Struct [^ip::address_v6::bytes_type]]
+
+  namespace std {
+    namespace experimental {
+      namespace net {
+        namespace ip {
+
+          struct address_v6::bytes_type : array<unsigned char, 16>
+          {
+            template <class... T> explicit bytes_type(T... t)
+              : array<unsigned char, 16>{{static_cast<unsigned char>(t)...}} {}
+          };
+
+        } // namespace ip
+      } // namespace net
+    } // namespace experimental
+  } // namespace std
+
+The [^ip::address_v6::bytes_type] type is a standard-layout struct that provides a
+byte-level representation of an IPv6 address in network byte order.
+
+[endsect]
+
 [section [^ip::address_v6] constructors]
 
   address_v6() noexcept;
@@ -87,6 +111,22 @@ the table below.]
   [[`is_unspecified()`][`true`]]
   [[`scope_id()`][`0`]]
 ]
+
+  address_v6(const address_v6& a) noexcept;
+
+[function_effects Constructs an object of class `address_v6`.]
+
+[function_postconditions `*this == a`]
+
+  address_v6(const bytes_type& bytes, unsigned long scope);
+
+[function_requires Each element of `bytes` is in the range `[0, 0xFF]`.]
+
+[function_throws `out_of_range` if any element of `bytes` is not in the range
+`[0, 0xFF]`. [inline_note For implementations where `UCHAR_MAX == 0xFF`, no
+out-of-range detection is needed.]]
+
+[function_postconditions `to_bytes() == bytes` and `scope_id() == scope`.]
 
   template <class... T> explicit address_v6(T&&... t);
 
@@ -287,18 +327,10 @@ a.to_bytes()) && a.scope_id() < b.scope_id())`.]
 
 [section:ip__address_v6__creation [^ip::address_v6] creation]
 
-  address_v6 make_address_v6(const array<unsigned char, 16>& bytes,
+  address_v6 make_address_v6(const address_v6::bytes_type& bytes,
                              unsigned long scope_id);
 
-[function_requires Each element of the array `bytes` is in the range
-`[0, 0xFF]`.]
-
-[function_throws `out_of_range` if any element of the array `bytes` is not in
-the range `[0, 0xFF]`. [inline_note For implementations where `UCHAR_MAX ==
-0xFF`, no out-of-range detection is needed.]]
-
-[function_returns An object `a` of type `address_v6` where `a.to_bytes() ==
-bytes` and `a.scope_id() == scope_id`.]
+[function_returns `address_v6(bytes, scope_id)`.]
 
   address_v6 make_address_v6(v4_mapped_t, const address_v4& a) noexcept;
 
@@ -307,8 +339,8 @@ corresponding to the specified IPv4 address, as if computed by the following
 method:
 ``
   address_v4::bytes_type v4b = a.to_bytes();
-  bytes_type v6b = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                     0xFF, 0xFF, v4b[0], v4b[1], v4b[2], v4b[3] };
+  bytes_type v6b(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                 0xFF, 0xFF, v4b[0], v4b[1], v4b[2], v4b[3]);
   return address_v6(v6b);
 ``]
 

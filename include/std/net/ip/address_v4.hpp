@@ -48,14 +48,32 @@ class address;
 class address_v4
 {
 public:
-  /// The type used to represent an address as an array of bytes.
-  typedef std::array<unsigned char, 4> bytes_type;
+  /// A standard-layout type used to represent an address as an array of bytes.
+  struct bytes_type : std::array<unsigned char, 4>
+  {
+#if defined(STDNET_HAS_VARIADIC_TEMPLATES)
+    template <class... T>
+    explicit bytes_type(T... t)
+      : std::array<unsigned char, 4>{{static_cast<unsigned char>(t)...}}
+    {
+    }
+#else // defined(STDNET_HAS_VARIADIC_TEMPLATES)
+    bytes_type(unsigned char a = 0, unsigned char b = 0,
+        unsigned char c = 0, unsigned char d = 0)
+    {
+      (*this)[0] = a, (*this)[1] = b, (*this)[2] = c, (*this)[3] = d;
+    }
+#endif // defined(STDNET_HAS_VARIADIC_TEMPLATES)
+  };
 
   /// Default constructor.
   address_v4() STDNET_NOEXCEPT
   {
     addr_.s_addr = 0;
   }
+
+  /// Implicit construction from bytes, in network byte order.
+  STDNET_DECL address_v4(const bytes_type& o);
 
 #if defined(STDNET_HAS_VARIADIC_TEMPLATES)
   /// Explicitly construct from a list of arguments.
@@ -227,13 +245,11 @@ private:
   // The underlying IPv4 address.
   std::experimental::net::detail::in4_addr_type addr_;
 
-  friend address_v4 make_address_v4(const bytes_type&);
   friend address_v4 make_address_v4(unsigned long);
 };
 
 /// Construct an address_v4 from raw bytes.
-STDNET_DECL address_v4 make_address_v4(
-    const std::array<unsigned char, 4>& bytes);
+STDNET_DECL address_v4 make_address_v4(const address_v4::bytes_type& bytes);
 
 /// Construct an address_v4 from a unsigned long in host byte order.
 STDNET_DECL address_v4 make_address_v4(unsigned long addr);

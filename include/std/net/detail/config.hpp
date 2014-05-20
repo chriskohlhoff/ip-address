@@ -106,6 +106,11 @@
 #    endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #   endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)) || (__GNUC__ > 4)
 #  endif // defined(__GNUC__)
+# if defined(__clang__)
+#  if __has_feature(cxx_variadic_templates)
+#   define STDNET_HAS_VARIADIC_TEMPLATES 1
+#  endif // __has_feature(cxx_noexcept)
+# endif // defined(__clang__)
 # endif // !defined(STDNET_DISABLE_VARIADIC_TEMPLATES)
 #endif // !defined(STDNET_HAS_VARIADIC_TEMPLATES)
 

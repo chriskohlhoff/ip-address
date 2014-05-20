@@ -31,6 +31,20 @@ namespace experimental {
 namespace net {
 namespace ip {
 
+address_v4::address_v4(const address_v4::bytes_type& bytes)
+{
+#if UCHAR_MAX > 0xFF
+  if (bytes[0] > 0xFF || bytes[1] > 0xFF || bytes[2] > 0xFF || bytes[3] > 0xFF)
+  {
+    std::out_of_range ex("address_v4 from bytes_type");
+    std::experimental::net::detail::throw_exception(ex);
+  }
+#endif // UCHAR_MAX > 0xFF
+
+  using namespace std; // For memcpy.
+  memcpy(&addr_.s_addr, bytes.data(), 4);
+}
+
 address_v4::bytes_type address_v4::to_bytes() const STDNET_NOEXCEPT
 {
   using namespace std; // For memcpy.
@@ -110,21 +124,9 @@ address_v4 address_v4::netmask(const address_v4& addr) STDNET_NOEXCEPT
   return address_v4(0xFFFFFFFF);
 }
 
-address_v4 make_address_v4(const std::array<unsigned char, 4>& bytes)
+address_v4 make_address_v4(const address_v4::bytes_type& bytes)
 {
-#if UCHAR_MAX > 0xFF
-  if (bytes[0] > 0xFF || bytes[1] > 0xFF
-      || bytes[2] > 0xFF || bytes[3] > 0xFF)
-  {
-    std::out_of_range ex("address_v4 from bytes_type");
-    std::experimental::net::detail::throw_exception(ex);
-  }
-#endif // UCHAR_MAX > 0xFF
-
-  using namespace std; // For memcpy.
-  address_v4 tmp;
-  memcpy(&tmp.addr_.s_addr, bytes.data(), 4);
-  return tmp;
+  return address_v4(bytes);
 }
 
 address_v4 make_address_v4(unsigned long addr)
@@ -159,7 +161,7 @@ address_v4 make_address_v4(const char* str,
   if (std::experimental::net::detail::socket_ops::inet_pton(
         AF_INET, str, bytes.data(), 0, ec) <= 0)
     return address_v4();
-  return make_address_v4(bytes);
+  return address_v4(bytes);
 }
 
 address_v4 make_address_v4(const std::string& str)

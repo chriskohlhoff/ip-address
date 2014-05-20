@@ -36,7 +36,7 @@ void test()
     // address_v4 constructors.
 
     ip::address_v4 addr1;
-    const ip::address_v4::bytes_type const_bytes_value = { { 127, 0, 0, 1 } };
+    const ip::address_v4::bytes_type const_bytes_value(127, 0, 0, 1);
     ip::address_v4 addr2(const_bytes_value);
     const unsigned long const_ulong_value = 0x7F000001;
     ip::address_v4 addr3(const_ulong_value);
@@ -151,7 +151,7 @@ void test()
   STDNET_CHECK(a1.to_bytes()[3] == 0);
   STDNET_CHECK(a1.to_ulong() == 0);
 
-  address_v4::bytes_type b1 = {{ 1, 2, 3, 4 }};
+  address_v4::bytes_type b1(1, 2, 3, 4);
   address_v4 a2(b1);
   STDNET_CHECK(a2.to_bytes()[0] == 1);
   STDNET_CHECK(a2.to_bytes()[1] == 2);

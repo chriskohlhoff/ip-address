@@ -75,8 +75,8 @@ bool operator<=(const address_v4&, const address_v4&) STDNET_NOEXCEPT;
 bool operator>=(const address_v4&, const address_v4&) STDNET_NOEXCEPT;
 
 // address_v4 creation:
+//address_v4 make_address_v4(const address_v4::octets&);
 address_v4 make_address_v4(unsigned long);
-address_v4 make_address_v4(const std::array<unsigned char, 4>&);
 address_v4 make_address_v4(v4_mapped_t, const address_v6&);
 address_v4 make_address_v4(const char*);
 address_v4 make_address_v4(const char*, error_code&) STDNET_NOEXCEPT;
@@ -101,7 +101,7 @@ bool operator<=(const address_v6&, const address_v6&) STDNET_NOEXCEPT;
 bool operator>=(const address_v6&, const address_v6&) STDNET_NOEXCEPT;
 
 // address_v6 creation:
-address_v6 make_address_v6(const std::array<unsigned char, 16>&, unsigned long = 0);
+//address_v6 make_address_v6(const address_v6::octets&, unsigned long = 0);
 address_v6 make_address_v6(v4_mapped_t, const address_v4&) STDNET_NOEXCEPT;
 address_v6 make_address_v6(const char*);
 address_v6 make_address_v6(const char*, error_code&) STDNET_NOEXCEPT;

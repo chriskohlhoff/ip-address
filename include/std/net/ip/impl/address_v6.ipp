@@ -40,6 +40,24 @@ address_v6::address_v6() STDNET_NOEXCEPT
 {
 }
 
+address_v6::address_v6(const address_v6::bytes_type& bytes, unsigned long scope)
+{
+#if UCHAR_MAX > 0xFF
+  for (std::size_t i = 0; i < bytes.size(); ++i)
+  {
+    if (bytes[i] > 0xFF)
+    {
+      std::out_of_range ex("address_v6 from octets");
+      std::experimental::net::detail::throw_exception(ex);
+    }
+  }
+#endif // UCHAR_MAX > 0xFF
+
+  using namespace std; // For memcpy.
+  memcpy(addr_.s6_addr, bytes.data(), 16);
+  scope_id_ = scope;
+}
+
 address_v6::address_v6(const address_v6& other) STDNET_NOEXCEPT
   : addr_(other.addr_),
     scope_id_(other.scope_id_)
@@ -199,25 +217,10 @@ address_v6 address_v6::loopback() STDNET_NOEXCEPT
   return tmp;
 }
 
-address_v6 make_address_v6(const std::array<unsigned char, 16>& bytes,
-    unsigned long scope)
+address_v6 make_address_v6(const address_v6::bytes_type& bytes,
+    unsigned long scope_id)
 {
-#if UCHAR_MAX > 0xFF
-  for (std::size_t i = 0; i < bytes.size(); ++i)
-  {
-    if (bytes[i] > 0xFF)
-    {
-      std::out_of_range ex("address_v6 from bytes_type");
-      std::experimental::net::detail::throw_exception(ex);
-    }
-  }
-#endif // UCHAR_MAX > 0xFF
-
-  address_v6 tmp;
-  using namespace std; // For memcpy.
-  memcpy(tmp.addr_.s6_addr, bytes.data(), 16);
-  tmp.scope_id_ = scope;
-  return tmp;
+  return address_v6(bytes, scope_id);
 }
 
 address_v6 make_address_v6(const char* str)
@@ -236,7 +239,7 @@ address_v6 make_address_v6(const char* str,
   if (std::experimental::net::detail::socket_ops::inet_pton(
         AF_INET6, str, bytes.data(), &scope_id, ec) <= 0)
     return address_v6();
-  return make_address_v6(bytes, scope_id);
+  return address_v6(bytes, scope_id);
 }
 
 address_v6 make_address_v6(const std::string& str)
@@ -253,8 +256,8 @@ address_v6 make_address_v6(const std::string& str,
 address_v6 make_address_v6(v4_mapped_t, const address_v4& addr) STDNET_NOEXCEPT
 {
   address_v4::bytes_type v4_bytes = addr.to_bytes();
-  address_v6::bytes_type v6_bytes = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0xFF, 0xFF, v4_bytes[0], v4_bytes[1], v4_bytes[2], v4_bytes[3] } };
+  address_v6::bytes_type v6_bytes(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0xFF, 0xFF, v4_bytes[0], v4_bytes[1], v4_bytes[2], v4_bytes[3]);
   return address_v6(v6_bytes);
 }
 
@@ -267,8 +270,8 @@ address_v4 make_address_v4(v4_mapped_t, const address_v6& addr)
   }
 
   address_v6::bytes_type v6_bytes = addr.to_bytes();
-  address_v4::bytes_type v4_bytes = { {
-    v6_bytes[12], v6_bytes[13], v6_bytes[14], v6_bytes[15] } };
+  address_v4::bytes_type v4_bytes(v6_bytes[12],
+      v6_bytes[13], v6_bytes[14], v6_bytes[15]);
   return address_v4(v4_bytes);
 }
 

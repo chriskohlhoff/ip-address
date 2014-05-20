@@ -49,11 +49,38 @@ class address_v4;
 class address_v6
 {
 public:
-  /// The type used to represent an address as an array of bytes.
-  typedef std::array<unsigned char, 16> bytes_type;
+  /// A standard-layout type used to represent an address as an array of bytes.
+  struct bytes_type : std::array<unsigned char, 16>
+  {
+#if defined(STDNET_HAS_VARIADIC_TEMPLATES)
+    template <class... T>
+    explicit bytes_type(T... t)
+      : std::array<unsigned char, 16>{{static_cast<unsigned char>(t)...}}
+    {
+    }
+#else // defined(STDNET_HAS_VARIADIC_TEMPLATES)
+    bytes_type(unsigned char a = 0, unsigned char b = 0,
+        unsigned char c = 0, unsigned char d = 0,
+        unsigned char e = 0, unsigned char f = 0,
+        unsigned char g = 0, unsigned char h = 0,
+        unsigned char i = 0, unsigned char j = 0,
+        unsigned char k = 0, unsigned char l = 0,
+        unsigned char m = 0, unsigned char n = 0,
+        unsigned char o = 0, unsigned char p = 0)
+    {
+      (*this)[0] = a, (*this)[1] = b, (*this)[2] = c, (*this)[3] = d;
+      (*this)[4] = e, (*this)[5] = f, (*this)[6] = g, (*this)[7] = h;
+      (*this)[8] = i, (*this)[9] = j, (*this)[10] = k, (*this)[11] = l;
+      (*this)[12] = m, (*this)[13] = n, (*this)[14] = o, (*this)[15] = p;
+    }
+#endif // defined(STDNET_HAS_VARIADIC_TEMPLATES)
+  };
 
   /// Default constructor.
   STDNET_DECL address_v6() STDNET_NOEXCEPT;
+
+  /// Implicit construction from bytes, in network byte order.
+  STDNET_DECL address_v6(const bytes_type& bytes, unsigned long scope = 0);
 
 #if defined(STDNET_HAS_VARIADIC_TEMPLATES)
   /// Explicitly construct from a list of arguments.
@@ -61,7 +88,7 @@ public:
     typename = typename enable_if<is_same<address_v6,
       decltype(make_address_v6(declval<T>()...))>::value>::type>
   explicit address_v6(T&&... t)
-    : address(make_address_v6(forward<T>(t)...))
+    : address_v6(make_address_v6(forward<T>(t)...))
   {
   }
 #else // defined(STDNET_HAS_VARIADIC_TEMPLATES)
@@ -218,13 +245,11 @@ private:
 
   // The scope ID associated with the address.
   unsigned long scope_id_;
-
-  friend address_v6 make_address_v6(const bytes_type&, unsigned long);
 };
 
 /// Construct an address_v6 from raw bytes.
 STDNET_DECL address_v6 make_address_v6(
-    const std::array<unsigned char, 16>& bytes, unsigned long scope_id);
+    const address_v6::bytes_type& bytes, unsigned long scope_id = 0);
 
 /// Create an address_v6 from an IPv6 address string.
 STDNET_DECL address_v6 make_address_v6(const char* str);
