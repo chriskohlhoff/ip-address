@@ -1,11 +1,11 @@
 [section:ip__address_cast Function [^ip::address_cast]]
 
-  template <class T> T address_cast(const address& a) noexcept(``['see below]``);
+  template <class T> constexpr T address_cast(const address& a) noexcept(``['see below]``);
 
 [:This function template shall participate in overload resolution only for the
  types `T` listed in the table below.]
 
-[table template <class T> T address_cast(const address&) effects
+[table template <class T> constexpr T address_cast(const address&) effects
   [[T][noexcept][remarks]]
   [
     [`address`]
@@ -26,12 +26,12 @@
   ]
 ]
 
-  template <class T> T address_cast(const address_v4& a) noexcept(``['see below]``);
+  template <class T> constexpr T address_cast(const address_v4& a) noexcept(``['see below]``);
 
 [:This function template shall participate in overload resolution only for the
  types `T` listed in the table below.]
 
-[table template <class T> T address_cast(const address_v4&) effects
+[table template <class T> constexpr T address_cast(const address_v4&) effects
   [[T][noexcept][remarks]]
   [
     [`address`]
@@ -51,12 +51,12 @@
   ]
 ]
 
-  template <class T> T address_cast(const address_v6& a) noexcept(``['see below]``);
+  template <class T> constexpr T address_cast(const address_v6& a) noexcept(``['see below]``);
 
 [:This function template shall participate in overload resolution only for the
  types `T` listed in the table below.]
 
-[table template <class T> T address_cast(const address_v6&) effects
+[table template <class T> constexpr T address_cast(const address_v6&) effects
   [[T][noexcept][remarks]]
   [
     [`address`]

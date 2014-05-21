@@ -48,17 +48,17 @@
           address make_address(const string&, error_code&) noexcept;
 
           // ``[link classes.ip__address_v4__creation address_v4 creation]``:
-          address_v4 make_address_v4(const address_v4::bytes_type&);
-          address_v4 make_address_v4(unsigned long);
-          address_v4 make_address_v4(v4_mapped_t, const address_v6&);
+          constexpr address_v4 make_address_v4(const address_v4::bytes_type&);
+          constexpr address_v4 make_address_v4(unsigned long);
+          constexpr address_v4 make_address_v4(v4_mapped_t, const address_v6&);
           address_v4 make_address_v4(const char*);
           address_v4 make_address_v4(const char*, error_code&) noexcept;
           address_v4 make_address_v4(const string&);
           address_v4 make_address_v4(const string&, error_code&) noexcept;
 
           // ``[link classes.ip__address_v6__creation address_v6 creation]``:
-          address_v6 make_address_v6(const address_v6::bytes_type&, unsigned long = 0);
-          address_v6 make_address_v6(v4_mapped_t, const address_v4&) noexcept;
+          constexpr address_v6 make_address_v6(const address_v6::bytes_type&, unsigned long = 0);
+          constexpr address_v6 make_address_v6(v4_mapped_t, const address_v4&) noexcept;
           address_v6 make_address_v6(const char*);
           address_v6 make_address_v6(const char*, error_code&) noexcept;
           address_v6 make_address_v6(const string&);
@@ -80,9 +80,9 @@
               basic_ostream<CharT, Traits>&, const address_v6&);
 
           // ``[link functions.ip__address_cast address conversions]``:
-          template <class T> T address_cast(const address&) noexcept(``['see below]``);
-          template <class T> T address_cast(const address_v4&) noexcept(``['see below]``);
-          template <class T> T address_cast(const address_v6&) noexcept(``['see below]``);
+          template <class T> constexpr T address_cast(const address&) noexcept(``['see below]``);
+          template <class T> constexpr T address_cast(const address_v4&) noexcept(``['see below]``);
+          template <class T> constexpr T address_cast(const address_v6&) noexcept(``['see below]``);
 
         } // namespace ip
       } // namespace net

@@ -12,33 +12,33 @@
             struct bytes_type;
 
             // constructors:
-            address_v4() noexcept;
-            address_v4(const address_v4& a) noexcept;
-            address_v4(const bytes_type& bytes);
-            template <class... T> explicit address(T&&... t);
+            constexpr address_v4() noexcept;
+            constexpr address_v4(const address_v4& a) noexcept;
+            constexpr address_v4(const bytes_type& bytes);
+            template <class... T> explicit constexpr address(T&&... t);
 
             // assignment:
             address_v4& operator=(const address_v4& a) noexcept;
 
             // members:
-            bool is_unspecified() const noexcept;
-            bool is_loopback() const noexcept;
-            bool is_class_a() const noexcept;
-            bool is_class_b() const noexcept;
-            bool is_class_c() const noexcept;
-            bool is_multicast() const noexcept;
-            bytes_type to_bytes() const noexcept;
-            unsigned long to_ulong() const noexcept;
+            constexpr bool is_unspecified() const noexcept;
+            constexpr bool is_loopback() const noexcept;
+            constexpr bool is_class_a() const noexcept;
+            constexpr bool is_class_b() const noexcept;
+            constexpr bool is_class_c() const noexcept;
+            constexpr bool is_multicast() const noexcept;
+            constexpr bytes_type to_bytes() const noexcept;
+            constexpr unsigned long to_ulong() const noexcept;
             string to_string() const;
             string to_string(error_code& ec) const;
 
             // static members:
-            static address_v4 any() noexcept;
-            static address_v4 loopback() noexcept;
-            static address_v4 broadcast() noexcept;
-            static address_v4 broadcast(const address_v4& addr,
+            static constexpr address_v4 any() noexcept;
+            static constexpr address_v4 loopback() noexcept;
+            static constexpr address_v4 broadcast() noexcept;
+            static constexpr address_v4 broadcast(const address_v4& addr,
               const address_v4& mask) noexcept;
-            static address_v4 netmask(const address_v4& addr) noexcept;
+            static constexpr address_v4 netmask(const address_v4& addr) noexcept;
           };
 
           // address_v4 comparisons:
@@ -50,9 +50,9 @@
           bool operator>=(const address_v4& a, const address_v4& b) noexcept;
 
           // address_v4 creation:
-          address_v4 make_address_v4(const address_v4::bytes_type&);
-          address_v4 make_address_v4(unsigned long);
-          address_v4 make_address_v4(v4_mapped_t, const address_v6&);
+          constexpr address_v4 make_address_v4(const address_v4::bytes_type&);
+          constexpr address_v4 make_address_v4(unsigned long);
+          constexpr address_v4 make_address_v4(v4_mapped_t, const address_v6&);
           address_v4 make_address_v4(const char*);
           address_v4 make_address_v4(const char*, error_code&) noexcept;
           address_v4 make_address_v4(const string&);
@@ -77,7 +77,7 @@
 
           struct address_v4::bytes_type : array<unsigned char, 4>
           {
-            template <class... T> explicit bytes_type(T... t)
+            template <class... T> explicit constexpr bytes_type(T... t)
               : array<unsigned char, 4>{{static_cast<unsigned char>(t)...}} {}
           };
 
@@ -93,7 +93,7 @@ byte-level representation of an IPv4 address in network byte order.
 
 [section [^ip::address_v4] constructors]
 
-  address_v4() noexcept;
+  constexpr address_v4() noexcept;
 
 [function_effects Constructs an object of class `address_v4`.]
 
@@ -106,13 +106,13 @@ the table below.]
   [[`to_ulong()`][`0`]]
 ]
 
-  address_v4(const address_v4& a) noexcept;
+  constexpr address_v4(const address_v4& a) noexcept;
 
 [function_effects Constructs an object of class `address_v4`.]
 
 [function_postconditions `*this == a`]
 
-  address_v4(const bytes_type& bytes);
+  constexpr address_v4(const bytes_type& bytes);
 
 [function_requires Each element of `bytes` is in the range `[0, 0xFF]`.]
 
@@ -123,7 +123,7 @@ out-of-range detection is needed.]]
 [function_postconditions `to_bytes() == bytes` and `to_ulong() == (bytes[0]
 << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3]`.]
 
-  template <class... T> explicit address_v4(T&&... t);
+  template <class... T> explicit constexpr address_v4(T&&... t);
 
 [function_remarks This constructor shall not participate in overload resolution
 unless the expression `make_address_v4(forward<T>(t).``.``.)` is valid and yields an
@@ -146,36 +146,36 @@ the expression `make_address_v4(forward<T>(t).``.``.)`.]
 
 [section [^ip::address_v4] members]
 
-  bool is_unspecified() const noexcept;
+  constexpr bool is_unspecified() const noexcept;
 
 [function_returns `to_ulong() == 0`.]
 
-  bool is_loopback() const noexcept;
+  constexpr bool is_loopback() const noexcept;
 
 [function_returns `(to_ulong() & 0xFF000000) == 0x7F000000`.]
 
-  bool is_class_a() const noexcept;
+  constexpr bool is_class_a() const noexcept;
 
 [function_returns `(to_ulong() & 0x80000000) == 0`.]
 
-  bool is_class_b() const noexcept;
+  constexpr bool is_class_b() const noexcept;
 
 [function_returns `(to_ulong() & 0xC0000000) == 0x80000000`.]
 
-  bool is_class_c() const noexcept;
+  constexpr bool is_class_c() const noexcept;
 
 [function_returns `(to_ulong() & 0xE0000000) == 0xC0000000`.]
 
-  bool is_multicast() const noexcept;
+  constexpr bool is_multicast() const noexcept;
 
 [function_returns `(to_ulong() & 0xF0000000) == 0xE0000000`.]
 
-  bytes_type to_bytes() const noexcept;
+  constexpr bytes_type to_bytes() const noexcept;
 
 [function_returns A representation of the address in [link
 definitions.network_byte_order network byte order].]
 
-  unsigned long to_ulong() const noexcept;
+  constexpr unsigned long to_ulong() const noexcept;
 
 [function_returns A representation of the address in [link
 definitions.host_byte_order host byte order].]
@@ -193,23 +193,23 @@ Otherwise `string()`.]
 
 [section [^ip::address_v4] static members]
 
-  static address_v4 any() noexcept;
+  static constexpr address_v4 any() noexcept;
 
 [function_returns `address_v4()`.]
 
-  static address_v4 loopback() noexcept;
+  static constexpr address_v4 loopback() noexcept;
 
 [function_returns `address_v4(0x7F000001)`.]
 
-  static address_v4 broadcast() noexcept;
+  static constexpr address_v4 broadcast() noexcept;
 
 [function_returns `address_v4(0xFFFFFFFF)`.]
 
-  static address_v4 broadcast(const address_v4& addr, const address_v4& mask) noexcept;
+  static constexpr address_v4 broadcast(const address_v4& addr, const address_v4& mask) noexcept;
 
 [function_returns `address_v4(addr.to_ulong() | ~mask.to_ulong())`.]
 
-  static address_v4 netmask(const address_v4& addr) noexcept;
+  static constexpr address_v4 netmask(const address_v4& addr) noexcept;
 
 [function_block If `addr.is_class_a()` is true, returns
 `address_v4(0xFF000000)`. If `addr.is_class_b()` is true, returns
@@ -248,11 +248,11 @@ Otherwise `string()`.]
 
 [section:ip__address_v4__creation [^ip::address_v4] creation]
 
-  address_v4 make_address_v4(const address_v4::bytes_type& bytes);
+  constexpr address_v4 make_address_v4(const address_v4::bytes_type& bytes);
 
 [function_returns `address_v4(bytes)`.]
 
-  address_v4 make_address_v4(unsigned long val);
+  constexpr address_v4 make_address_v4(unsigned long val);
 
 [function_requires `val` is in the range `[0, 0xFFFFFFFF]`.]
 
@@ -264,7 +264,7 @@ out-of-range detection is needed.]]
 val` and `a.to_bytes()` is `{ (val >> 24) & 0xFF, (val >> 16) & 0xFF,
 (val >> 8) & 0xFF, val & 0xFF }`.]
 
-  address_v4 make_address_v4(v4_mapped_t, const address_v6& a);
+  constexpr address_v4 make_address_v4(v4_mapped_t, const address_v6& a);
 
 [function_requires `a.is_v4_mapped()`.]
 

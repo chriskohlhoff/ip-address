@@ -66,26 +66,25 @@ class address
 {
 public:
   /// Default constructor.
-  STDNET_DECL address() STDNET_NOEXCEPT;
+  STDNET_CONSTEXPR address() STDNET_NOEXCEPT
+    : type_(ipv4),
+      ipv4_address_(),
+      ipv6_address_()
+  {
+  }
 
   /// Construct from another address type.
   template <typename T,
     typename = typename enable_if<
       detail::is_convertible_to_address<T>::value>::type>
-  address(const T& t) STDNET_NOEXCEPT
-    : address(address_cast<address>(t))
-  {
-  }
+  STDNET_CONSTEXPR address(const T& t) STDNET_NOEXCEPT;
 
 #if defined(STDNET_HAS_VARIADIC_TEMPLATES)
   /// Explicitly construct from a list of arguments.
   template <typename... T,
     typename = typename enable_if<is_same<address,
       decltype(make_address(declval<T>()...))>::value>::type>
-  explicit address(T&&... t)
-    : address(make_address(forward<T>(t)...))
-  {
-  }
+  explicit STDNET_CONSTEXPR address(T&&... t);
 #else // defined(STDNET_HAS_VARIADIC_TEMPLATES)
   template <typename T1>
   explicit address(T1& t1, typename enable_if<is_same<address,
@@ -114,29 +113,51 @@ public:
 #endif // defined(STDNET_HAS_VARIADIC_TEMPLATES)
 
   /// Copy constructor.
-  STDNET_DECL address(const address& other) STDNET_NOEXCEPT;
+  STDNET_CONSTEXPR address(const address& other) STDNET_NOEXCEPT
+    : type_(other.type_),
+      ipv4_address_(other.ipv4_address_),
+      ipv6_address_(other.ipv6_address_)
+  {
+  }
 
 #if defined(STDNET_HAS_MOVE)
   /// Move constructor.
-  STDNET_DECL address(address&& other) STDNET_NOEXCEPT;
+  address(address&& other) STDNET_NOEXCEPT
+    : type_(other.type_),
+      ipv4_address_(other.ipv4_address_),
+      ipv6_address_(other.ipv6_address_)
+  {
+  }
 #endif // defined(STDNET_HAS_MOVE)
 
   /// Assign from another address.
-  STDNET_DECL address& operator=(const address& other) STDNET_NOEXCEPT;
+  address& operator=(const address& other) STDNET_NOEXCEPT
+  {
+    type_ = other.type_;
+    ipv4_address_ = other.ipv4_address_;
+    ipv6_address_ = other.ipv6_address_;
+    return *this;
+  }
 
 #if defined(STDNET_HAS_MOVE)
   /// Move-assign from another address.
-  STDNET_DECL address& operator=(address&& other) STDNET_NOEXCEPT;
+  address& operator=(address&& other) STDNET_NOEXCEPT
+  {
+    type_ = other.type_;
+    ipv4_address_ = other.ipv4_address_;
+    ipv6_address_ = other.ipv6_address_;
+    return *this;
+  }
 #endif // defined(STDNET_HAS_MOVE)
 
   /// Get whether the address is an IP version 4 address.
-  bool is_v4() const STDNET_NOEXCEPT
+  STDNET_CONSTEXPR bool is_v4() const STDNET_NOEXCEPT
   {
     return type_ == ipv4;
   }
 
   /// Get whether the address is an IP version 6 address.
-  bool is_v6() const STDNET_NOEXCEPT
+  STDNET_CONSTEXPR bool is_v6() const STDNET_NOEXCEPT
   {
     return type_ == ipv6;
   }
@@ -148,17 +169,39 @@ public:
   STDNET_DECL std::string to_string(std::error_code& ec) const;
 
   /// Determine whether the address is a loopback address.
-  STDNET_DECL bool is_loopback() const STDNET_NOEXCEPT;
+  STDNET_CONSTEXPR bool is_loopback() const STDNET_NOEXCEPT
+  {
+    return (type_ == ipv4)
+      ? ipv4_address_.is_loopback()
+      : ipv6_address_.is_loopback();
+  }
 
   /// Determine whether the address is unspecified.
-  STDNET_DECL bool is_unspecified() const STDNET_NOEXCEPT;
+  STDNET_CONSTEXPR bool is_unspecified() const STDNET_NOEXCEPT
+  {
+    return (type_ == ipv4)
+      ? ipv4_address_.is_unspecified()
+      : ipv6_address_.is_unspecified();
+  }
 
   /// Determine whether the address is a multicast address.
-  STDNET_DECL bool is_multicast() const STDNET_NOEXCEPT;
+  STDNET_CONSTEXPR bool is_multicast() const STDNET_NOEXCEPT
+  {
+    return (type_ == ipv4)
+      ? ipv4_address_.is_multicast()
+      : ipv6_address_.is_multicast();
+  }
 
   /// Compare two addresses for equality.
-  STDNET_DECL friend bool operator==(const address& a1,
-      const address& a2) STDNET_NOEXCEPT;
+  friend bool operator==(const address& a1,
+      const address& a2) STDNET_NOEXCEPT
+  {
+    if (a1.type_ != a2.type_)
+      return false;
+    if (a1.type_ == address::ipv6)
+      return a1.ipv6_address_ == a2.ipv6_address_;
+    return a1.ipv4_address_ == a2.ipv4_address_;
+  }
 
   /// Compare two addresses for inequality.
   friend bool operator!=(const address& a1, const address& a2) STDNET_NOEXCEPT
@@ -167,8 +210,17 @@ public:
   }
 
   /// Compare addresses for ordering.
-  STDNET_DECL friend bool operator<(const address& a1,
-      const address& a2) STDNET_NOEXCEPT;
+  friend bool operator<(const address& a1,
+      const address& a2) STDNET_NOEXCEPT
+  {
+    if (a1.type_ < a2.type_)
+      return true;
+    if (a1.type_ > a2.type_)
+      return false;
+    if (a1.type_ == address::ipv6)
+      return a1.ipv6_address_ < a2.ipv6_address_;
+    return a1.ipv4_address_ < a2.ipv4_address_;
+  }
 
   /// Compare addresses for ordering.
   friend bool operator>(const address& a1, const address& a2) STDNET_NOEXCEPT
@@ -193,7 +245,7 @@ private:
   friend class address_v6;
 
   // The type of the address.
-  enum { ipv4, ipv6 } type_;
+  enum address_type { ipv4, ipv6 } type_;
 
   // The underlying IPv4 address.
   address_v4 ipv4_address_;
@@ -201,13 +253,22 @@ private:
   // The underlying IPv6 address.
   address_v6 ipv6_address_;
 
-  template <class T> friend T address_cast(const address&,
+  // Helper constructor for address_cast.
+  STDNET_CONSTEXPR address(address_type type,
+      const address_v4& v4, const address_v6& v6)
+    : type_(type),
+      ipv4_address_(v4),
+      ipv6_address_(v6)
+  {
+  }
+
+  template <class T> friend STDNET_CONSTEXPR T address_cast(const address&,
     typename enable_if<is_same<T, address_v4>::value>::type*);
-  template <class T> friend T address_cast(const address&,
+  template <class T> friend STDNET_CONSTEXPR T address_cast(const address&,
     typename enable_if<is_same<T, address_v6>::value>::type*);
-  template <class T> friend T address_cast(const address_v4&,
+  template <class T> friend STDNET_CONSTEXPR T address_cast(const address_v4&,
     typename enable_if<is_same<T, address>::value>::type*) STDNET_NOEXCEPT;
-  template <class T> friend T address_cast(const address_v6&,
+  template <class T> friend STDNET_CONSTEXPR T address_cast(const address_v6&,
     typename enable_if<is_same<T, address>::value>::type*) STDNET_NOEXCEPT;
 };
 

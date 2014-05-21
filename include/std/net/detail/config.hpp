@@ -152,6 +152,27 @@
 # endif // !defined(STDNET_DELETED)
 #endif // !defined(STDNET_DELETED)
 
+// Support relaxed constexpr on compilers known to allow it.
+#if !defined(STDNET_CONSTEXPR)
+# if defined(__GNUC__)
+#  if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4)
+#   if defined(__GXX_EXPERIMENTAL_CXX0X__)
+#    define STDNET_HAS_CONSTEXPR 1
+#    define STDNET_CONSTEXPR constexpr
+#   endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
+#  endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4)
+# endif // defined(__GNUC__)
+# if defined(__clang__)
+#  if __has_feature(cxx_constexpr)
+#   define STDNET_HAS_CONSTEXPR 1
+#   define STDNET_CONSTEXPR constexpr
+#  endif // __has_feature(cxx_constexpr)
+# endif // defined(__clang__)
+# if !defined(STDNET_CONSTEXPR)
+#  define STDNET_CONSTEXPR
+# endif // !defined(STDNET_CONSTEXPR)
+#endif // !defined(STDNET_CONSTEXPR)
+
 // Standard library support for system errors.
 #if !defined(STDNET_HAS_STD_SYSTEM_ERROR)
 # if !defined(STDNET_DISABLE_STD_SYSTEM_ERROR)

@@ -30,47 +30,6 @@ namespace experimental {
 namespace net {
 namespace ip {
 
-address::address() STDNET_NOEXCEPT
-  : type_(ipv4),
-    ipv4_address_(),
-    ipv6_address_()
-{
-}
-
-address::address(const address& other) STDNET_NOEXCEPT
-  : type_(other.type_),
-    ipv4_address_(other.ipv4_address_),
-    ipv6_address_(other.ipv6_address_)
-{
-}
-
-#if defined(STDNET_HAS_MOVE)
-address::address(address&& other) STDNET_NOEXCEPT
-  : type_(other.type_),
-    ipv4_address_(other.ipv4_address_),
-    ipv6_address_(other.ipv6_address_)
-{
-}
-#endif // defined(STDNET_HAS_MOVE)
-
-address& address::operator=(const address& other) STDNET_NOEXCEPT
-{
-  type_ = other.type_;
-  ipv4_address_ = other.ipv4_address_;
-  ipv6_address_ = other.ipv6_address_;
-  return *this;
-}
-
-#if defined(STDNET_HAS_MOVE)
-address& address::operator=(address&& other) STDNET_NOEXCEPT
-{
-  type_ = other.type_;
-  ipv4_address_ = other.ipv4_address_;
-  ipv6_address_ = other.ipv6_address_;
-  return *this;
-}
-#endif // defined(STDNET_HAS_MOVE)
-
 std::string address::to_string() const
 {
   if (type_ == ipv6)
@@ -83,47 +42,6 @@ std::string address::to_string(std::error_code& ec) const
   if (type_ == ipv6)
     return ipv6_address_.to_string(ec);
   return ipv4_address_.to_string(ec);
-}
-
-bool address::is_loopback() const STDNET_NOEXCEPT
-{
-  return (type_ == ipv4)
-    ? ipv4_address_.is_loopback()
-    : ipv6_address_.is_loopback();
-}
-
-bool address::is_unspecified() const STDNET_NOEXCEPT
-{
-  return (type_ == ipv4)
-    ? ipv4_address_.is_unspecified()
-    : ipv6_address_.is_unspecified();
-}
-
-bool address::is_multicast() const STDNET_NOEXCEPT
-{
-  return (type_ == ipv4)
-    ? ipv4_address_.is_multicast()
-    : ipv6_address_.is_multicast();
-}
-
-bool operator==(const address& a1, const address& a2) STDNET_NOEXCEPT
-{
-  if (a1.type_ != a2.type_)
-    return false;
-  if (a1.type_ == address::ipv6)
-    return a1.ipv6_address_ == a2.ipv6_address_;
-  return a1.ipv4_address_ == a2.ipv4_address_;
-}
-
-bool operator<(const address& a1, const address& a2) STDNET_NOEXCEPT
-{
-  if (a1.type_ < a2.type_)
-    return true;
-  if (a1.type_ > a2.type_)
-    return false;
-  if (a1.type_ == address::ipv6)
-    return a1.ipv6_address_ < a2.ipv6_address_;
-  return a1.ipv4_address_ < a2.ipv4_address_;
 }
 
 address make_address(const char* str)

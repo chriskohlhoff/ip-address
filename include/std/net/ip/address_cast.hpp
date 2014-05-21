@@ -32,7 +32,7 @@ namespace ip {
 
 /// Cast a version-independent address to itself.
 template <class T>
-inline T address_cast(const address& addr,
+inline STDNET_CONSTEXPR T address_cast(const address& addr,
     typename enable_if<is_same<T, address>::value>::type*) STDNET_NOEXCEPT
 {
   return addr;
@@ -43,16 +43,12 @@ inline T address_cast(const address& addr,
  * @throws bad_address_cast if @c a does not represent an IPv4 address.
  */
 template <class T>
-inline T address_cast(const address& addr,
+inline STDNET_CONSTEXPR T address_cast(const address& addr,
     typename enable_if<is_same<T, address_v4>::value>::type*)
 {
-  if (addr.type_ != address::ipv4)
-  {
-    bad_address_cast ex;
-    std::experimental::net::detail::throw_exception(ex);
-  }
-
-  return addr.ipv4_address_;
+  return (addr.type_ != address::ipv4)
+    ? throw bad_address_cast()
+    : addr.ipv4_address_;
 }
 
 /// Cast a version-independent address to an IPv6 address.
@@ -60,32 +56,25 @@ inline T address_cast(const address& addr,
  * @throws bad_address_cast if @c a does not represent an IPv6 address.
  */
 template <class T>
-inline T address_cast(const address& addr,
+inline STDNET_CONSTEXPR T address_cast(const address& addr,
     typename enable_if<is_same<T, address_v6>::value>::type*)
 {
-  if (addr.type_ != address::ipv6)
-  {
-    bad_address_cast ex;
-    std::experimental::net::detail::throw_exception(ex);
-  }
-
-  return addr.ipv6_address_;
+  return (addr.type_ != address::ipv6)
+    ? throw bad_address_cast()
+    : addr.ipv6_address_;
 }
 
 /// Cast an IPv4 address to a version-independent address.
 template <class T>
-inline T address_cast(const address_v4& addr,
+inline STDNET_CONSTEXPR T address_cast(const address_v4& addr,
     typename enable_if<is_same<T, address>::value>::type*) STDNET_NOEXCEPT
 {
-  address new_addr;
-  new_addr.type_ = address::ipv4;
-  new_addr.ipv4_address_ = addr;
-  return new_addr;
+  return address(address::ipv4, addr, address_v6());
 }
 
 /// Cast an IPv4 address to itself.
 template <class T>
-inline T address_cast(const address_v4& addr,
+inline STDNET_CONSTEXPR T address_cast(const address_v4& addr,
     typename enable_if<is_same<T, address_v4>::value>::type*) STDNET_NOEXCEPT
 {
   return addr;
@@ -93,18 +82,15 @@ inline T address_cast(const address_v4& addr,
 
 /// Cast an IPv6 address to a version-independent address.
 template <class T>
-inline T address_cast(const address_v6& addr,
+inline STDNET_CONSTEXPR T address_cast(const address_v6& addr,
     typename enable_if<is_same<T, address>::value>::type*) STDNET_NOEXCEPT
 {
-  address new_addr;
-  new_addr.type_ = address::ipv6;
-  new_addr.ipv6_address_ = addr;
-  return new_addr;
+  return address(address::ipv6, address_v4(), addr);
 }
 
 /// Cast an IPv6 address to itself.
 template <class T>
-inline T address_cast(const address_v6& addr,
+inline STDNET_CONSTEXPR T address_cast(const address_v6& addr,
     typename enable_if<is_same<T, address_v6>::value>::type*) STDNET_NOEXCEPT
 {
   return addr;

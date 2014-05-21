@@ -153,13 +153,6 @@ design, please consult
 
 [section Further Work]
 
-[section Use of constexpr]
-
-Further work is required to determine which function, if any, should be marked
-`constexpr`.
-
-[endsect]
-
 [section Address Iteration]
 
 It has been suggested in the SG4 discussion forum that the address classes
@@ -373,6 +366,14 @@ larger standard-layout structure, such as a packet definition:
   receive_message(m); // e.g. reads bytes from a socket
   if (m.hdr.to == old_address)
     m.hdr.to = new_address.to_bytes();
+
+[endsect]
+
+[section Use of constexpr]
+
+The `constexpr` keyword has been applied to some of the functions in the
+proposal. The rationale for this change is that many of the equivalent
+__POSIX__ macros can be used in constant expressions.
 
 [endsect]
 

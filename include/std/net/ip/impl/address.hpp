@@ -15,9 +15,8 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#if !defined(STDNET_NO_IOSTREAM)
-
 #include "std/net/detail/throw_error.hpp"
+#include "std/net/ip/address_cast.hpp"
 
 #include "std/net/detail/push_options.hpp"
 
@@ -25,6 +24,24 @@ namespace std {
 namespace experimental {
 namespace net {
 namespace ip {
+
+template <typename T, typename>
+inline STDNET_CONSTEXPR address::address(const T& t) STDNET_NOEXCEPT
+  : address(address_cast<address>(t))
+{
+}
+
+#if defined(STDNET_HAS_VARIADIC_TEMPLATES)
+
+template <typename... T, typename>
+inline STDNET_CONSTEXPR address::address(T&&... t)
+  : address(make_address(static_cast<T&&>(t)...))
+{
+}
+
+#endif // defined(STDNET_HAS_VARIADIC_TEMPLATES)
+
+#if !defined(STDNET_NO_IOSTREAM)
 
 template <typename Elem, typename Traits>
 std::basic_ostream<Elem, Traits>& operator<<(
@@ -45,13 +62,13 @@ std::basic_ostream<Elem, Traits>& operator<<(
   return os;
 }
 
+#endif // !defined(STDNET_NO_IOSTREAM)
+
 } // namespace ip
 } // namespace net
 } // namespace experimental
 } // namespace std
 
 #include "std/net/detail/pop_options.hpp"
-
-#endif // !defined(STDNET_NO_IOSTREAM)
 
 #endif // STDNET_IP_IMPL_ADDRESS_HPP
