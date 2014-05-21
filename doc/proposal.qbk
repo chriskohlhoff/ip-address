@@ -147,6 +147,39 @@ For more information on the motivating design decisions for the three-class
 design, please consult
 [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3603.html N3603].
 
+In this section we list some of the additional proposed changes that were
+considered but rejected. The changes incorporated since N3603 are described
+[link ipaddress.changes at the end].
+
+[section Overloads of hton and ntoh]
+
+One suggestion was that the proposal should include overloads of `hton` and
+`ntoh` for the address types. The motivating use case was that address objects
+may be used directly as part of standard-layout aggregates that are ultimately
+intended for network transmission.
+
+This change was rejected on the basis that the applying `hton` to a class type
+(as opposed to a simple integer) may result in an object that is in an invalid
+or nonsensical state. As a matter of style, the author feels that the address
+types should be treated as abstractions without necessarily forcing a
+particular internal implementation.
+
+The addresses' `to_bytes()` member functions can already be used to obtain a
+representation of the address in network byte order. To further aid the
+motivating use case, the `bytes_type` types have been changed to be [link
+ipaddress.bytes_type unique types].
+
+[endsect]
+
+[section Specialisation of less<>]
+
+Another suggestion was that the address types should specialise `std::less<>`
+rather than provide `operator<` and friends. This change was rejected since it
+would appear to render the address types incompatible with other standard
+library types, such as `std::tuple<>`, which apply `operator<` to their elements.
+
+[endsect]
+
 [endsect]
 
 [/-----------------------------------------------------------------------------]
@@ -262,7 +295,7 @@ addresses.
 
 [/-----------------------------------------------------------------------------]
 
-[section Changes in This Revision]
+[section:changes Changes in This Revision]
 
 In this revision of the proposal, we include changes made based on feedback and
 discussion from the 2013 meeting of SG4 at Bristol, where N3603 was discussed.
@@ -336,7 +369,7 @@ Support for IP address literals has been included. For example:
 
 [endsect]
 
-[section Strongly-Typed Byte Representations]
+[section:bytes_type Strongly-Typed Byte Representations]
 
 The nested typedefs `bytes_type` have been changed to be unique standard-layout
 types. Objects of type `bytes_type` are implicitly convertible to the
