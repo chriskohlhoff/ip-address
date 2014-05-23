@@ -139,6 +139,16 @@ the expression `make_address_v6(forward<T>(t).``.``.)`.]
 
 [endsect]
 
+[section [^ip::address_v6] assignment]
+
+  address_v6& operator=(const address_v6& a) noexcept;
+
+[function_postconditions `*this == a`]
+
+[function_returns `*this`]
+
+[endsect]
+
 [section [^ip::address_v6] members]
 
   void scope_id(unsigned long id) noexcept;
