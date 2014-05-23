@@ -72,7 +72,7 @@ the table below.]
   ]
 ]
 
-  constexpr address(const address& a);
+  constexpr address(const address& a) noexcept;
 
 [function_effects Constructs an object of class `address`.]
 
@@ -105,7 +105,7 @@ expression `make_address(forward<T>(t).``.``.)`.]
 
 [section [^ip::address] assignment]
 
-  address& operator=(const address& a);
+  address& operator=(const address& a) noexcept;
 
 [function_postconditions `*this == a`]
 
