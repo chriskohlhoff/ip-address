@@ -23,8 +23,8 @@ my $draft_info = " (as of commit $rev)";
 
 my $docno =
 "<pre>" .
-"Doc. no:  D????" . $draft_info . "\n" .
-"Date:     2014-04-16\n" .
+"Doc. no:  D4044 " . $draft_info . "\n" .
+"Date:     2014-05-24\n" .
 "Revises:  N3603\n" .
 "Reply-To: Christopher Kohlhoff &lt;chris\@kohlhoff.com&gt;\n" .
 "</pre>\n";
