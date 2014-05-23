@@ -64,15 +64,11 @@ the table below.]
   [[expression][value]]
   [
     [`is_v4()`]
-    [`true`]
+    [`false`]
   ]
   [
     [`is_v6()`]
     [`false`]
-  ]
-  [
-    [`is_unspecified()`]
-    [`true`]
   ]
 ]
 
@@ -121,15 +117,21 @@ expression `make_address(forward<T>(t).``.``.)`.]
 
   constexpr bool is_unspecified() const noexcept;
 
-[function_returns `is_v4() ? address_v4(*this).is_unspecified() : address_v6(*this).is_unspecified()`.]
+[function_returns If `is_v4() == true`, returns
+`address_cast<address_v4>(*this).is_unspecified()`. If `is_v6() == true`, returns
+`address_cast<address_v6>(*this).is_unspecified()`. Otherwise returns `false`.]
 
   constexpr bool is_loopback() const noexcept;
 
-[function_returns `is_v4() ? address_v4(*this).is_loopback() : address_v6(*this).is_loopback()`.]
+[function_returns If `is_v4() == true`, returns
+`address_cast<address_v4>(*this).is_loopback()`. If `is_v6() == true`, returns
+`address_cast<address_v6>(*this).is_loopback()`. Otherwise returns `false`.]
 
   constexpr bool is_multicast() const noexcept;
 
-[function_returns `is_v4() ? address_v4(*this).is_multicast() : address_v6(*this).is_multicast()`.]
+[function_returns If `is_v4() == true`, returns
+`address_cast<address_v4>(*this).is_multicast()`. If `is_v6() == true`, returns
+`address_cast<address_v6>(*this).is_multicast()`. Otherwise returns `false`.]
 
   constexpr bool is_v4() const noexcept;
 
@@ -142,7 +144,9 @@ expression `make_address(forward<T>(t).``.``.)`.]
   string to_string() const;
   string to_string(error_code& ec) const;
 
-[function_returns `is_v4() ? address_v4(*this).to_string(ec) : address_v6(*this).to_string(ec)`.]
+[function_returns If `is_v4() == true`, returns
+`address_cast<address_v4>(*this).to_string(ec)`. If `is_v6() == true`, returns
+`address_cast<address_v6>(*this).to_string(ec)`. Otherwise throws `bad_address_cast`.]
 
 [endsect]
 
@@ -150,8 +154,11 @@ expression `make_address(forward<T>(t).``.``.)`.]
 
   bool operator==(const address& a, const address& b) noexcept;
 
-[function_returns `(a.is_v4() && b.is_v4() && address_v4(a) == address_v4(b)) ||
-(a.is_v6() && b.is_v6() && address_v6(a) == address_v6(b))`.]
+[function_returns `a_v4 == b_v4 && a_v6 == b_v6`, where:[br]
+ [mdash] `a_v4` is the value of `a.is_v4() ? address_cast<address_v4>(a) : address_v4()`;[br]
+ [mdash] `b_v4` is `b.is_v4() ? address_cast<address_v4>(b) : address_v4()`;[br]
+ [mdash] `a_v6` is `a.is_v6() ? address_cast<address_v6>(a) : address_v6()`; and[br]
+ [mdash] `b_v6` is `b.is_v6() ? address_cast<address_v6>(b) : address_v6()`.]
 
   bool operator!=(const address& a, const address& b) noexcept;
 
@@ -159,9 +166,11 @@ expression `make_address(forward<T>(t).``.``.)`.]
 
   bool operator< (const address& a, const address& b) noexcept;
 
-[function_returns `(a.is_v4() && b.is_v4() && address_v4(a) < address_v4(b)) ||
-(a.is_v6() && b.is_v6() && address_v6(a) < address_v6(b)) ||
-(a.is_v4() && b.is_v6())`.]
+[function_returns `a_v6 < b_v6 || a_v6 == b_v6 && a_v4 < b_v4`, where:[br]
+ [mdash] `a_v4` is the value of `a.is_v4() ? address_cast<address_v4>(a) : address_v4()`;[br]
+ [mdash] `b_v4` is `b.is_v4() ? address_cast<address_v4>(b) : address_v4()`;[br]
+ [mdash] `a_v6` is `a.is_v6() ? address_cast<address_v6>(a) : address_v6()`; and[br]
+ [mdash] `b_v6` is `b.is_v6() ? address_cast<address_v6>(b) : address_v6()`.]
 
   bool operator> (const address& a, const address& b) noexcept;
 

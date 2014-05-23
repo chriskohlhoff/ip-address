@@ -32,16 +32,20 @@ namespace ip {
 
 std::string address::to_string() const
 {
+  if (type_ == ipv4)
+    return ipv4_address_.to_string();
   if (type_ == ipv6)
     return ipv6_address_.to_string();
-  return ipv4_address_.to_string();
+  throw bad_address_cast();
 }
 
 std::string address::to_string(std::error_code& ec) const
 {
+  if (type_ == ipv4)
+    return ipv4_address_.to_string(ec);
   if (type_ == ipv6)
     return ipv6_address_.to_string(ec);
-  return ipv4_address_.to_string(ec);
+  throw bad_address_cast();
 }
 
 address make_address(const char* str)

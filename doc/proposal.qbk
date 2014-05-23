@@ -410,6 +410,14 @@ __POSIX__ macros can be used in constant expressions.
 
 [endsect]
 
+[section Make Default-Constructed address Invalid]
+
+A default-constructed `address` object now represents an invalid address that
+is neither IPv4 nor IPv6. Any attempt to `address_cast` it to another type will
+result in a `bad_address_cast` exception.
+
+[endsect]
+
 [endsect]
 
 [/-----------------------------------------------------------------------------]

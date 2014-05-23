@@ -67,7 +67,7 @@ class address
 public:
   /// Default constructor.
   STDNET_CONSTEXPR address() STDNET_NOEXCEPT
-    : type_(ipv4),
+    : type_(invalid),
       ipv4_address_(),
       ipv6_address_()
   {
@@ -171,25 +171,22 @@ public:
   /// Determine whether the address is a loopback address.
   STDNET_CONSTEXPR bool is_loopback() const STDNET_NOEXCEPT
   {
-    return (type_ == ipv4)
-      ? ipv4_address_.is_loopback()
-      : ipv6_address_.is_loopback();
+    return (type_ == ipv4) ? ipv4_address_.is_loopback() :
+      (type_ == ipv6) ? ipv6_address_.is_loopback() : false;
   }
 
   /// Determine whether the address is unspecified.
   STDNET_CONSTEXPR bool is_unspecified() const STDNET_NOEXCEPT
   {
-    return (type_ == ipv4)
-      ? ipv4_address_.is_unspecified()
-      : ipv6_address_.is_unspecified();
+    return (type_ == ipv4) ? ipv4_address_.is_unspecified() :
+      (type_ == ipv6) ? ipv6_address_.is_unspecified() : false;
   }
 
   /// Determine whether the address is a multicast address.
   STDNET_CONSTEXPR bool is_multicast() const STDNET_NOEXCEPT
   {
-    return (type_ == ipv4)
-      ? ipv4_address_.is_multicast()
-      : ipv6_address_.is_multicast();
+    return (type_ == ipv4) ? ipv4_address_.is_multicast() :
+      (type_ == ipv6) ? ipv6_address_.is_multicast() : false;
   }
 
   /// Compare two addresses for equality.
@@ -198,9 +195,11 @@ public:
   {
     if (a1.type_ != a2.type_)
       return false;
+    if (a1.type_ == address::ipv4)
+      return a1.ipv4_address_ == a2.ipv4_address_;
     if (a1.type_ == address::ipv6)
-      return a1.ipv6_address_ == a2.ipv6_address_;
-    return a1.ipv4_address_ == a2.ipv4_address_;
+      return a1.ipv4_address_ == a2.ipv4_address_;
+    return true;
   }
 
   /// Compare two addresses for inequality.
@@ -217,9 +216,11 @@ public:
       return true;
     if (a1.type_ > a2.type_)
       return false;
+    if (a1.type_ == address::ipv4)
+      return a1.ipv4_address_ < a2.ipv4_address_;
     if (a1.type_ == address::ipv6)
       return a1.ipv6_address_ < a2.ipv6_address_;
-    return a1.ipv4_address_ < a2.ipv4_address_;
+    return false;
   }
 
   /// Compare addresses for ordering.
@@ -245,7 +246,7 @@ private:
   friend class address_v6;
 
   // The type of the address.
-  enum address_type { ipv4, ipv6 } type_;
+  enum address_type { invalid, ipv4, ipv6 } type_;
 
   // The underlying IPv4 address.
   address_v4 ipv4_address_;
