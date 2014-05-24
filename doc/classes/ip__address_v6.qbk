@@ -266,8 +266,7 @@ following method:
   constexpr bool is_multicast_global() const noexcept;
 
 [function_returns A boolean indicating whether the `address_v6` object
-represents a multicast organisation-local address, as if computed by the
-following method:
+represents a multicast global address, as if computed by the following method:
 ``
   bytes_type b = to_bytes();
   return b[0] == 0xFF && (b[1] & 0x0F) == 0x0E;
