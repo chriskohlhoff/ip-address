@@ -38,7 +38,6 @@
             static constexpr address_v4 broadcast() noexcept;
             static constexpr address_v4 broadcast(const address_v4& addr,
               const address_v4& mask) noexcept;
-            static constexpr address_v4 netmask(const address_v4& addr) noexcept;
           };
 
           // address_v4 comparisons:
@@ -208,13 +207,6 @@ Otherwise `string()`.]
   static constexpr address_v4 broadcast(const address_v4& addr, const address_v4& mask) noexcept;
 
 [function_returns `address_v4(addr.to_ulong() | ~mask.to_ulong())`.]
-
-  static constexpr address_v4 netmask(const address_v4& addr) noexcept;
-
-[function_block If `addr.is_class_a()` is true, returns
-`address_v4(0xFF000000)`. If `addr.is_class_b()` is true, returns
-`address_v4(0xFFFF0000)`. If `addr.is_class_c()` is true, returns
-`address_v4(0xFFFFFF00)`. Otherwise returns `address_v4(0xFFFFFFFF)`.]
 
 [endsect]
 

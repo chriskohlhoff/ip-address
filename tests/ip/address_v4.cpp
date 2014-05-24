@@ -84,8 +84,6 @@ void test()
 
     addr1 = ip::address_v4::broadcast(addr2, addr3);
 
-    addr1 = ip::address_v4::netmask(addr2);
-
     // address_v4 comparisons.
 
     b = (addr1 == addr2);
@@ -242,21 +240,6 @@ void test()
   STDNET_CHECK(a6.to_bytes()[2] == 0xFF);
   STDNET_CHECK(a6.to_bytes()[3] == 0xFF);
   STDNET_CHECK(a6.to_ulong() == 0xFFFFFFFF);
-
-  address_v4 class_a_net(0xFF000000);
-  address_v4 class_b_net(0xFFFF0000);
-  address_v4 class_c_net(0xFFFFFF00);
-  address_v4 other_net(0xFFFFFFFF);
-  STDNET_CHECK(address_v4::netmask(address_v4(0x01000000)) == class_a_net);
-  STDNET_CHECK(address_v4::netmask(address_v4(0x7F000000)) == class_a_net);
-  STDNET_CHECK(address_v4::netmask(address_v4(0x80000000)) == class_b_net);
-  STDNET_CHECK(address_v4::netmask(address_v4(0xBFFF0000)) == class_b_net);
-  STDNET_CHECK(address_v4::netmask(address_v4(0xC0000000)) == class_c_net);
-  STDNET_CHECK(address_v4::netmask(address_v4(0xDFFFFF00)) == class_c_net);
-  STDNET_CHECK(address_v4::netmask(address_v4(0xE0000000)) == other_net);
-  STDNET_CHECK(address_v4::netmask(address_v4(0xEFFFFFFF)) == other_net);
-  STDNET_CHECK(address_v4::netmask(address_v4(0xF0000000)) == other_net);
-  STDNET_CHECK(address_v4::netmask(address_v4(0xFFFFFFFF)) == other_net);
 }
 
 } // namespace ip_address_v4_runtime

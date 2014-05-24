@@ -285,17 +285,6 @@ public:
     return address_v4(addr.to_ulong() | (mask.to_ulong() ^ 0xFFFFFFFF));
   }
 
-  /// Obtain the netmask that corresponds to the address, based on its address
-  /// class.
-  static STDNET_CONSTEXPR address_v4 netmask(
-      const address_v4& addr) STDNET_NOEXCEPT
-  {
-    return (addr.is_class_a()) ? address_v4(0xFF000000)
-      : (addr.is_class_b()) ? address_v4(0xFFFF0000)
-      : (addr.is_class_c()) ? address_v4(0xFFFFFF00)
-      : address_v4(0xFFFFFFFF);
-  }
-
 private:
   // The underlying IPv4 address.
   bytes_type bytes_;

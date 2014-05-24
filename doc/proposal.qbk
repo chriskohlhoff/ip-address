@@ -418,6 +418,14 @@ result in a `bad_address_cast` exception.
 
 [endsect]
 
+[section Removed address_v4::netmask]
+
+The `ip::address_v4::netmask` function has been removed as it is not possible
+to give the correct answer, given only an arbitrary IP address, without access
+to the routing table.
+
+[endsect]
+
 [endsect]
 
 [/-----------------------------------------------------------------------------]
